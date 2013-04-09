@@ -353,9 +353,9 @@ public class FastBeatDetector {
 		writeDebug("Time taken: " + String.valueOf(time / 1000l) + " seconds");
 		writeDebug("Flux values: " + fluxCount);
 		writeDebug("Beat values: " + beatCount);
-		writeDebug("Song Percentage Beats: "
+		writeDebug("Flux : Beat ratio: "
 				+ String.valueOf(((float) beatCount / fluxCount) * 100) + "%");
-		writeDebug("----Analysis Complete----");
+		writeDebug("----Analysis Complete----\n");
 	}
 }
 

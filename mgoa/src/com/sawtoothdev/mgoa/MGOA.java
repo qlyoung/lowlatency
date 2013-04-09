@@ -17,10 +17,11 @@ public class MGOA extends Game {
 	@Override
 	public void create() {
 		
+		// I love how much sense this line makes
 		Resources.game = this;
 		
+		
 		FileHandle song = Gdx.files.internal("data/audio/aki.mp3");
-
 
 		{// debugging, remove for final release
 			song = Gdx.files.absolute(song.file().getAbsolutePath());

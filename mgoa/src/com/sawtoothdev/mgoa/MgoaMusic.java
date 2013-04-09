@@ -16,13 +16,14 @@ import com.badlogic.gdx.files.FileHandle;
 public class MgoaMusic {
 
 
-	private long startTime;
 	private Music music;
+
+	private long startTime;
+	private boolean paused = false;
 
 
 	public MgoaMusic(FileHandle audioFile){
 		this.music = Gdx.audio.newMusic(audioFile);
-
 
 		//prepare the music player
 		music.play();
@@ -47,6 +48,12 @@ public class MgoaMusic {
 	 */
 	public long getPosition(){
 		return System.currentTimeMillis() - startTime;
+	}
+	public boolean isPlaying(){
+		return music.isPlaying();
+	}
+	public boolean isPaused(){
+		return paused;
 	}
 
 

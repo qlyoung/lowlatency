@@ -1,7 +1,6 @@
 package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,10 +38,10 @@ public class PlayScreen implements Screen {
 		
 		renderer.render(map.world, camera.combined);
 		
-		if (Gdx.input.isKeyPressed(Keys.UP))
-			camera.translate(0f, 1f);
-		if (Gdx.input.isKeyPressed(Keys.DOWN))
-			camera.translate(0f, -1f);
+		if (!music.isPlaying() && !music.isPaused())
+			music.play();
+		
+		camera.translate(0f, MapGenerator.player_velocity * delta);
 		
 	}
 

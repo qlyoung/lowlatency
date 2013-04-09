@@ -29,10 +29,12 @@ public class LoadScreen implements Screen {
 	
 	private LoadingThread loadThread;
 	private Map m;
+	private MgoaMusic music;
 	
 	public LoadScreen(FileHandle audioFile){
 		
 		loadThread = new LoadingThread(audioFile);
+		music = new MgoaMusic(audioFile);
 	}
 	
 	
@@ -43,11 +45,10 @@ public class LoadScreen implements Screen {
 		//
 		//...maybe later
 		
-		
 		//if done loading, move on
 		if (!loadThread.isAlive()){
-			Resources.game.setScreen(new PlayScreen(m, null));
 			
+			Resources.game.setScreen(new PlayScreen(m, music));
 		}
 	}
 

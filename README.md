@@ -1,4 +1,4 @@
 mgoa
 ====
 
-A blend of sound, light and going fast
+A work of sound, light and going fast
