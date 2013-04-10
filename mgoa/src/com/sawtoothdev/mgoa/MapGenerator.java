@@ -48,7 +48,6 @@ public class MapGenerator {
 
 
 		// les get funkay
-		
 		ArrayList<Body> walls = new ArrayList<Body>(), orbs = new ArrayList<Body>();
 
 		Vector2 prevWallEnd = new Vector2();
@@ -64,7 +63,8 @@ public class MapGenerator {
 
 			float timeSecs = beat.timeMs / 1000f;
 			
-			if (beat.energy > .5f) {
+			if (beat.energy > .5f) {				
+				
 				
 				walls.add( putEdge(world, prevWallEnd.x - 1, prevWallEnd.y, prevWallEnd.x - 1, beat.timeMs * player_velocity) );
 				walls.add( putEdge(world, prevWallEnd.x + 1, prevWallEnd.y, prevWallEnd.x + 1, beat.timeMs * player_velocity) );
@@ -132,11 +132,6 @@ public class MapGenerator {
 		return orb;
 	}
 	private static Body putEdge(World world, float x1, float y1, float x2, float y2){
-		/*
-		 * walls are defined by bodies containing one fixture, an edge,
-		 * that radiates from the center of the body; so the body's
-		 * origin should be placed at the end of the last edge
-		 */
 
 		BodyDef wallDef = new BodyDef();
 		wallDef.type = BodyType.StaticBody;
