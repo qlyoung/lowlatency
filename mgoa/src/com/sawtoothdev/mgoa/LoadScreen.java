@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -27,12 +28,13 @@ public class LoadScreen implements Screen {
 		
 		@Override
 		public void run() {
+			
 			FastBeatDetector analyzer = new FastBeatDetector(audioFile);
+			
 			try {
 				beats = analyzer.detectBeats(FastBeatDetector.SENSITIVITY_STANDARD);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Gdx.app.log("Load Screen", e.getMessage());
 			}
 			
 		}

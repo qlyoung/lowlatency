@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,11 +26,11 @@ import com.sawtoothdev.audioanalysis.Beat;
  *
  */
 
-public class PlayScreen implements Screen, SongEventListener {
+public class PlayScreen implements Screen, ISongEventListener {
 	
 	OrthographicCamera camera;
 	
-	private class WorldManager implements SongEventListener, GameObject {
+	private class WorldManager implements ISongEventListener, IGameObject {
 		
 		World world;
 		Box2DDebugRenderer renderer = new Box2DDebugRenderer();
@@ -37,6 +38,8 @@ public class PlayScreen implements Screen, SongEventListener {
 		
 		ArrayList<Body> orbs = new ArrayList<Body>();
 		Body player;
+		
+		private float playerAngle = 0f;
 		
 		public WorldManager(){
 			
@@ -79,7 +82,7 @@ public class PlayScreen implements Screen, SongEventListener {
 				player = world.createBody(playerDef);
 				player.createFixture(playerFixture);
 				
-				player.setTransform(0, 2.5f, 0);
+				player.setTransform(2.5f, 0, 0);
 				
 				triangle.dispose();
 				
@@ -94,7 +97,7 @@ public class PlayScreen implements Screen, SongEventListener {
 				circleDef.type = BodyType.KinematicBody;
 				
 				int angle = random.nextInt(361);
-				Vector2 velocity = new Vector2((float) Math.sin(angle) * 5f, (float) Math.cos(angle) * 5f);
+				Vector2 velocity = new Vector2((float) Math.sin(angle) * 4f, (float) Math.cos(angle) * 4f);
 				
 				circleDef.linearVelocity.set(velocity);
 				circleDef.position.set(0, 0);
@@ -120,17 +123,30 @@ public class PlayScreen implements Screen, SongEventListener {
 		@Override
 		public void render(float delta) {
 			
+			// update orbs
 			for (Body orb : orbs){
 				float posX = orb.getPosition().x + (delta * orb.getLinearVelocity().x);
 				float posY = orb.getPosition().y + (delta * orb.getLinearVelocity().y);
-				
 				orb.setTransform(posX, posY, 0);
 			}
 			
-			//rotate player
-			player.setTransform(player.getPosition(), (float) (Math.toRadians(180)));
+			// process input
+			if (Gdx.input.isKeyPressed(Keys.LEFT))
+				playerAngle += (delta * 8);
+			if (Gdx.input.isKeyPressed(Keys.RIGHT))
+				playerAngle -= (delta * 8);
 			
+			// move player
+			player.setTransform(rotate(playerAngle, player.getPosition(), new Vector2()), 0);
+			
+			// render debug lines
 			renderer.render(world, camera.combined);
+		}
+		
+		private Vector2 rotate(float angle, Vector2 currentPos, Vector2 centre)
+		{
+		    double distance = Math.sqrt(Math.pow(currentPos.x - centre.x, 2) + Math.pow(currentPos.y - centre.y, 2));
+		    return new Vector2( (float)(distance * Math.cos(angle)), (float)(distance * Math.sin(angle)) ).add(centre);
 		}
 		
 	}

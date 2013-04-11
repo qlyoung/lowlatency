@@ -1,6 +1,6 @@
 package com.sawtoothdev.mgoa;
 
-public interface GameObject {
+public interface IGameObject {
 	
 	public void render(float delta);
 
