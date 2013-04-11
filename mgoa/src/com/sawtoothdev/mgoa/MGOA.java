@@ -19,10 +19,8 @@ public class MGOA extends Game {
 		
 		Resources.game = this;
 		
-		// set clear color to blue
-		Gdx.gl.glClearColor(0, 0, 1, 0);
-		
 		FileHandle song = Gdx.files.internal("data/audio/aki.mp3");
+
 
 		{// debugging, remove for final release
 			song = Gdx.files.absolute(song.file().getAbsolutePath());

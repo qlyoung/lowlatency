@@ -1,7 +1,12 @@
 package com.sawtoothdev.mgoa;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.audioanalysis.FastBeatDetector;
 
 /**
  * Responsible for loading all resources before gameplay begins.
@@ -22,19 +27,25 @@ public class LoadScreen implements Screen {
 		
 		@Override
 		public void run() {
-			m = MapGenerator.generate(audioFile);
+			FastBeatDetector analyzer = new FastBeatDetector(audioFile);
+			try {
+				beats = analyzer.detectBeats(FastBeatDetector.SENSITIVITY_STANDARD);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 	}
 	
 	private LoadingThread loadThread;
-	private Map m;
-	private MgoaMusic music;
+	private ArrayList<Beat> beats;
+	private FileHandle audioFile;
 	
 	public LoadScreen(FileHandle audioFile){
-		
+		this.audioFile = audioFile;
 		loadThread = new LoadingThread(audioFile);
-		music = new MgoaMusic(audioFile);
 	}
 	
 	
@@ -45,10 +56,10 @@ public class LoadScreen implements Screen {
 		//
 		//...maybe later
 		
+		
 		//if done loading, move on
 		if (!loadThread.isAlive()){
-			
-			Resources.game.setScreen(new PlayScreen(m, music));
+			Resources.game.setScreen(new PlayScreen(beats, audioFile));
 		}
 	}
 
