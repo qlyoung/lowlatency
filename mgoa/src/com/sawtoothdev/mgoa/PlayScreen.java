@@ -26,9 +26,11 @@ import com.sawtoothdev.audioanalysis.Beat;
  *
  */
 
-public class PlayScreen implements Screen, ISongEventListener {
+public class PlayScreen implements Screen {
 	
 	OrthographicCamera camera;
+	
+	final float circleRadius = 2.0f;
 	
 	private class WorldManager implements ISongEventListener, IGameObject {
 		
@@ -45,6 +47,7 @@ public class PlayScreen implements Screen, ISongEventListener {
 			
 			world = new World(new Vector2(), true);
 			
+			
 			{// create circle
 				BodyDef circleDef = new BodyDef();
 				circleDef.type = BodyType.StaticBody;
@@ -55,7 +58,7 @@ public class PlayScreen implements Screen, ISongEventListener {
 				circFixture.friction = 0f;
 				
 				CircleShape circleShape = new CircleShape();
-				circleShape.setRadius(2.5f);
+				circleShape.setRadius(circleRadius);
 				
 				circFixture.shape = circleShape;
 				
@@ -82,7 +85,7 @@ public class PlayScreen implements Screen, ISongEventListener {
 				player = world.createBody(playerDef);
 				player.createFixture(playerFixture);
 				
-				player.setTransform(2.5f, 0, 0);
+				player.setTransform(circleRadius, 0, 0);
 				
 				triangle.dispose();
 				
@@ -92,32 +95,35 @@ public class PlayScreen implements Screen, ISongEventListener {
 
 		@Override
 		public void onBeat(Beat b) {
-			{// create circle
-				BodyDef circleDef = new BodyDef();
-				circleDef.type = BodyType.KinematicBody;
 				
-				int angle = random.nextInt(361);
-				Vector2 velocity = new Vector2((float) Math.sin(angle) * 4f, (float) Math.cos(angle) * 4f);
-				
-				circleDef.linearVelocity.set(velocity);
-				circleDef.position.set(0, 0);
-				
-				FixtureDef circFixture = new FixtureDef();
-				circFixture.density = 1f;
-				circFixture.friction = 0f;
-				
-				CircleShape circleShape = new CircleShape();
-				circleShape.setRadius(.1f);
-				
-				circFixture.shape = circleShape;
-				
-				Body circle = world.createBody(circleDef);
-				circle.createFixture(circFixture);
-				
-				circleShape.dispose();
-				
-				orbs.add(circle);
-			}
+			BodyDef circleDef = new BodyDef();
+			circleDef.type = BodyType.KinematicBody;
+		
+			int angle = random.nextInt(361);
+			
+			Vector2 velocity = new Vector2(
+					(float) Math.sin(angle) * Resources.difficulty.beat_velocity,
+					(float) Math.cos(angle) * Resources.difficulty.beat_velocity);
+			
+			circleDef.linearVelocity.set(velocity);
+			circleDef.position.set(0, 0);
+			
+			FixtureDef circFixture = new FixtureDef();
+			circFixture.density = 1f;
+			circFixture.friction = 0f;
+			
+			CircleShape circleShape = new CircleShape();
+			circleShape.setRadius(.1f);
+			
+			circFixture.shape = circleShape;
+			
+			Body circle = world.createBody(circleDef);
+			circle.createFixture(circFixture);
+			
+			circleShape.dispose();
+			
+			orbs.add(circle);
+			
 		}
 
 		@Override
@@ -132,15 +138,16 @@ public class PlayScreen implements Screen, ISongEventListener {
 			
 			// process input
 			if (Gdx.input.isKeyPressed(Keys.LEFT))
-				playerAngle += (delta * 8);
+				playerAngle += (delta * Resources.difficulty.player_velocity);
 			if (Gdx.input.isKeyPressed(Keys.RIGHT))
-				playerAngle -= (delta * 8);
+				playerAngle -= (delta * Resources.difficulty.player_velocity);
 			
 			// move player
 			player.setTransform(rotate(playerAngle, player.getPosition(), new Vector2()), 0);
 			
 			// render debug lines
 			renderer.render(world, camera.combined);
+			
 		}
 		
 		private Vector2 rotate(float angle, Vector2 currentPos, Vector2 centre)
@@ -157,7 +164,10 @@ public class PlayScreen implements Screen, ISongEventListener {
 	public PlayScreen(ArrayList<Beat> beats, FileHandle audioFile) {
 		
 		worldManager = new WorldManager();
+		
+		long delayMs = (long) ((circleRadius / Resources.difficulty.beat_velocity) * 1000);
 		engine = new SongEngine(beats, 0, audioFile);
+
 		engine.addListener(worldManager);
 		
 		camera = new OrthographicCamera();
@@ -170,22 +180,15 @@ public class PlayScreen implements Screen, ISongEventListener {
 	public void render(float delta) {
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		camera.update();
-
+		
 		engine.render(delta);
 		worldManager.render(delta);
+		camera.update();
 	}
 	
-	
-	@Override
-	public void onBeat(Beat b) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -196,25 +199,21 @@ public class PlayScreen implements Screen, ISongEventListener {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 

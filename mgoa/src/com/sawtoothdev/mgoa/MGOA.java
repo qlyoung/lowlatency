@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.sawtoothdev.mgoa.Difficulty.DifficultyName;
 
 /**
  * Main game class, top level.
@@ -18,8 +19,9 @@ public class MGOA extends Game {
 	public void create() {
 		
 		Resources.game = this;
+		Resources.difficulty = new Difficulty(DifficultyName.HARD);
 		
-		FileHandle song = Gdx.files.internal("data/audio/aki.mp3");
+		FileHandle song = Gdx.files.internal("data/audio/she-supersonic.mp3");
 
 
 		{// debugging, remove for final release

@@ -10,7 +10,7 @@ import com.badlogic.gdx.Game;
 
 public class Resources {
 
-	public static enum Difficulty { EASY, NORMAL, HARD, HARDPLUS };
 	public static Game game;
+	public static Difficulty difficulty;
 	
 }

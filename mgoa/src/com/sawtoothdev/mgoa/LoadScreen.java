@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
 
 /**
@@ -31,11 +32,29 @@ public class LoadScreen implements Screen {
 			
 			FastBeatDetector analyzer = new FastBeatDetector(audioFile);
 			
+			float sensitivity = 0;
+			
+			switch (Resources.difficulty.name){
+			case EASY:
+				sensitivity = FastBeatDetector.SENSITIVITY_LOW;
+				break;
+			case NORMAL:
+				sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
+				break;
+			case HARD:
+				sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
+				break;
+			case HARDPLUS:
+				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
+			}
+			
 			try {
-				beats = analyzer.detectBeats(FastBeatDetector.SENSITIVITY_STANDARD);
+				beats = analyzer.detectBeats(sensitivity);
 			} catch (IOException e) {
 				Gdx.app.log("Load Screen", e.getMessage());
 			}
+			
+			beats = BeatsProcessor.removeCloseBeatsExp(beats, 300);
 			
 		}
 		
