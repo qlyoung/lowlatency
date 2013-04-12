@@ -14,7 +14,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -39,9 +42,7 @@ public class PlayScreen implements Screen {
 		Random random = new Random();
 		
 		ArrayList<Body> orbs = new ArrayList<Body>();
-		Body player;
-		
-		private float playerAngle = 0f;
+		Body circle;
 		
 		public WorldManager(){
 			
@@ -50,45 +51,17 @@ public class PlayScreen implements Screen {
 			
 			{// create circle
 				BodyDef circleDef = new BodyDef();
-				circleDef.type = BodyType.StaticBody;
+				circleDef.type = BodyType.KinematicBody;
 				circleDef.position.set(0, 0);
 				
 				FixtureDef circFixture = new FixtureDef();
 				circFixture.density = 1f;
 				circFixture.friction = 0f;
 				
-				CircleShape circleShape = new CircleShape();
-				circleShape.setRadius(circleRadius);
+				circFixture.shape = ShapeFactory.makeCircle(26, 2.0f);
 				
-				circFixture.shape = circleShape;
-				
-				Body circle = world.createBody(circleDef);
+				circle = world.createBody(circleDef);
 				circle.createFixture(circFixture);
-				
-				circleShape.dispose();
-				
-			}
-			
-			{//create player
-				BodyDef playerDef = new BodyDef();
-				playerDef.type = BodyType.KinematicBody;
-				
-				FixtureDef playerFixture = new FixtureDef();
-				playerFixture.density = 1f;
-				playerFixture.friction = 0f;
-				
-				PolygonShape triangle = new PolygonShape();
-				triangle.set( new float[] {0, 0, .3f, 0, 0.15f, .3f});
-				
-				playerFixture.shape = triangle;
-				
-				player = world.createBody(playerDef);
-				player.createFixture(playerFixture);
-				
-				player.setTransform(circleRadius, 0, 0);
-				
-				triangle.dispose();
-				
 			}
 			
 		}
@@ -138,12 +111,9 @@ public class PlayScreen implements Screen {
 			
 			// process input
 			if (Gdx.input.isKeyPressed(Keys.LEFT))
-				playerAngle += (delta * Resources.difficulty.player_velocity);
+				circle.setTransform(new Vector2(), circle.getAngle() + delta * Resources.difficulty.player_velocity);
 			if (Gdx.input.isKeyPressed(Keys.RIGHT))
-				playerAngle -= (delta * Resources.difficulty.player_velocity);
-			
-			// move player
-			player.setTransform(rotate(playerAngle, player.getPosition(), new Vector2()), 0);
+				circle.setTransform(new Vector2(), circle.getAngle() - delta * Resources.difficulty.player_velocity);
 			
 			// render debug lines
 			renderer.render(world, camera.combined);
