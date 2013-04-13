@@ -1,7 +1,6 @@
 package com.sawtoothdev.mgoa;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
@@ -52,6 +51,9 @@ public class PlayScreen implements Screen {
 		
 		// player
 		Body playerCircle;
+		
+		// misc
+		private float camera_rotate_velocity = 200; 
 		
 		public WorldManager(){
 			
@@ -104,7 +106,7 @@ public class PlayScreen implements Screen {
 			}
 			
 			{// spin camera
-				camera.rotate(delta * 120);
+				camera.rotate(delta * camera_rotate_velocity);
 				camera.update();
 			}
 			
@@ -113,7 +115,7 @@ public class PlayScreen implements Screen {
 				// decrease light distance
 				for (Light l : lights){
 					if (l.getDistance() > LIGHT_DISTANCE)
-						l.setDistance(l.getDistance() - (delta * 2));
+						l.setDistance(l.getDistance() - (delta * 3));
 				}
 				
 				// update the handler's render matrix
@@ -175,6 +177,11 @@ public class PlayScreen implements Screen {
 			for (Light l : lights){
 				l.setDistance(l.getDistance() + b.energy);
 			}
+			
+			// fuck with the camera
+			if (b.energy > .6f)
+				camera_rotate_velocity = -camera_rotate_velocity;
+			
 		}
 	}
 	
