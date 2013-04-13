@@ -5,15 +5,16 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 
 public class ShapeFactory {
 
-	public static ChainShape makeCircle(int points, float radius){
+	public static ChainShape makeCircle(int points, float radius, int gap){
 		
 		//make a circle manually
+		
 		ChainShape manualCircle = new ChainShape();
 		
-		Vector2[] circlePoints = new Vector2[points];
+		Vector2[] circlePoints = new Vector2[points - gap + 1];
 		float theta = 0f;
 		
-		for (int i = 0; i < points; i++){
+		for (int i = 0; i < points - gap + 1; i++){
 			
 			theta = (float) (Math.PI * (i / (points / 2f)));
 			

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,12 +14,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
 
@@ -58,7 +54,7 @@ public class PlayScreen implements Screen {
 				circFixture.density = 1f;
 				circFixture.friction = 0f;
 				
-				circFixture.shape = ShapeFactory.makeCircle(26, 2.0f);
+				circFixture.shape = ShapeFactory.makeCircle(26, 2.0f, 2);
 				
 				circle = world.createBody(circleDef);
 				circle.createFixture(circFixture);
@@ -117,6 +113,9 @@ public class PlayScreen implements Screen {
 			
 			// render debug lines
 			renderer.render(world, camera.combined);
+			
+			// spin camera
+			camera.rotate(delta * 120);
 			
 		}
 		
