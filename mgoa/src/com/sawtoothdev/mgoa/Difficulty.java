@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa;
 
 public class Difficulty {
 	
-	public static enum DifficultyName { EASY, NORMAL, HARD, HARDPLUS };
+	public static enum DifficultyName { EASY, NORMAL, HARD, HARDPLUS, TESTING };
 	
 	public Difficulty(DifficultyName name){
 		
@@ -18,6 +18,10 @@ public class Difficulty {
 			beat_velocity = 3.0f;
 			break;
 		case HARDPLUS:
+			player_velocity = 9;
+			beat_velocity = 5.5f;
+			break;
+		case TESTING:
 			player_velocity = 9;
 			beat_velocity = 5.5f;
 			break;

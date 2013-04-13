@@ -9,6 +9,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
+import com.sawtoothdev.mgoa.Difficulty.DifficultyName;
 
 /**
  * Responsible for loading all resources before gameplay begins.
@@ -30,6 +31,8 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
+			//overhaul all of this before release
+			
 			FastBeatDetector analyzer = new FastBeatDetector(audioFile);
 			
 			float sensitivity = 0;
@@ -46,6 +49,8 @@ public class LoadScreen implements Screen {
 				break;
 			case HARDPLUS:
 				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
+			case TESTING:
+				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
 			}
 			
 			try {
@@ -54,7 +59,8 @@ public class LoadScreen implements Screen {
 				Gdx.app.log("Load Screen", e.getMessage());
 			}
 			
-			beats = BeatsProcessor.removeCloseBeatsExp(beats, 300);
+			if (!(Resources.difficulty.name == DifficultyName.TESTING))
+				beats = BeatsProcessor.removeCloseBeatsExp(beats, 300);
 			
 		}
 		

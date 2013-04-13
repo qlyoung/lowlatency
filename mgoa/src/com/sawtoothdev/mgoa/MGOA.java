@@ -19,7 +19,7 @@ public class MGOA extends Game {
 	public void create() {
 		
 		Resources.game = this;
-		Resources.difficulty = new Difficulty(DifficultyName.HARD);
+		Resources.difficulty = new Difficulty(DifficultyName.TESTING);
 		
 		FileHandle song = Gdx.files.internal("data/audio/she-supersonic.mp3");
 
