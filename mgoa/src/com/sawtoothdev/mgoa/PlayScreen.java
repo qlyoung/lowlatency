@@ -50,7 +50,8 @@ public class PlayScreen implements Screen {
 		ArrayList<Light> lights = new ArrayList<Light>();
 		
 		// player
-		Body playerCircle;
+		Body playerArc;
+		Body outerCircle;
 		
 		// misc
 		private float camera_rotate_velocity = 200; 
@@ -64,6 +65,28 @@ public class PlayScreen implements Screen {
 				handler.setAmbientLight(Color.WHITE);
 			}
 			
+			{// create arc
+				BodyDef circleDef = new BodyDef();
+				circleDef.type = BodyType.KinematicBody;
+				circleDef.position.set(0, 0);
+				
+				FixtureDef circFixture = new FixtureDef();
+				circFixture.density = 1f;
+				circFixture.friction = 0f;
+				
+				circFixture.shape = ShapeFactory.makeCircle(30, circleRadius / 2, 28);
+				
+				playerArc = world.createBody(circleDef);
+				playerArc.createFixture(circFixture);
+				
+				// put a light in the middle
+				PointLight light = new PointLight(handler, 500, Color.MAGENTA, LIGHT_DISTANCE * 2f, playerArc.getPosition().x, playerArc.getPosition().y);
+				light.setXray(true);
+				lights.add(light);
+				
+				light.attachToBody(playerArc, 0, 0);
+			}
+			
 			{// create circle
 				BodyDef circleDef = new BodyDef();
 				circleDef.type = BodyType.KinematicBody;
@@ -73,23 +96,25 @@ public class PlayScreen implements Screen {
 				circFixture.density = 1f;
 				circFixture.friction = 0f;
 				
-				circFixture.shape = ShapeFactory.makeCircle(26, circleRadius, 3);
+				circFixture.shape = ShapeFactory.makeCircle(26, circleRadius, 0);
 				
-				playerCircle = world.createBody(circleDef);
-				playerCircle.createFixture(circFixture);
-				
-				// put a light in the middle
-				PointLight light = new PointLight(handler, 500, Color.MAGENTA, LIGHT_DISTANCE * 2f, playerCircle.getPosition().x, playerCircle.getPosition().y);
-				light.setXray(true);
-				lights.add(light);
-				
-				light.attachToBody(playerCircle, 0, 0);
+				outerCircle = world.createBody(circleDef);
+				outerCircle.createFixture(circFixture);
 			}
 			
+			{// setup collision detection
+				
+				
+			}
 		}
 
 		@Override
 		public void render(float delta) {
+			
+			{// collision detection
+				world.step(1/60, 6, 3);
+				Gdx.app.log("world", String.valueOf(world.getContactList().size()));
+			}
 			
 			// render orbs
 			for (Body orb : orbs){
@@ -100,9 +125,9 @@ public class PlayScreen implements Screen {
 			
 			{// render player circle
 				if (Gdx.input.isKeyPressed(Keys.LEFT))
-					playerCircle.setTransform(new Vector2(), playerCircle.getAngle() + delta * Resources.difficulty.player_velocity);
+					playerArc.setTransform(new Vector2(), playerArc.getAngle() + delta * Resources.difficulty.player_velocity);
 				if (Gdx.input.isKeyPressed(Keys.RIGHT))
-					playerCircle.setTransform(new Vector2(), playerCircle.getAngle() - delta * Resources.difficulty.player_velocity);
+					playerArc.setTransform(new Vector2(), playerArc.getAngle() - delta * Resources.difficulty.player_velocity);
 			}
 			
 			{// spin camera
@@ -187,7 +212,7 @@ public class PlayScreen implements Screen {
 	
 	
 	// settings
-	private final float circleRadius = 2.0f;
+	private final float circleRadius = 3.0f;
 	
 	// camera
 	private final OrthographicCamera camera;
