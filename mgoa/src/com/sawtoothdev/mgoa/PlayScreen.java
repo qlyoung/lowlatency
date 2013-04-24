@@ -89,7 +89,7 @@ public class PlayScreen implements Screen {
 			{// light it up
 				for (Body core : cores){
 					
-					PointLight pLight = new PointLight(handler, 500, Color.GREEN, .5f, core.getPosition().x, core.getPosition().y);
+					PointLight pLight = new PointLight(handler, 500, Color.WHITE, .5f, core.getPosition().x, core.getPosition().y);
 					pLight.attachToBody(core, 0, 0);
 					pLight.setXray(true);
 					lights.add(pLight);
@@ -129,25 +129,38 @@ public class PlayScreen implements Screen {
 			
 			spriteBatch.begin();
 			{
+				// shrink and draw rings
+				for (int i = 0; i < circleSprites.size(); i++) {
+					Sprite s = circleSprites.get(i);
+					
+					s.scale(-delta);
+					
+					if (s.getScaleX() < 0)
+						circleSprites.remove(s);
+				}
+				
 				for (Sprite s : circleSprites){
-					s.setSize(s.getWidth() - 1, s.getHeight() - 1);
 					s.draw(spriteBatch);
 				}
+				
 			}
 			spriteBatch.end();
 			
 			// render debug lines
 			renderer.render(world, camera.combined);
-			
-			camera.update();
 		}
 		
 		@Override
 		public void onBeat(Beat b) {
 			
-			//add circle sprite
-			Sprite s = new Sprite(new Texture("data/textures/circ.png"));
-			circleSprites.add(s);
+			//add circle sprite if high energy\
+			//int core = Resources.random.nextInt(3);
+			
+			if (b.energy > .25){
+				Sprite s = new Sprite(new Texture("data/textures/circ.png"));
+				circleSprites.add(s);
+				s.setPosition(400 - s.getWidth() / 2f, 320 - s.getHeight() / 2f);
+			}
 			
 			//pulse all the lights
 			for (Light l : lights){
@@ -190,6 +203,8 @@ public class PlayScreen implements Screen {
 		
 		engine.render(delta);
 		worldManager.render(delta);
+		
+		camera.update();
 	}
 	
 
