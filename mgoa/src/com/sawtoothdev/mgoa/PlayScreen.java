@@ -7,12 +7,14 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -48,13 +50,9 @@ public class PlayScreen implements Screen {
 		// collections
 		ArrayList<Body> orbs = new ArrayList<Body>();
 		ArrayList<Light> lights = new ArrayList<Light>();
-		
-		// player
-		Body playerArc;
-		Body outerCircle;
-		
-		// misc
-		private float camera_rotate_velocity = 200; 
+		ArrayList<Body> cores = new ArrayList<Body>();
+		ArrayList<Sprite> circleSprites = new ArrayList<Sprite>();
+
 		
 		public WorldManager(){
 			
@@ -65,74 +63,48 @@ public class PlayScreen implements Screen {
 				handler.setAmbientLight(Color.WHITE);
 			}
 			
-			{// create arc
-				BodyDef circleDef = new BodyDef();
-				circleDef.type = BodyType.KinematicBody;
-				circleDef.position.set(0, 0);
+			{// make three cores
+				BodyDef coreDef = new BodyDef();
+				coreDef.type = BodyType.StaticBody;
 				
-				FixtureDef circFixture = new FixtureDef();
-				circFixture.density = 1f;
-				circFixture.friction = 0f;
+				FixtureDef coreFixture = new FixtureDef();
+				coreFixture.shape = new CircleShape();
+				coreFixture.shape.setRadius(.5f);
 				
-				circFixture.shape = ShapeFactory.makeCircle(30, circleRadius / 2, 28);
+				Body core1 = world.createBody(coreDef);
+				core1.setTransform(new Vector2(1, -1), 0);
 				
-				playerArc = world.createBody(circleDef);
-				playerArc.createFixture(circFixture);
+				Body core2 = world.createBody(coreDef);
+				core2.setTransform(new Vector2(-1, -1), 0);
 				
-				// put a light in the middle
-				PointLight light = new PointLight(handler, 500, Color.MAGENTA, LIGHT_DISTANCE * 2f, playerArc.getPosition().x, playerArc.getPosition().y);
-				light.setXray(true);
-				lights.add(light);
+				Body core3 = world.createBody(coreDef);
+				core3.setTransform(new Vector2(0, 1f), 0);
 				
-				light.attachToBody(playerArc, 0, 0);
+				cores.add(core1);
+				cores.add(core2);
+				cores.add(core3);
+				
 			}
 			
-			{// create circle
-				BodyDef circleDef = new BodyDef();
-				circleDef.type = BodyType.KinematicBody;
-				circleDef.position.set(0, 0);
-				
-				FixtureDef circFixture = new FixtureDef();
-				circFixture.density = 1f;
-				circFixture.friction = 0f;
-				
-				circFixture.shape = ShapeFactory.makeCircle(26, circleRadius, 0);
-				
-				outerCircle = world.createBody(circleDef);
-				outerCircle.createFixture(circFixture);
-			}
-			
-			{// setup collision detection
-				
-				
+			{// light it up
+				for (Body core : cores){
+					
+					PointLight pLight = new PointLight(handler, 500, Color.GREEN, .5f, core.getPosition().x, core.getPosition().y);
+					pLight.attachToBody(core, 0, 0);
+					pLight.setXray(true);
+					lights.add(pLight);
+				}
 			}
 		}
 
 		@Override
 		public void render(float delta) {
 			
-			{// collision detection
-				world.step(1/60, 6, 3);
-				Gdx.app.log("world", String.valueOf(world.getContactList().size()));
-			}
-			
 			// render orbs
 			for (Body orb : orbs){
 				float posX = orb.getPosition().x + (delta * orb.getLinearVelocity().x);
 				float posY = orb.getPosition().y + (delta * orb.getLinearVelocity().y);
 				orb.setTransform(posX, posY, 0);
-			}
-			
-			{// render player circle
-				if (Gdx.input.isKeyPressed(Keys.LEFT))
-					playerArc.setTransform(new Vector2(), playerArc.getAngle() + delta * Resources.difficulty.player_velocity);
-				if (Gdx.input.isKeyPressed(Keys.RIGHT))
-					playerArc.setTransform(new Vector2(), playerArc.getAngle() - delta * Resources.difficulty.player_velocity);
-			}
-			
-			{// spin camera
-				camera.rotate(delta * camera_rotate_velocity);
-				camera.update();
 			}
 			
 			{// render lights
@@ -155,64 +127,36 @@ public class PlayScreen implements Screen {
 				handler.updateAndRender();
 			}
 			
+			spriteBatch.begin();
+			{
+				for (Sprite s : circleSprites){
+					s.setSize(s.getWidth() - 1, s.getHeight() - 1);
+					s.draw(spriteBatch);
+				}
+			}
+			spriteBatch.end();
+			
 			// render debug lines
 			renderer.render(world, camera.combined);
+			
+			camera.update();
 		}
 		
 		@Override
 		public void onBeat(Beat b) {
 			
-			//make a new orb
-			BodyDef circleDef = new BodyDef();
-			circleDef.type = BodyType.KinematicBody;
-		
-			int angle = Resources.random.nextInt(361);
-			
-			Vector2 velocity = new Vector2(
-					(float) Math.sin(angle) * Resources.difficulty.beat_velocity,
-					(float) Math.cos(angle) * Resources.difficulty.beat_velocity);
-			
-			circleDef.linearVelocity.set(velocity);
-			circleDef.position.set(0, 0);
-			
-			FixtureDef circFixture = new FixtureDef();
-			circFixture.density = 1f;
-			circFixture.friction = 0f;
-			
-			CircleShape circleShape = new CircleShape();
-			circleShape.setRadius(.1f);
-			
-			circFixture.shape = circleShape;
-			
-			Body orb = world.createBody(circleDef);
-			orb.createFixture(circFixture);
-			
-			circleShape.dispose();
-			
-			orbs.add(orb);
-			
-			
-			//light it up
-			PointLight light = new PointLight(handler, 500, Color.CYAN, LIGHT_DISTANCE, orb.getPosition().x, orb.getPosition().y);
-			light.setXray(true);
-			light.attachToBody(orb, 0, 0);
-			lights.add(light);
+			//add circle sprite
+			Sprite s = new Sprite(new Texture("data/textures/circ.png"));
+			circleSprites.add(s);
 			
 			//pulse all the lights
 			for (Light l : lights){
 				l.setDistance(l.getDistance() + b.energy);
 			}
 			
-			// fuck with the camera
-			if (b.energy > .6f)
-				camera_rotate_velocity = -camera_rotate_velocity;
-			
 		}
 	}
 	
-	
-	// settings
-	private final float circleRadius = 3.0f;
 	
 	// camera
 	private final OrthographicCamera camera;
@@ -220,6 +164,9 @@ public class PlayScreen implements Screen {
 	// engines and managers
 	private final WorldManager worldManager;
 	private final SongEngine engine;
+	
+	// misc
+	private SpriteBatch spriteBatch = new SpriteBatch();
 	
 	public PlayScreen(ArrayList<Beat> beats, FileHandle audioFile) {
 		
