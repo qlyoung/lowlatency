@@ -33,34 +33,25 @@ public class LoadScreen implements Screen {
 			
 			//overhaul all of this before release
 			
-			FastBeatDetector analyzer = new FastBeatDetector(audioFile);
-			
 			float sensitivity = 0;
 			
 			switch (Resources.difficulty.name){
 			case EASY:
-				sensitivity = FastBeatDetector.SENSITIVITY_LOW;
-				break;
 			case NORMAL:
-				sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
-				break;
 			case HARD:
-				sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
-				break;
 			case HARDPLUS:
-				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
 			case TESTING:
 				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
 			}
 			
 			try {
-				beats = analyzer.detectBeats(sensitivity);
+				beats = FastBeatDetector.detectBeats(sensitivity, audioFile);
 			} catch (IOException e) {
 				Gdx.app.log("Load Screen", e.getMessage());
 			}
 			
 			if (!(Resources.difficulty.name == DifficultyName.TESTING))
-				beats = BeatsProcessor.removeCloseBeatsExp(beats, 300);
+				beats = BeatsProcessor.removeCloseBeats(beats, 300);
 			
 		}
 		

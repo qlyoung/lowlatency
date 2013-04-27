@@ -22,7 +22,7 @@ import java.util.Iterator;
 		 * @param minTimeBetween The minimum time, in milliseconds, that must be present
 		 * between consecutive beats.
 		 */
-		public static ArrayList<Beat> removeCloseBeatsExp(ArrayList<Beat> beats, long minTimeBetween) {
+		public static ArrayList<Beat> removeCloseBeats(ArrayList<Beat> beats, long minTimeBetween) {
 
 			ArrayList<Beat> result = new ArrayList<Beat>();
 

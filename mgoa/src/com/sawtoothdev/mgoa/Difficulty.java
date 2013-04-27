@@ -10,33 +10,24 @@ public class Difficulty {
 		
 		switch (name){
 		case EASY:
-			player_velocity = 8;
-			beat_velocity = 3;
-			break;
-		case HARD:
-			player_velocity = 9;
-			beat_velocity = 3.0f;
-			break;
-		case HARDPLUS:
-			player_velocity = 9;
-			beat_velocity = 5.5f;
-			break;
-		case TESTING:
-			player_velocity = 9;
-			beat_velocity = 5.5f;
+			ring_time_secs = 1.5f;
 			break;
 		default:
 		case NORMAL:
-			player_velocity = 8;
-			beat_velocity = 4f;
+		case TESTING:
+			ring_time_secs = 1f;
 			break;
-				
+		case HARD:
+			ring_time_secs = .5f;
+			break;
+		case HARDPLUS:
+			ring_time_secs = .25f;
+			break;
 		}
 		
 	}
 	
 	public final DifficultyName name;	
-	public final float player_velocity;
-	public final float beat_velocity;
+	public final float ring_time_secs;
 
 }

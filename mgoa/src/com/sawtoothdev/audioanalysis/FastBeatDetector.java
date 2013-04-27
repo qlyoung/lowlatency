@@ -228,19 +228,12 @@ public class FastBeatDetector {
 	}
 
 
-	private FileHandle songHandle;
-	private PrintStream debugStream;
+	private static PrintStream debugStream;
 
 
 	public static final float SENSITIVITY_AGGRESSIVE = 1.0f;
 	public static final float SENSITIVITY_STANDARD = 1.4f;
 	public static final float SENSITIVITY_LOW = 1.7f;
-
-
-	public FastBeatDetector(FileHandle file) {
-		this.songHandle = file;
-	}
-
 
 	/***
 	 * Performs beat detection on this detector's audio file
@@ -248,16 +241,16 @@ public class FastBeatDetector {
 	 * @return
 	 * @throws IOException
 	 */
-	public ArrayList<Beat> detectBeats(float sensitivity) throws IOException {
+	public static ArrayList<Beat> detectBeats(float sensitivity, FileHandle audioFile) throws IOException {
 
 		long start_time = System.currentTimeMillis();
 
 		{// make sure we have a valid file
 			
-			if (songHandle == null || !songHandle.exists())
+			if (audioFile == null || !audioFile.exists())
 				throw new IOException("Null FileHandle or bad path");
 			
-			if (!( songHandle.extension().toLowerCase().contains("mp3") || songHandle.extension().toLowerCase().contains("ogg")) )
+			if (!( audioFile.extension().toLowerCase().contains("mp3") || audioFile.extension().toLowerCase().contains("ogg")) )
 				throw new IOException("Not a music file");
 		}
 		
@@ -265,7 +258,7 @@ public class FastBeatDetector {
 
 		writeDebug("Calculating spectral flux values...");
 		ArrayList<Float> spectralFluxes = AudioFunctions
-				.getSpectralFluxes(songHandle);
+				.getSpectralFluxes(audioFile);
 
 
 		writeDebug("Detecting rhythmic onsets...");
@@ -338,17 +331,17 @@ public class FastBeatDetector {
 	 * @param stream
 	 *            The PrintStream. Can be null.
 	 */
-	public void setDebugStream(PrintStream stream) {
-		this.debugStream = stream;
+	public static void setDebugStream(PrintStream stream) {
+		debugStream = stream;
 	}
 
 
-	private void writeDebug(String message) {
-		if (this.debugStream != null) {
-			this.debugStream.println(message);
+	private static void writeDebug(String message) {
+		if (debugStream != null) {
+			debugStream.println(message);
 		}
 	}
-	private void printResults(long time, int fluxCount, int beatCount) {
+	private static void printResults(long time, int fluxCount, int beatCount) {
 		writeDebug("\n---------Results---------");
 		writeDebug("Time taken: " + String.valueOf(time / 1000l) + " seconds");
 		writeDebug("Flux values: " + fluxCount);
