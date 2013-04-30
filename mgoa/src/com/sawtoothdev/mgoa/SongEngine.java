@@ -43,6 +43,7 @@ public class SongEngine implements IGameObject {
 
 			if (engineTimer >= delayMs && !music.isPlaying())
 				music.play();
+				
 
 			if (map.get(index) != null && map.get(index).timeMs < engineTimer) {
 				onBeat(map.get(index));
@@ -53,8 +54,6 @@ public class SongEngine implements IGameObject {
 	}
 
 	private void onBeat(Beat mo) {
-		System.out.println("Beat time: " + mo.timeMs + "  Realtime: "
-				+ music.getPosition());
 
 		for (ISongEventListener l : listeners)
 			l.onBeat(mo);
@@ -65,4 +64,7 @@ public class SongEngine implements IGameObject {
 		this.listeners.add(l);
 	}
 
+	public long getSongTime() {
+		return music.getPosition();
+	}
 }

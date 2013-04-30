@@ -17,6 +17,8 @@ public class MgoaMusic {
 
 	private long startTime;
 	private boolean paused = false;
+	
+	private boolean playing = false;
 
 	public MgoaMusic(FileHandle audioFile) {
 		this.music = Gdx.audio.newMusic(audioFile);
@@ -27,16 +29,19 @@ public class MgoaMusic {
 	}
 
 	public void play() {
+		playing = true;
 		music.play();
 		startTime = System.currentTimeMillis();
 	}
 
 	public void pause() {
 		music.pause();
+		playing = false;
 	}
 
 	public void stop() {
 		music.stop();
+		playing = false;
 	}
 
 	/**
@@ -47,7 +52,7 @@ public class MgoaMusic {
 	}
 
 	public boolean isPlaying() {
-		return music.isPlaying();
+		return playing;
 	}
 
 	public boolean isPaused() {

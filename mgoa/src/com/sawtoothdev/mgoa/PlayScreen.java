@@ -52,6 +52,23 @@ public class PlayScreen implements Screen {
 
 		@Override
 		public void render(float delta) {
+			
+			{// handle input
+				
+				if (Gdx.input.isTouched()){
+					
+					// translate touch coords to world coords
+					Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), camera);
+					
+					// check collisions
+					for (BeatCore core : activeCores){
+						if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y))
+							Gdx.app.log("hit", core.onHit(engine.getSongTime()).toString());
+					}
+					
+				}
+			}
+			
 
 			{// rings
 				
@@ -59,7 +76,6 @@ public class PlayScreen implements Screen {
 					for (int i = 0; i < activeCores.size(); i++){
 						BeatCore c = activeCores.get(i);
 						if (c.isComplete()){
-							c.deactivate();
 							activeCores.remove(c);
 							corePool.free(c);
 						}
@@ -100,21 +116,14 @@ public class PlayScreen implements Screen {
 					float y = (float) (Math.random() * (max - min) + min);
 
 					
-					
 					BeatCore core = corePool.obtain();
-					Vector2 position = new Vector2();
-					position.x = x;
-					position.y = y;
-					core.setPosition(position, camera);
-					core.activate();
+					core.setPosition(new Vector2(x, y), camera);
+					core.setup(b);
 					
 					activeCores.add(core);
 					
 				}
 			}
-			
-			for (BeatCore c : activeCores)
-				c.pulse(b.energy);
 
 		}
 	
@@ -147,12 +156,12 @@ public class PlayScreen implements Screen {
 			bMap = map.hard;
 		}
 			
-		engine = new SongEngine(bMap, 0, audioFile);
+		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
 
 		engine.addListener(worldManager);
 
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 10, 6);
+		camera.setToOrtho(false, Resources.worldDimensions.x, Resources.worldDimensions.y);
 		camera.position.set(0, 0, 0);
 	}
 
