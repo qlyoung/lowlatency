@@ -9,7 +9,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
-import com.sawtoothdev.mgoa.Difficulty.DifficultyName;
 
 /**
  * Responsible for loading all resources before gameplay begins.
@@ -31,34 +30,29 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
-			//overhaul all of this before release
+			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
 			
-			float sensitivity = 0;
-			
-			switch (Resources.difficulty.name){
-			case EASY:
-			case NORMAL:
-			case HARD:
-			case HARDPLUS:
-			case TESTING:
-				sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
-			}
+			ArrayList<Beat> beats = null;
 			
 			try {
 				beats = FastBeatDetector.detectBeats(sensitivity, audioFile);
-			} catch (IOException e) {
-				Gdx.app.log("Load Screen", e.getMessage());
-			}
+			} catch (IOException e) { Gdx.app.log("Load Screen", e.getMessage()); }
 			
-			if (!(Resources.difficulty.name == DifficultyName.TESTING))
-				beats = BeatsProcessor.removeCloseBeats(beats, 300);
+			
+			ArrayList<Beat> easy, medium, hard;
+			
+			easy = BeatsProcessor.removeCloseBeats(beats, 250);
+			medium = BeatsProcessor.removeCloseBeats(beats, 175);
+			hard = BeatsProcessor.removeCloseBeats(beats, 100);
+			
+			map = new BeatMap(easy, medium, hard);
 			
 		}
 		
 	}
 	
+	private BeatMap map;
 	private LoadingThread loadThread;
-	private ArrayList<Beat> beats;
 	private FileHandle audioFile;
 	
 	public LoadScreen(FileHandle audioFile){
@@ -77,7 +71,7 @@ public class LoadScreen implements Screen {
 		
 		//if done loading, move on
 		if (!loadThread.isAlive()){
-			Resources.game.setScreen(new PlayScreen(beats, audioFile));
+			Resources.game.setScreen(new PlayScreen(map, audioFile));
 		}
 	}
 

@@ -28,7 +28,7 @@ public class PlayScreen implements Screen {
 		// box2d
 		World world;
 
-		//TODO: Pool everything
+		// le pool
 		CorePool corePool;
 		
 		// lights
@@ -94,10 +94,17 @@ public class PlayScreen implements Screen {
 				
 				if (b.energy > 0f){
 					
+					float max = 4, min = -4;
+					float x = (float) (Math.random() * (max - min) + min);
+					max = 2; min = -2;
+					float y = (float) (Math.random() * (max - min) + min);
+
+					
+					
 					BeatCore core = corePool.obtain();
-					Vector2 position = new Vector2(Resources.random.nextInt(9), Resources.random.nextInt(5));
-					position.x -= 4;
-					position.y -= 2;
+					Vector2 position = new Vector2();
+					position.x = x;
+					position.y = y;
 					core.setPosition(position, camera);
 					core.activate();
 					
@@ -105,6 +112,9 @@ public class PlayScreen implements Screen {
 					
 				}
 			}
+			
+			for (BeatCore c : activeCores)
+				c.pulse(b.energy);
 
 		}
 	
@@ -117,13 +127,27 @@ public class PlayScreen implements Screen {
 	private final WorldManager worldManager;
 	private final SongEngine engine;
 
-
 	
-	public PlayScreen(ArrayList<Beat> beats, FileHandle audioFile) {
+	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
 		worldManager = new WorldManager();
-
-		engine = new SongEngine(beats, (long) (Resources.difficulty.ring_time_secs * 1000f), audioFile);
+		
+		ArrayList<Beat> bMap;
+		
+		switch (Resources.difficulty.name){
+		case EASY:
+			bMap = map.easy;
+			break;
+		case NORMAL:
+			bMap = map.medium;
+			break;
+		default:
+		case HARD:
+		case HARDPLUS:
+			bMap = map.hard;
+		}
+			
+		engine = new SongEngine(bMap, 0, audioFile);
 
 		engine.addListener(worldManager);
 

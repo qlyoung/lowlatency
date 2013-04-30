@@ -10,24 +10,24 @@ public class Difficulty {
 		
 		switch (name){
 		case EASY:
-			ring_time_secs = 1.5f;
+			ringTimeMs = 1500;
 			break;
 		default:
 		case NORMAL:
 		case TESTING:
-			ring_time_secs = 1f;
+			ringTimeMs = 1000;
 			break;
 		case HARD:
-			ring_time_secs = .5f;
+			ringTimeMs = 700;
 			break;
 		case HARDPLUS:
-			ring_time_secs = .25f;
+			ringTimeMs = 250;
 			break;
 		}
 		
 	}
 	
 	public final DifficultyName name;	
-	public final float ring_time_secs;
+	public final long ringTimeMs;
 
 }
