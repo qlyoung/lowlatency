@@ -15,62 +15,83 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class BeatCore implements IGameObject, Poolable {
 
-	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, MISS, INACTIVE };
-	
-	private final Sprite ring;
+	public static enum Accuracy {
+		STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, MISS, INACTIVE
+	};
+
+	private final Sprite ring, coreRing;
 	private Vector2 position;
-	
+
 	private Beat beat;
-	
+	private long time;
+
 	private boolean complete = false;
-	
-	
-	public BeatCore(World world, RayHandler handler){		
+
+	private static float SYNCH_SIZE = 1/2f;
+
+	public BeatCore(World world, RayHandler handler) {
 		ring = new Sprite(new Texture("data/textures/circ.png"));
+
+		coreRing = new Sprite(new Texture("data/textures/circ.png"));
+		coreRing.setScale(SYNCH_SIZE);
+		coreRing.setColor(Color.GREEN);
 	}
 
 	// lifecycle
-	public void setup(Beat beat){
+	public void setup(Beat beat, long timeMs) {
 		this.beat = beat;
+		this.time = timeMs + 500;
 	}
-	
+
 	@Override
 	public void render(float delta) {
-		
-		if (ring.getScaleX() >= 0)
-			ring.scale(-delta  / (Resources.difficulty.ringTimeMs / 1000));
-		else
-			complete = true;
-		
-		
-				
-		ring.draw(Resources.spriteBatch);
+
+		{// update
+			if (ring.getScaleX() > SYNCH_SIZE)
+				ring.scale(-delta
+						/ ((Resources.difficulty.ringTimeMs / (1000 * SYNCH_SIZE))));
+			else if (ring.getScaleX() <= SYNCH_SIZE)
+				ring.setColor(Color.RED);
+
+			if (time > 0)
+				time -= delta * 1000f;
+			else
+				complete = true;
+		}
+
+		{// draw
+			coreRing.draw(Resources.spriteBatch);
+			ring.draw(Resources.spriteBatch);
+		}
 	}
-	
+
 	@Override
 	public void reset() {
-		
+
 		ring.setScale(1);
 		ring.setColor(Color.WHITE);
-		
+
+		time = Resources.difficulty.ringTimeMs;
+
 		complete = false;
 	}
-	
-	
+
 	// modifiers
-	public void setPosition(Vector2 worldPos, Camera camera){
+	public void setPosition(Vector2 worldPos, Camera camera) {
 
 		this.position = worldPos;
-		
+
 		Vector2 spritePosition = Resources.projectToScreen(worldPos, camera);
-		ring.setPosition(spritePosition.x - ring.getWidth() / 2f, spritePosition.y - ring.getHeight() / 2f);
+		ring.setPosition(spritePosition.x - ring.getWidth() / 2f,
+				spritePosition.y - ring.getHeight() / 2f);
+		coreRing.setPosition(spritePosition.x - coreRing.getWidth() / 2f, spritePosition.y - coreRing.getHeight() / 2f);
 	}
 
-	public Accuracy onHit(long songTimeMs){
+	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
-		
+
 		Gdx.app.log("diff", String.valueOf(diff));
-		
+
 		if (diff < -300)
 			return Accuracy.INACTIVE;
 		else if (diff < -210)
@@ -85,17 +106,17 @@ public class BeatCore implements IGameObject, Poolable {
 			return Accuracy.STELLAR;
 		else
 			return Accuracy.MISS;
-		
+
 	}
-	
+
 	// readers
-	public boolean isComplete(){
+	public boolean isComplete() {
 		return complete;
 	}
 
-	public Rectangle getBoundingRectangle(){
-		
+	public Rectangle getBoundingRectangle() {
+
 		return new Rectangle(position.x - .25f, position.y - .25f, .5f, .5f);
-		
+
 	}
 }

@@ -118,7 +118,7 @@ public class PlayScreen implements Screen {
 					
 					BeatCore core = corePool.obtain();
 					core.setPosition(new Vector2(x, y), camera);
-					core.setup(b);
+					core.setup(b, Resources.difficulty.ringTimeMs);
 					
 					activeCores.add(core);
 					
