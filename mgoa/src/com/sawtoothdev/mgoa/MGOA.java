@@ -21,6 +21,9 @@ public class MGOA extends Game {
 		Resources.game = this;
 		Resources.difficulty = new Difficulty(DifficultyName.HARD);
 		
+		Resources.camera.setToOrtho(false, Resources.worldDimensions.x, Resources.worldDimensions.y);
+		Resources.camera.position.set(0, 0, 0);
+		
 		FileHandle song = Gdx.files.internal("data/audio/music.mp3");
 
 

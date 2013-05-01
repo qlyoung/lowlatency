@@ -2,18 +2,14 @@ package com.sawtoothdev.mgoa;
 
 import java.util.ArrayList;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
 
 /**
@@ -30,29 +26,15 @@ public class PlayScreen implements Screen {
 		BitmapFont font = new BitmapFont();
 		String lastAccuracy = "READY";
 		
-		// box2d
-		World world;
-
 		// le pool
 		CorePool corePool;
 		
-		// lights
-		RayHandler handler;
-		
 		// objects
 		ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
+		int index = 0;
 
 		public WorldManager() {
-
-			world = new World(new Vector2(), true);
-
-			{// set up lighting
-				handler = new RayHandler(world);
-				handler.setAmbientLight(Color.WHITE);
-			}
-			
-			corePool = new CorePool(world, handler);
-			
+			corePool = new CorePool();
 		}
 
 		@Override
@@ -63,7 +45,7 @@ public class PlayScreen implements Screen {
 				if (Gdx.input.isTouched()){
 					
 					// translate touch coords to world coords
-					Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), camera);
+					Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 					
 					// check collisions
 					for (BeatCore core : activeCores){
@@ -102,17 +84,6 @@ public class PlayScreen implements Screen {
 				Resources.spriteBatch.end();
 			}
 			
-			{// lights
-
-				{// draw
-					handler.setCombinedMatrix(camera.combined, camera.position.x,
-							camera.position.y, camera.viewportWidth * camera.zoom,
-							camera.viewportHeight * camera.zoom);
-					handler.updateAndRender();
-				}
-
-			}
-			
 		}
 
 		@Override
@@ -127,8 +98,12 @@ public class PlayScreen implements Screen {
 					
 					
 					BeatCore core = corePool.obtain();
-					core.setPosition(new Vector2(x, y), camera);
-					core.setup(b, Resources.difficulty.ringTimeMs);
+					core.setPosition(new Vector2(x, y));
+					core.setup(b, Resources.difficulty.ringTimeMs, String.valueOf(index));
+					
+					index++;
+					if (index > 15)
+						index = 0;
 					
 					activeCores.add(core);
 					
@@ -139,8 +114,6 @@ public class PlayScreen implements Screen {
 	
 	}
 
-	// camera
-	private final OrthographicCamera camera;
 
 	// engines and managers
 	private final WorldManager worldManager;
@@ -172,10 +145,6 @@ public class PlayScreen implements Screen {
 		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
 
 		engine.addListener(worldManager);
-
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Resources.worldDimensions.x, Resources.worldDimensions.y);
-		camera.position.set(0, 0, 0);
 	}
 
 	@Override
@@ -190,7 +159,7 @@ public class PlayScreen implements Screen {
 		engine.render(delta);
 		worldManager.render(delta);
 
-		camera.update();
+		Resources.camera.update();
 	}
 
 	@Override
