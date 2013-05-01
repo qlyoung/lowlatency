@@ -10,6 +10,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -24,6 +26,9 @@ import com.sawtoothdev.audioanalysis.Beat;
 public class PlayScreen implements Screen {
 
 	private class WorldManager implements ISongEventListener, IGameObject {
+		
+		BitmapFont font = new BitmapFont();
+		String lastAccuracy = "READY";
 		
 		// box2d
 		World world;
@@ -62,10 +67,14 @@ public class PlayScreen implements Screen {
 					
 					// check collisions
 					for (BeatCore core : activeCores){
-						if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y))
-							Gdx.app.log("hit", core.onHit(engine.getSongTime()).toString());
+						
+						if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)){
+							String nextAccuracy = core.onHit(engine.getSongTime()).toString();
+							if (nextAccuracy != "INACTIVE")
+								lastAccuracy = nextAccuracy;
+						}
+							
 					}
-					
 				}
 			}
 			
@@ -83,6 +92,9 @@ public class PlayScreen implements Screen {
 				}
 				
 				Resources.spriteBatch.begin();
+				
+				font.setColor(Color.WHITE);
+				font.draw(Resources.spriteBatch, lastAccuracy, 50, 50);
 				
 				for (BeatCore core : activeCores)
 					core.render(delta);
@@ -110,11 +122,9 @@ public class PlayScreen implements Screen {
 				
 				if (b.energy > 0f){
 					
-					float max = 4, min = -4;
-					float x = (float) (Math.random() * (max - min) + min);
-					max = 2; min = -2;
-					float y = (float) (Math.random() * (max - min) + min);
-
+					float y = Resources.random.nextInt(5) - 2;
+					float x = Resources.random.nextInt(9) - 4;
+					
 					
 					BeatCore core = corePool.obtain();
 					core.setPosition(new Vector2(x, y), camera);
@@ -135,6 +145,9 @@ public class PlayScreen implements Screen {
 	// engines and managers
 	private final WorldManager worldManager;
 	private final SongEngine engine;
+	
+	// misc
+	Texture background = new Texture("data/textures/bg.png");
 
 	
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
@@ -169,6 +182,10 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		Resources.spriteBatch.begin();
+		Resources.spriteBatch.draw(background, 0, 0);
+		Resources.spriteBatch.end();
 
 		engine.render(delta);
 		worldManager.render(delta);

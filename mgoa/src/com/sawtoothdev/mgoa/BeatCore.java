@@ -6,7 +6,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -18,21 +20,27 @@ public class BeatCore implements IGameObject, Poolable {
 	public static enum Accuracy {
 		STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, MISS, INACTIVE
 	};
-
+	private static float SYNCH_SIZE = 1/3f;
+	private static float SHRINK_RATE = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
+	private static BitmapFont coreFont = new BitmapFont();
+	
 	private final Sprite ring, coreRing;
 	private Vector2 position;
 
 	private Beat beat;
 	private long time;
+	private String text;
 
 	private boolean complete = false;
+	private boolean beenHit = false;
 
-	private static float SYNCH_SIZE = 1/2f;
 
 	public BeatCore(World world, RayHandler handler) {
-		ring = new Sprite(new Texture("data/textures/circ.png"));
-
-		coreRing = new Sprite(new Texture("data/textures/circ.png"));
+		
+		TextureRegion reggie = new TextureRegion(new Texture("data/textures/circ.png"), 175, 175);
+		ring = new Sprite(reggie);
+		coreRing = new Sprite(reggie);
+		
 		coreRing.setScale(SYNCH_SIZE);
 		coreRing.setColor(Color.GREEN);
 	}
@@ -48,10 +56,9 @@ public class BeatCore implements IGameObject, Poolable {
 
 		{// update
 			if (ring.getScaleX() > SYNCH_SIZE)
-				ring.scale(-delta
-						/ ((Resources.difficulty.ringTimeMs / (1000 * SYNCH_SIZE))));
+				ring.scale(delta * SHRINK_RATE);
 			else if (ring.getScaleX() <= SYNCH_SIZE)
-				ring.setColor(Color.RED);
+				ring.setColor(Color.BLUE);
 
 			if (time > 0)
 				time -= delta * 1000f;
@@ -62,6 +69,7 @@ public class BeatCore implements IGameObject, Poolable {
 		{// draw
 			coreRing.draw(Resources.spriteBatch);
 			ring.draw(Resources.spriteBatch);
+			
 		}
 	}
 
@@ -74,6 +82,7 @@ public class BeatCore implements IGameObject, Poolable {
 		time = Resources.difficulty.ringTimeMs;
 
 		complete = false;
+		beenHit = false;
 	}
 
 	// modifiers
@@ -92,8 +101,15 @@ public class BeatCore implements IGameObject, Poolable {
 
 		Gdx.app.log("diff", String.valueOf(diff));
 
-		if (diff < -300)
+		if (beenHit)
 			return Accuracy.INACTIVE;
+
+		beenHit = true;
+		
+		if (diff < -300){
+			beenHit = false;
+			return Accuracy.INACTIVE;
+		}
 		else if (diff < -210)
 			return Accuracy.ALMOST;
 		else if (diff < -150)
@@ -104,6 +120,14 @@ public class BeatCore implements IGameObject, Poolable {
 			return Accuracy.PERFECT;
 		else if (diff < 40)
 			return Accuracy.STELLAR;
+		else if (diff < 120)
+			return Accuracy.PERFECT;
+		else if (diff < 200)
+			return Accuracy.EXCELLENT;
+		else if (diff < 280)
+			return Accuracy.GOOD;
+		else if (diff < 400)
+			return Accuracy.ALMOST;
 		else
 			return Accuracy.MISS;
 

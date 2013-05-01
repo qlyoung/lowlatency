@@ -10,12 +10,12 @@ public class Difficulty {
 		
 		switch (name){
 		case EASY:
-			ringTimeMs = 1500;
+			ringTimeMs = 1000;
 			break;
 		default:
 		case NORMAL:
 		case TESTING:
-			ringTimeMs = 1000;
+			ringTimeMs = 750;
 			break;
 		case HARD:
 			ringTimeMs = 700;

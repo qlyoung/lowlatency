@@ -44,8 +44,7 @@ public class SongEngine implements IGameObject {
 			if (engineTimer >= delayMs && !music.isPlaying())
 				music.play();
 				
-
-			if (map.get(index) != null && map.get(index).timeMs < engineTimer) {
+			if (index <= map.size() - 1 && map.get(index).timeMs < engineTimer) {
 				onBeat(map.get(index));
 				index++;
 			}

@@ -41,12 +41,11 @@ public class LoadScreen implements Screen {
 			
 			ArrayList<Beat> easy, medium, hard;
 			
-			easy = BeatsProcessor.removeCloseBeats(beats, 250);
-			medium = BeatsProcessor.removeCloseBeats(beats, 175);
-			hard = BeatsProcessor.removeCloseBeats(beats, 100);
+			easy = BeatsProcessor.removeCloseBeats(beats, 400);
+			medium = BeatsProcessor.removeCloseBeats(beats, 250);
+			hard = BeatsProcessor.removeCloseBeats(beats, 200);
 			
 			map = new BeatMap(easy, medium, hard);
-			
 		}
 		
 	}
