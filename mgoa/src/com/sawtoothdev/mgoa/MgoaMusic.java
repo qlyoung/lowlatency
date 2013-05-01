@@ -14,12 +14,12 @@ import com.badlogic.gdx.files.FileHandle;
 public class MgoaMusic {
 
 	private Music music;
-
 	private long startTime;
-	private boolean paused = false;
 	
+	private boolean paused = false;
 	private boolean playing = false;
 
+	
 	public MgoaMusic(FileHandle audioFile) {
 		this.music = Gdx.audio.newMusic(audioFile);
 

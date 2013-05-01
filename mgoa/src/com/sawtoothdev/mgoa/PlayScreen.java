@@ -35,52 +35,52 @@ public class PlayScreen implements Screen {
 
 		public WorldManager() {
 			corePool = new CorePool();
+			font.setColor(Color.WHITE);
 		}
 
 		@Override
 		public void render(float delta) {
 			
-			{// handle input
+			// input
+			if (Gdx.input.isTouched()){
 				
-				if (Gdx.input.isTouched()){
+				// translate touch coords to world coords
+				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));	
+				
+				// check collisions
+				for (BeatCore core : activeCores){
 					
-					// translate touch coords to world coords
-					Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-					
-					// check collisions
-					for (BeatCore core : activeCores){
-						
-						if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)){
-							String nextAccuracy = core.onHit(engine.getSongTime()).toString();
-							if (nextAccuracy != "INACTIVE")
-								lastAccuracy = nextAccuracy;
-						}
-							
+					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)){
+						String nextAccuracy = core.onHit(engine.getSongTime()).toString();
+						if (nextAccuracy != "INACTIVE")
+							lastAccuracy = nextAccuracy;
 					}
+						
 				}
 			}
 			
-
+			
 			{// rings
 				
-				{// update
-					for (int i = 0; i < activeCores.size(); i++){
-						BeatCore c = activeCores.get(i);
-						if (c.isComplete()){
-							activeCores.remove(c);
-							corePool.free(c);
-						}
+				// update
+				for (int i = 0; i < activeCores.size(); i++){
+					
+					BeatCore c = activeCores.get(i);
+					
+					if (c.isComplete()){
+						activeCores.remove(c);
+						corePool.free(c);
 					}
 				}
 				
+				// draw
 				Resources.spriteBatch.begin();
-				
-				font.setColor(Color.WHITE);
-				font.draw(Resources.spriteBatch, lastAccuracy, 50, 50);
-				
-				for (BeatCore core : activeCores)
-					core.render(delta);
-				
+				{
+					font.draw(Resources.spriteBatch, lastAccuracy, 50, 50);
+
+					for (BeatCore core : activeCores)
+						core.render(delta);
+				}
 				Resources.spriteBatch.end();
 			}
 			
@@ -89,25 +89,20 @@ public class PlayScreen implements Screen {
 		@Override
 		public void onBeat(Beat b) {
 
-			{// add new ring if energy high enough
+			if (b.energy > 0f){
 				
-				if (b.energy > 0f){
-					
-					float y = Resources.random.nextInt(5) - 2;
-					float x = Resources.random.nextInt(9) - 4;
-					
-					
-					BeatCore core = corePool.obtain();
-					core.setPosition(new Vector2(x, y));
-					core.setup(b, Resources.difficulty.ringTimeMs, String.valueOf(index));
-					
-					index++;
-					if (index > 15)
-						index = 0;
-					
-					activeCores.add(core);
-					
-				}
+				float y = Resources.random.nextInt(5) - 2;
+				float x = Resources.random.nextInt(9) - 4;					
+				
+				BeatCore core = corePool.obtain();
+				core.setPosition(new Vector2(x, y));
+				core.setup(b, Resources.difficulty.ringTimeMs, String.valueOf(index));
+			
+				index++;
+				if (index > 15)
+					index = 0;
+				
+				activeCores.add(core);					
 			}
 
 		}
@@ -128,7 +123,6 @@ public class PlayScreen implements Screen {
 		worldManager = new WorldManager();
 		
 		ArrayList<Beat> bMap;
-		
 		switch (Resources.difficulty.name){
 		case EASY:
 			bMap = map.easy;
@@ -143,7 +137,6 @@ public class PlayScreen implements Screen {
 		}
 			
 		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
-
 		engine.addListener(worldManager);
 	}
 

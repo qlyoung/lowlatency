@@ -13,6 +13,10 @@ import com.sawtoothdev.audioanalysis.FastBeatDetector;
 /**
  * Responsible for loading all resources before gameplay begins.
  * This includes audio analysis, map generation, and graphics.
+ * 
+ * I put all the loading code its own thread so we can display
+ * an interactive load screen at some point.
+ * 
  * @author albatross
  *
  */
@@ -21,7 +25,8 @@ public class LoadScreen implements Screen {
 	
 	public class LoadingThread extends Thread{
 		
-		private FileHandle audioFile;
+		public FileHandle audioFile;
+		public BeatMap map;
 		
 		public LoadingThread(FileHandle audioFile){
 			this.audioFile = audioFile;
@@ -50,33 +55,27 @@ public class LoadScreen implements Screen {
 		
 	}
 	
-	private BeatMap map;
 	private LoadingThread loadThread;
-	private FileHandle audioFile;
+	
 	
 	public LoadScreen(FileHandle audioFile){
-		this.audioFile = audioFile;
 		loadThread = new LoadingThread(audioFile);
+		loadThread.start();
 	}
-	
 	
 	@Override
 	public void render(float delta) {
 		
-		//show soft interactive light show synced to ambient music while loading
-		//
-		//...maybe later
-		
-		
 		//if done loading, move on
-		if (!loadThread.isAlive()){
-			Resources.game.setScreen(new PlayScreen(map, audioFile));
+		if (!loadThread.isAlive()) {
+			PlayScreen playScreen = new PlayScreen(loadThread.map, loadThread.audioFile);
+			Resources.game.setScreen(playScreen);
 		}
 	}
 
 	@Override
 	public void show() {
-		loadThread.start();
+		
 	}
 	
 	@Override

@@ -4,6 +4,9 @@ public class Difficulty {
 	
 	public static enum DifficultyName { EASY, NORMAL, HARD, HARDPLUS, TESTING };
 	
+	public final DifficultyName name;	
+	public final long ringTimeMs;
+	
 	public Difficulty(DifficultyName name){
 		
 		this.name = name;
@@ -27,7 +30,4 @@ public class Difficulty {
 		
 	}
 	
-	public final DifficultyName name;	
-	public final long ringTimeMs;
-
 }
