@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,7 @@ public class Resources {
 	public static SpriteBatch spriteBatch;
 	public static OrthographicCamera camera;
 	public static Vector2 worldDimensions;
+	public static BitmapFont font;
 	
 	
 	// a few useful methods

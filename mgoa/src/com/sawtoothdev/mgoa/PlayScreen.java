@@ -8,7 +8,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 
@@ -23,8 +22,7 @@ public class PlayScreen implements Screen {
 
 	private class WorldManager implements ISongEventListener, IGameObject {
 		
-		BitmapFont font = new BitmapFont();
-		String lastAccuracy = "READY";
+
 		
 		// le pool
 		CorePool corePool;
@@ -35,7 +33,7 @@ public class PlayScreen implements Screen {
 
 		public WorldManager() {
 			corePool = new CorePool();
-			font.setColor(Color.WHITE);
+			Resources.font.setColor(Color.WHITE);
 		}
 
 		@Override
@@ -45,17 +43,18 @@ public class PlayScreen implements Screen {
 			if (Gdx.input.isTouched()){
 				
 				// translate touch coords to world coords
-				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));	
+				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 				
 				// check collisions
 				for (BeatCore core : activeCores){
 					
 					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)){
 						String nextAccuracy = core.onHit(engine.getSongTime()).toString();
-						if (nextAccuracy != "INACTIVE")
-							lastAccuracy = nextAccuracy;
+						if (nextAccuracy != "INACTIVE"){
+							hud.setLastAccuracy(nextAccuracy + "!");
+							hud.addToScore(core.getScoreValue());
+						}
 					}
-						
 				}
 			}
 			
@@ -76,8 +75,6 @@ public class PlayScreen implements Screen {
 				// draw
 				Resources.spriteBatch.begin();
 				{
-					font.draw(Resources.spriteBatch, lastAccuracy, 50, 50);
-
 					for (BeatCore core : activeCores)
 						core.render(delta);
 				}
@@ -109,10 +106,39 @@ public class PlayScreen implements Screen {
 	
 	}
 
+	private class HUD implements IGameObject {
 
+		private int score;
+		String lastAccuracy = "READY";
+		
+		
+		public HUD(){
+			
+		}
+		
+		@Override
+		public void render(float delta) {
+			
+			Resources.spriteBatch.begin();
+			Resources.font.draw(Resources.spriteBatch, String.valueOf(score), 0, 450);
+			Resources.font.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
+			Resources.spriteBatch.end();
+			
+		}
+		
+		public void addToScore(int value){
+			score += value;
+		}
+		public void setLastAccuracy(String message){
+			this.lastAccuracy = message;
+		}
+		
+	}
+	
 	// engines and managers
 	private final WorldManager worldManager;
 	private final SongEngine engine;
+	private final HUD hud;
 	
 	// misc
 	Texture background = new Texture("data/textures/bg.png");
@@ -121,6 +147,7 @@ public class PlayScreen implements Screen {
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
 		worldManager = new WorldManager();
+		hud = new HUD();
 		
 		ArrayList<Beat> bMap;
 		switch (Resources.difficulty.name){
@@ -132,7 +159,6 @@ public class PlayScreen implements Screen {
 			break;
 		default:
 		case HARD:
-		case HARDPLUS:
 			bMap = map.hard;
 		}
 			
@@ -151,6 +177,7 @@ public class PlayScreen implements Screen {
 
 		engine.render(delta);
 		worldManager.render(delta);
+		hud.render(delta);
 
 		Resources.camera.update();
 	}

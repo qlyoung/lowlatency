@@ -134,4 +134,7 @@ public class BeatCore implements IGameObject, Poolable {
 		return new Rectangle(position.x - .25f, position.y - .25f, .5f, .5f);
 
 	}
+	public int getScoreValue(){
+		return (int) (beat.energy * 1000);
+	}
 }
