@@ -21,12 +21,10 @@ import com.sawtoothdev.audioanalysis.Beat;
 public class PlayScreen implements Screen {
 
 	private class WorldManager implements ISongEventListener, IGameObject {
-		
 
-		
 		// le pool
 		CorePool corePool;
-		
+
 		// objects
 		ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 		int index = 0;
@@ -38,119 +36,144 @@ public class PlayScreen implements Screen {
 
 		@Override
 		public void render(float delta) {
-			
+
 			// input
-			if (Gdx.input.isTouched()){
-				
+			if (Gdx.input.isTouched()) {
+
 				// translate touch coords to world coords
 				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-				
+
 				// check collisions
-				for (BeatCore core : activeCores){
-					
-					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)){
+				for (BeatCore core : activeCores) {
+
+					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)) {
+						
 						String nextAccuracy = core.onHit(engine.getSongTime()).toString();
-						if (nextAccuracy != "INACTIVE"){
+						
+						if (nextAccuracy != "INACTIVE") {
 							hud.setLastAccuracy(nextAccuracy + "!");
 							hud.addToScore(core.getScoreValue());
 						}
 					}
 				}
 			}
-			
-			
+
 			{// rings
-				
+
 				// update
-				for (int i = 0; i < activeCores.size(); i++){
-					
+				for (int i = 0; i < activeCores.size(); i++) {
+
 					BeatCore c = activeCores.get(i);
-					
-					if (c.isComplete()){
+
+					if (c.isComplete()) {
 						activeCores.remove(c);
 						corePool.free(c);
 					}
 				}
-				
+
 				// draw
-				Resources.spriteBatch.begin();
-				{
-					for (BeatCore core : activeCores)
-						core.render(delta);
-				}
-				Resources.spriteBatch.end();
+				for (BeatCore core : activeCores)
+					core.render(delta);
 			}
-			
+
 		}
 
 		@Override
-		public void onBeat(Beat b) {
+		public void onBeatWarning(Beat b) {
 
-			if (b.energy > 0f){
-				
-				float y = Resources.random.nextInt(5) - 2;
-				float x = Resources.random.nextInt(9) - 4;					
-				
+			if (b.energy > 0f) {
+
 				BeatCore core = corePool.obtain();
-				core.setPosition(new Vector2(x, y));
-				core.setup(b, Resources.difficulty.ringTimeMs, String.valueOf(index));
-			
+				core.setup(b, String.valueOf(index));
+
+				Vector2 position = new Vector2();
+
+				// don't place beats on top of each other
+				if (activeCores.size() > 0) {
+					
+					boolean clean = false;
+
+					while (!clean) {
+
+						float y = Resources.random.nextInt(5) - 2;
+						float x = Resources.random.nextInt(9) - 4;
+						position.set(x, y);
+
+						for (BeatCore c : activeCores) {
+							clean = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
+							if (!clean)
+								break;
+						}
+
+					}
+				}
+				else {
+					float y = Resources.random.nextInt(5) - 2;
+					float x = Resources.random.nextInt(9) - 4;
+					position.set(x, y);
+				}
+					
+
+				core.setPosition(position);
+
 				index++;
 				if (index > 15)
 					index = 0;
-				
-				activeCores.add(core);					
+
+				activeCores.add(core);
 			}
 
 		}
-	
+
 	}
 
 	private class HUD implements IGameObject {
 
-		private int score;
+		private int score, displayScore;
 		String lastAccuracy = "READY";
-		
-		
-		public HUD(){
-			
+
+		public HUD() {
+
 		}
-		
+
 		@Override
 		public void render(float delta) {
-			
-			Resources.spriteBatch.begin();
-			Resources.font.draw(Resources.spriteBatch, String.valueOf(score), 0, 450);
+
+			if (displayScore < score)
+				displayScore += 3;
+			else if (displayScore > score)
+				displayScore = score;
+
+			Resources.font.setColor(Color.WHITE);
+			Resources.font.draw(Resources.spriteBatch, String.valueOf(displayScore), 10, 460);
 			Resources.font.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
-			Resources.spriteBatch.end();
-			
+
 		}
-		
-		public void addToScore(int value){
+
+		public void addToScore(int value) {
 			score += value;
 		}
-		public void setLastAccuracy(String message){
+		public void setLastAccuracy(String message) {
 			this.lastAccuracy = message;
 		}
-		
+
 	}
-	
+
 	// engines and managers
-	private final WorldManager worldManager;
 	private final SongEngine engine;
+	private final WorldManager worldManager;
 	private final HUD hud;
-	
+
 	// misc
 	Texture background = new Texture("data/textures/bg.png");
 
-	
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
 		worldManager = new WorldManager();
 		hud = new HUD();
-		
+
 		ArrayList<Beat> bMap;
-		switch (Resources.difficulty.name){
+		switch (Resources.difficulty.name) {
 		case EASY:
 			bMap = map.easy;
 			break;
@@ -161,8 +184,9 @@ public class PlayScreen implements Screen {
 		case HARD:
 			bMap = map.hard;
 		}
-			
-		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
+
+		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs,
+				audioFile);
 		engine.addListener(worldManager);
 	}
 
@@ -172,12 +196,13 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		Resources.spriteBatch.begin();
-		Resources.spriteBatch.draw(background, 0, 0);
+		{
+			Resources.spriteBatch.draw(background, 0, 0);
+			engine.render(delta);
+			worldManager.render(delta);
+			hud.render(delta);
+		}
 		Resources.spriteBatch.end();
-
-		engine.render(delta);
-		worldManager.render(delta);
-		hud.render(delta);
 
 		Resources.camera.update();
 	}

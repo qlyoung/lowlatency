@@ -4,5 +4,5 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public interface ISongEventListener {
 	
-	public void onBeat(Beat b);
+	public void onBeatWarning(Beat b);
 }

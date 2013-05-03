@@ -3,7 +3,6 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,32 +12,39 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class BeatCore implements IGameObject, Poolable {
 
+	// accuracy feedback
 	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, MISS, INACTIVE };
-	private static final float SYNCH_SIZE = 1/3f;
-	private static final float SHRINK_RATE_SECS = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
-	private static BitmapFont coreFont = new BitmapFont();
 	
+	// animation
+	private final float shrinkRateSecs;
+	private static final float SYNCH_SIZE = 1/3f;
+	
+	// gfx
 	private final Sprite ring, core;
+	
+	// mechanical
 	private Vector2 position;
 
 	private Beat beat;
 	private long timeMs;
 	private String text = null;
 
+	// state
 	private boolean complete = false;
 	private boolean beenHit = false;
 
 
 	public BeatCore() {
+		shrinkRateSecs = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
 		ring = new Sprite(new TextureRegion(new Texture("data/textures/circ.png"), 175, 175));
 		core = new Sprite(new Texture("data/textures/innerorb.png"));
-		coreFont.setColor(Color.BLACK);
+		
+		reset();
 	}
 
 	// lifecycle
-	public void setup(Beat beat, long timeMs, String text) {
+	public void setup(Beat beat, String text) {
 		this.beat = beat;
-		this.timeMs = timeMs + 500;
 		this.text = text;
 	}
 	@Override
@@ -46,14 +52,16 @@ public class BeatCore implements IGameObject, Poolable {
 
 		{// update
 			if (ring.getScaleX() > SYNCH_SIZE)
-				ring.scale(delta * SHRINK_RATE_SECS);
+				ring.scale(delta * shrinkRateSecs);
 			else if (ring.getScaleX() <= SYNCH_SIZE)
 				core.setColor(Color.GREEN);
 
-			if (timeMs > 0)
-				timeMs -= delta * 1000f;
-			else
+			if (timeMs <= 0 || beenHit)
 				complete = true;
+			else
+				timeMs -= delta * 1000f;
+			
+			
 		}
 
 		{// draw
@@ -61,7 +69,8 @@ public class BeatCore implements IGameObject, Poolable {
 			
 			core.draw(Resources.spriteBatch);
 			ring.draw(Resources.spriteBatch);
-			coreFont.draw(Resources.spriteBatch, text, worldPos.x - 5, worldPos.y + 5);
+			Resources.font.setColor(Color.BLACK);
+			Resources.font.draw(Resources.spriteBatch, text, worldPos.x - 5, worldPos.y + 5);
 		}
 	}
 	@Override
@@ -69,10 +78,10 @@ public class BeatCore implements IGameObject, Poolable {
 
 		ring.setScale(1);
 		ring.setColor(Color.WHITE);
-		core.setColor(Color.WHITE);
+		core.setColor(Color.BLUE);
 		beat = null;
 		text = null;
-		timeMs = Resources.difficulty.ringTimeMs;
+		timeMs = Resources.difficulty.ringTimeMs + 400;
 		complete = false;
 		beenHit = false;
 		
@@ -136,5 +145,8 @@ public class BeatCore implements IGameObject, Poolable {
 	}
 	public int getScoreValue(){
 		return (int) (beat.energy * 1000);
+	}
+	public Vector2 getPosition(){
+		return position;
 	}
 }

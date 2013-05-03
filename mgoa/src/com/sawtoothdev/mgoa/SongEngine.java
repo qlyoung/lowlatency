@@ -55,7 +55,7 @@ public class SongEngine implements IGameObject {
 	private void onBeat(Beat mo) {
 
 		for (ISongEventListener l : listeners)
-			l.onBeat(mo);
+			l.onBeatWarning(mo);
 	}
 
 	//extraneous
