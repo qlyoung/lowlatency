@@ -26,7 +26,7 @@ public class MGOA extends Game {
 		
 		// a bit of global setup
 		Resources.game = this;
-		Resources.difficulty = new Difficulty(DifficultyName.HARD);
+		Resources.difficulty = new Difficulty(DifficultyName.NORMAL);
 		Resources.random = new Random();
 		Resources.spriteBatch = new SpriteBatch();
 		Resources.worldDimensions = new Vector2(10, 6);
@@ -36,7 +36,7 @@ public class MGOA extends Game {
 		Resources.camera.position.set(0, 0, 0);
 		
 		// load an internal song for now
-		FileHandle song = Gdx.files.internal("data/audio/raversfantasy.mp3");
+		FileHandle song = Gdx.files.internal("data/audio/iremember.mp3");
 		song = Gdx.files.absolute(song.file().getAbsolutePath());
 		Gdx.app.log("abs path", song.file().getAbsolutePath());
 

@@ -51,16 +51,20 @@ public class BeatCore implements IGameObject, Poolable {
 	public void render(float delta) {
 
 		{// update
+			
 			if (ring.getScaleX() > SYNCH_SIZE)
 				ring.scale(delta * shrinkRateSecs);
 			else if (ring.getScaleX() <= SYNCH_SIZE)
 				core.setColor(Color.GREEN);
-
+			
+			Color c = ring.getColor();
+			if (c.a < .95f)
+				ring.setColor(c.r, c.g, c.b, (c.a + (delta * 3)));
+			
 			if (timeMs <= 0 || beenHit)
 				complete = true;
 			else
 				timeMs -= delta * 1000f;
-			
 			
 		}
 
@@ -77,8 +81,8 @@ public class BeatCore implements IGameObject, Poolable {
 	public void reset() {
 
 		ring.setScale(1);
-		ring.setColor(Color.WHITE);
-		core.setColor(Color.BLUE);
+		ring.setColor(1, 1, 1, 0f);
+		core.setColor(0, 0, 1, .8f);
 		beat = null;
 		text = null;
 		timeMs = Resources.difficulty.ringTimeMs + 400;

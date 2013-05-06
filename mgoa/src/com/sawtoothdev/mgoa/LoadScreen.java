@@ -35,7 +35,7 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
-			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
+			float sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
 			
 			ArrayList<Beat> beats = null;
 			

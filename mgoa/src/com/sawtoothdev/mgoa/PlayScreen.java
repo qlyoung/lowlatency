@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 
@@ -140,12 +139,12 @@ public class PlayScreen implements Screen {
 		public void render(float delta) {
 
 			if (displayScore < score)
-				displayScore += 3;
+				displayScore += 5;
 			else if (displayScore > score)
 				displayScore = score;
 
 			Resources.font.setColor(Color.WHITE);
-			Resources.font.draw(Resources.spriteBatch, String.valueOf(displayScore), 10, 460);
+			Resources.font.draw(Resources.spriteBatch, String.format("%09d", displayScore), 10, 460);
 			Resources.font.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
 
 		}
@@ -163,9 +162,6 @@ public class PlayScreen implements Screen {
 	private final SongEngine engine;
 	private final WorldManager worldManager;
 	private final HUD hud;
-
-	// misc
-	Texture background = new Texture("data/textures/bg.png");
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
@@ -185,8 +181,7 @@ public class PlayScreen implements Screen {
 			bMap = map.hard;
 		}
 
-		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs,
-				audioFile);
+		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
 		engine.addListener(worldManager);
 	}
 
@@ -197,7 +192,6 @@ public class PlayScreen implements Screen {
 
 		Resources.spriteBatch.begin();
 		{
-			Resources.spriteBatch.draw(background, 0, 0);
 			engine.render(delta);
 			worldManager.render(delta);
 			hud.render(delta);
