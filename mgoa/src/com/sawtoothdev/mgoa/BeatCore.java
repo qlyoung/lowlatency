@@ -46,21 +46,53 @@ public class BeatCore implements IGameObject, Poolable {
 	public void setup(Beat beat, String text) {
 		this.beat = beat;
 		this.text = text;
+		
+		Color coreColor;
+		
+		if (beat.energy > .8)
+			coreColor = Color.RED;
+		else if (beat.energy > .6)
+			coreColor = Color.ORANGE;
+		else if (beat.energy > .4)
+			coreColor = Color.YELLOW;
+		else if (beat.energy > .2)
+			coreColor = Color.BLUE;
+		else
+			coreColor = Color.MAGENTA;
+		
+		this.core.setColor(coreColor);
 	}
 	@Override
 	public void render(float delta) {
 
 		{// update
 			
+			Color c;
+			
+			//shrinking and hit coloration
 			if (ring.getScaleX() > SYNCH_SIZE)
 				ring.scale(delta * shrinkRateSecs);
-			else if (ring.getScaleX() <= SYNCH_SIZE)
-				core.setColor(Color.GREEN);
+			else if (ring.getScaleX() <= SYNCH_SIZE || beenHit){
+				//trigger fade
+			}
 			
-			Color c = ring.getColor();
+			//colors and fading
+			c = ring.getColor();			
 			if (c.a < .95f)
 				ring.setColor(c.r, c.g, c.b, (c.a + (delta * 3)));
+				
+			c = core.getColor();
+			if (timeMs <= 400 && c.a > .05){
+				float alpha = c.a;				
+				alpha -= (delta * 2);
+				
+				core.setColor(c.r, c.g, c.b, alpha);
+				c = ring.getColor();
+				ring.setColor(c.r, c.g, c.b, alpha);
+			}
+				
 			
+			//hit reaction
 			if (timeMs <= 0 || beenHit)
 				complete = true;
 			else
@@ -82,7 +114,6 @@ public class BeatCore implements IGameObject, Poolable {
 
 		ring.setScale(1);
 		ring.setColor(1, 1, 1, 0f);
-		core.setColor(0, 0, 1, .8f);
 		beat = null;
 		text = null;
 		timeMs = Resources.difficulty.ringTimeMs + 400;
