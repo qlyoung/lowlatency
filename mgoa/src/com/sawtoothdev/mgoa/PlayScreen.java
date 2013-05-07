@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 
@@ -128,6 +129,9 @@ public class PlayScreen implements Screen {
 
 	private class HUD implements IGameObject {
 
+		private BitmapFont accuracyFont = new BitmapFont();
+		private BitmapFont scoreFont = new BitmapFont();
+		
 		private int score, displayScore;
 		String lastAccuracy = "READY";
 
@@ -143,10 +147,17 @@ public class PlayScreen implements Screen {
 			else if (displayScore > score)
 				displayScore = score;
 
-			Resources.font.setColor(Color.WHITE);
-			Resources.font.draw(Resources.spriteBatch, String.format("%08d", displayScore), 10, 460);
-			Resources.font.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
+			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), 10, 460);
+			accuracyFont.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
+			
+			
+			Color c = accuracyFont.getColor();
+			if (c.a > 0f){
+				float alpha = (c.a - delta) < 0 ? 0 : c.a - delta;
 
+				accuracyFont.setColor(c.r, c.g, c.b, alpha);
+			}
+			
 		}
 
 		public void addToScore(int value) {
@@ -154,6 +165,7 @@ public class PlayScreen implements Screen {
 		}
 		public void setLastAccuracy(String message) {
 			this.lastAccuracy = message;
+			accuracyFont.setColor(Color.WHITE);
 		}
 
 	}
