@@ -144,7 +144,7 @@ public class PlayScreen implements Screen {
 				displayScore = score;
 
 			Resources.font.setColor(Color.WHITE);
-			Resources.font.draw(Resources.spriteBatch, String.format("%09d", displayScore), 10, 460);
+			Resources.font.draw(Resources.spriteBatch, String.format("%08d", displayScore), 10, 460);
 			Resources.font.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
 
 		}

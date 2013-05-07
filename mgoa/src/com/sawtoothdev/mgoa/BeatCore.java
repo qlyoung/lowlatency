@@ -13,32 +13,35 @@ import com.sawtoothdev.audioanalysis.Beat;
 public class BeatCore implements IGameObject, Poolable {
 
 	// accuracy feedback
-	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, MISS, INACTIVE };
-	
+	public static enum Accuracy {
+		STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, INACTIVE
+	};
+
 	// animation
 	private final float shrinkRateSecs;
-	private static final float SYNCH_SIZE = 1/3f;
-	
+	private static final float SYNCH_SIZE = 1 / 3f;
+
 	// gfx
 	private final Sprite ring, core;
-	
+	private String text = null;
+	private Color c;
+
 	// mechanical
 	private Vector2 position;
-
 	private Beat beat;
-	private long timeMs;
-	private String text = null;
 
 	// state
 	private boolean complete = false;
 	private boolean beenHit = false;
-
+	private boolean fading = false;
 
 	public BeatCore() {
+		// delta size / delta time
 		shrinkRateSecs = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
+
 		ring = new Sprite(new TextureRegion(new Texture("data/textures/circ.png"), 175, 175));
 		core = new Sprite(new Texture("data/textures/innerorb.png"));
-		
+
 		reset();
 	}
 
@@ -46,9 +49,9 @@ public class BeatCore implements IGameObject, Poolable {
 	public void setup(Beat beat, String text) {
 		this.beat = beat;
 		this.text = text;
-		
+
 		Color coreColor;
-		
+
 		if (beat.energy > .8)
 			coreColor = Color.RED;
 		else if (beat.energy > .6)
@@ -59,56 +62,54 @@ public class BeatCore implements IGameObject, Poolable {
 			coreColor = Color.BLUE;
 		else
 			coreColor = Color.MAGENTA;
-		
+
 		this.core.setColor(coreColor);
 	}
+
 	@Override
 	public void render(float delta) {
 
 		{// update
-			
-			Color c;
-			
-			//shrinking and hit coloration
-			if (ring.getScaleX() > SYNCH_SIZE)
+
+			// approach circle update
+			if (ring.getScaleX() > SYNCH_SIZE && !beenHit)
 				ring.scale(delta * shrinkRateSecs);
-			else if (ring.getScaleX() <= SYNCH_SIZE || beenHit){
-				//trigger fade
-			}
-			
-			//colors and fading
-			c = ring.getColor();			
+			else
+				fading = true;
+
+
+			// colors and fading
+			c = ring.getColor();
 			if (c.a < .95f)
 				ring.setColor(c.r, c.g, c.b, (c.a + (delta * 3)));
-				
-			c = core.getColor();
-			if (timeMs <= 400 && c.a > .05){
-				float alpha = c.a;				
-				alpha -= (delta * 2);
-				
-				core.setColor(c.r, c.g, c.b, alpha);
-				c = ring.getColor();
-				ring.setColor(c.r, c.g, c.b, alpha);
+
+			if (fading) {
+				c = core.getColor();
+				if (c.a > .05) {
+					float alpha = c.a;
+					alpha -= (delta * 2);
+
+					core.setColor(c.r, c.g, c.b, alpha);
+					c = ring.getColor();
+					ring.setColor(c.r, c.g, c.b, alpha);
+				}
+				else if (c.a <= .05f)
+					complete = true;
 			}
-				
-			
-			//hit reaction
-			if (timeMs <= 0 || beenHit)
-				complete = true;
-			else
-				timeMs -= delta * 1000f;
-			
+
 		}
 
 		{// draw
 			Vector2 worldPos = Resources.projectToScreen(position);
-			
+
 			core.draw(Resources.spriteBatch);
 			ring.draw(Resources.spriteBatch);
 			Resources.font.setColor(Color.BLACK);
-			Resources.font.draw(Resources.spriteBatch, text, worldPos.x - 5, worldPos.y + 5);
+			Resources.font.draw(Resources.spriteBatch, text, worldPos.x - 5,
+					worldPos.y + 5);
 		}
 	}
+
 	@Override
 	public void reset() {
 
@@ -116,10 +117,10 @@ public class BeatCore implements IGameObject, Poolable {
 		ring.setColor(1, 1, 1, 0f);
 		beat = null;
 		text = null;
-		timeMs = Resources.difficulty.ringTimeMs + 400;
 		complete = false;
 		beenHit = false;
-		
+		fading = false;
+
 	}
 
 	// modifiers
@@ -128,60 +129,64 @@ public class BeatCore implements IGameObject, Poolable {
 		this.position = worldPos;
 
 		Vector2 screenPosition = Resources.projectToScreen(worldPos);
-		ring.setPosition(screenPosition.x - ring.getWidth() / 2f, screenPosition.y - ring.getHeight() / 2f);
-		core.setPosition(screenPosition.x - core.getWidth() / 2f, screenPosition.y - core.getHeight() / 2f);
-		
+		ring.setPosition(screenPosition.x - ring.getWidth() / 2f,
+				screenPosition.y - ring.getHeight() / 2f);
+		core.setPosition(screenPosition.x - core.getWidth() / 2f,
+				screenPosition.y - core.getHeight() / 2f);
+
 	}
+
 	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
 
 		Gdx.app.log("diff", String.valueOf(diff));
 
-		if (beenHit)
+		if (beenHit || diff < -300)
 			return Accuracy.INACTIVE;
+		else {
+			beenHit = true;
+			fading = true;			
 
-		beenHit = true;
-		
-		if (diff < -300){
-			beenHit = false;
-			return Accuracy.INACTIVE;
+				
+			if (diff < -210)
+				return Accuracy.ALMOST;
+			else if (diff < -150)
+				return Accuracy.GOOD;
+			else if (diff < -90)
+				return Accuracy.EXCELLENT;
+			else if (diff < -30)
+				return Accuracy.PERFECT;
+			else if (diff < 40)
+				return Accuracy.STELLAR;
+			else if (diff < 120)
+				return Accuracy.PERFECT;
+			else if (diff < 200)
+				return Accuracy.EXCELLENT;
+			else if (diff < 280)
+				return Accuracy.GOOD;
+			else if (diff < 400)
+				return Accuracy.ALMOST;
+			else
+				return Accuracy.INACTIVE;
 		}
-		else if (diff < -210)
-			return Accuracy.ALMOST;
-		else if (diff < -150)
-			return Accuracy.GOOD;
-		else if (diff < -90)
-			return Accuracy.EXCELLENT;
-		else if (diff < -30)
-			return Accuracy.PERFECT;
-		else if (diff < 40)
-			return Accuracy.STELLAR;
-		else if (diff < 120)
-			return Accuracy.PERFECT;
-		else if (diff < 200)
-			return Accuracy.EXCELLENT;
-		else if (diff < 280)
-			return Accuracy.GOOD;
-		else if (diff < 400)
-			return Accuracy.ALMOST;
-		else
-			return Accuracy.MISS;
-
 	}
 
 	// readers
 	public boolean isComplete() {
 		return complete;
 	}
+
 	public Rectangle getBoundingRectangle() {
 
 		return new Rectangle(position.x - .25f, position.y - .25f, .5f, .5f);
 
 	}
-	public int getScoreValue(){
+
+	public int getScoreValue() {
 		return (int) (beat.energy * 1000);
 	}
-	public Vector2 getPosition(){
+
+	public Vector2 getPosition() {
 		return position;
 	}
 }
