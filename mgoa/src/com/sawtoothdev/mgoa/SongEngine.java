@@ -20,10 +20,24 @@ public class SongEngine implements IGameObject {
 	private boolean running = false;
 	
 
-	public SongEngine(ArrayList<Beat> map, long delayMs, FileHandle audioFile) {
-		this.map = map;
-		this.delayMs = delayMs;
+	public SongEngine(BeatMap beatMap, FileHandle audioFile) {
+		
+		// set the map
+		switch (Resources.difficulty.name) {
+		case EASY:
+			map = beatMap.easy;
+			break;
+		case NORMAL:
+			map = beatMap.medium;
+			break;
+		default:
+		case HARD:
+			map = beatMap.hard;
+		}
+		
+		this.delayMs = Resources.difficulty.ringTimeMs;
 		this.music = new MgoaMusic(audioFile);
+		this.music.setVolume(1f);
 		
 		listeners = new ArrayList<ISongEventListener>();
 	}

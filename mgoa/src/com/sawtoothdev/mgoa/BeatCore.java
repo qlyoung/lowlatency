@@ -80,14 +80,21 @@ public class BeatCore implements IGameObject, Poolable {
 
 			// colors and fading
 			c = ring.getColor();
-			if (c.a < .95f)
-				ring.setColor(c.r, c.g, c.b, (c.a + (delta * 3)));
+			if (c.a < .95f){
+				
+				float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
+				
+				ring.setColor(c.r, c.g, c.b, alpha);
+			}
 
 			if (fading) {
 				c = core.getColor();
 				if (c.a > .05) {
 					float alpha = c.a;
 					alpha -= (delta * 2);
+					
+					// make sure the alpha isn't set below 0
+					alpha = alpha < 0 ? 0 : alpha;
 
 					core.setColor(c.r, c.g, c.b, alpha);
 					c = ring.getColor();
@@ -188,5 +195,8 @@ public class BeatCore implements IGameObject, Poolable {
 
 	public Vector2 getPosition() {
 		return position;
+	}
+	public boolean beenHit(){
+		return beenHit;
 	}
 }

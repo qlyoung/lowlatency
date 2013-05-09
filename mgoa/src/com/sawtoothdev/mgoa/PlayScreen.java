@@ -2,14 +2,15 @@ package com.sawtoothdev.mgoa;
 
 import java.util.ArrayList;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.BeatCore.Accuracy;
 
 /**
  * Heart of the game, controls gameplay itself.
@@ -25,10 +26,13 @@ public class PlayScreen implements Screen {
 		// le pool
 		CorePool corePool;
 
-		// objects
+		// active object management
 		ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
+		
+		// index for numbering the beats
 		int index = 0;
 
+		
 		public WorldManager() {
 			corePool = new CorePool();
 			Resources.font.setColor(Color.WHITE);
@@ -40,19 +44,41 @@ public class PlayScreen implements Screen {
 			// input
 			if (Gdx.input.isTouched()) {
 
-				// translate touch coords to world coords
+				// translate touch coords to world coords and check collisions
 				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-				// check collisions
 				for (BeatCore core : activeCores) {
 
-					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y)) {
-						
-						String nextAccuracy = core.onHit(engine.getSongTime()).toString();
-						
-						if (nextAccuracy != "INACTIVE") {
-							hud.setLastAccuracy(nextAccuracy + "!");
-							hud.addToScore(core.getScoreValue());
+					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
+							
+						Accuracy accuracy = core.onHit(engine.getSongTime());
+							
+						if (accuracy != Accuracy.INACTIVE){
+							int divisor = Accuracy.values().length;
+							
+							switch (accuracy) {
+							case ALMOST:
+								divisor -= 1;
+									break;
+							case GOOD:
+								divisor -= 2;
+								break;
+							case EXCELLENT:
+								divisor -= 3;
+								break;
+							case PERFECT:
+								divisor -= 4;
+								break;
+							case STELLAR:
+								divisor -= 5;
+								break;
+							default:
+								break;
+							}
+							
+							int scoreValue = (int) core.getScoreValue() / divisor;
+							
+							hud.actuateHitEvent(accuracy, scoreValue);
 						}
 					}
 				}
@@ -68,6 +94,7 @@ public class PlayScreen implements Screen {
 					if (c.isComplete()) {
 						activeCores.remove(c);
 						corePool.free(c);
+						hud.incrementTotalBeatsShown();
 					}
 				}
 
@@ -88,11 +115,12 @@ public class PlayScreen implements Screen {
 
 				Vector2 position = new Vector2();
 
-				// don't place beats on top of each other
+				// place beat at empty position
 				if (activeCores.size() > 0) {
-					
+
 					boolean clean = false;
 
+					//find a clean position
 					while (!clean) {
 
 						float y = Resources.random.nextInt(5) - 2;
@@ -100,19 +128,18 @@ public class PlayScreen implements Screen {
 						position.set(x, y);
 
 						for (BeatCore c : activeCores) {
-							clean = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
+							clean = !(c.getPosition().x == position.x && c
+									.getPosition().y == position.y);
 							if (!clean)
 								break;
 						}
-
 					}
-				}
-				else {
+					
+				} else {
 					float y = Resources.random.nextInt(5) - 2;
 					float x = Resources.random.nextInt(9) - 4;
 					position.set(x, y);
 				}
-					
 
 				core.setPosition(position);
 
@@ -122,50 +149,7 @@ public class PlayScreen implements Screen {
 
 				activeCores.add(core);
 			}
-
-		}
-
-	}
-
-	private class HUD implements IGameObject {
-
-		private BitmapFont accuracyFont = new BitmapFont();
-		private BitmapFont scoreFont = new BitmapFont();
-		
-		private int score, displayScore;
-		String lastAccuracy = "READY";
-
-		public HUD() {
-
-		}
-
-		@Override
-		public void render(float delta) {
-
-			if (displayScore < score)
-				displayScore += 5;
-			else if (displayScore > score)
-				displayScore = score;
-
-			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), 10, 460);
-			accuracyFont.draw(Resources.spriteBatch, lastAccuracy, 380, 250);
 			
-			
-			Color c = accuracyFont.getColor();
-			if (c.a > 0f){
-				float alpha = (c.a - delta) < 0 ? 0 : c.a - delta;
-
-				accuracyFont.setColor(c.r, c.g, c.b, alpha);
-			}
-			
-		}
-
-		public void addToScore(int value) {
-			score += value;
-		}
-		public void setLastAccuracy(String message) {
-			this.lastAccuracy = message;
-			accuracyFont.setColor(Color.WHITE);
 		}
 
 	}
@@ -177,31 +161,25 @@ public class PlayScreen implements Screen {
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
+		// set up the world
 		worldManager = new WorldManager();
-		hud = new HUD();
 
-		ArrayList<Beat> bMap;
-		switch (Resources.difficulty.name) {
-		case EASY:
-			bMap = map.easy;
-			break;
-		case NORMAL:
-			bMap = map.medium;
-			break;
-		default:
-		case HARD:
-			bMap = map.hard;
-		}
+		// set up the heads up display
+		hud = new HUD(audioFile);
 
-		engine = new SongEngine(bMap, Resources.difficulty.ringTimeMs, audioFile);
+		// load the map
+		engine = new SongEngine(map, audioFile);
 		engine.addListener(worldManager);
 	}
 
 	@Override
 	public void render(float delta) {
 
+		// clear the screen and update the camera
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Resources.camera.update();
 
+		//update and draw
 		Resources.spriteBatch.begin();
 		{
 			engine.render(delta);
@@ -210,7 +188,6 @@ public class PlayScreen implements Screen {
 		}
 		Resources.spriteBatch.end();
 
-		Resources.camera.update();
 	}
 
 	@Override

@@ -27,21 +27,22 @@ public class MgoaMusic {
 		music.play();
 		music.pause();
 	}
-
+	
 	public void play() {
 		playing = true;
 		music.play();
 		startTime = System.currentTimeMillis();
 	}
-
 	public void pause() {
 		music.pause();
 		playing = false;
 	}
-
 	public void stop() {
 		music.stop();
 		playing = false;
+	}
+	public void setVolume(float volume){
+		this.music.setVolume(volume);
 	}
 
 	/**
@@ -50,11 +51,9 @@ public class MgoaMusic {
 	public long getPosition() {
 		return System.currentTimeMillis() - startTime;
 	}
-
 	public boolean isPlaying() {
 		return playing;
 	}
-
 	public boolean isPaused() {
 		return paused;
 	}
