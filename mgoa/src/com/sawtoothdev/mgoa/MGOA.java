@@ -6,7 +6,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.Difficulty.DifficultyName;
@@ -30,7 +29,6 @@ public class MGOA extends Game {
 		Resources.random = new Random();
 		Resources.spriteBatch = new SpriteBatch();
 		Resources.worldDimensions = new Vector2(10, 6);
-		Resources.font = new BitmapFont();
 		Resources.camera = new OrthographicCamera();
 		Resources.camera.setToOrtho(false, Resources.worldDimensions.x, Resources.worldDimensions.y);
 		Resources.camera.position.set(0, 0, 0);

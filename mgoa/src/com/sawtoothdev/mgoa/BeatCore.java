@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -25,6 +26,7 @@ public class BeatCore implements IGameObject, Poolable {
 	private final Sprite ring, core;
 	private String text = null;
 	private Color c;
+	private static BitmapFont font = new BitmapFont();
 
 	// mechanical
 	private Vector2 position;
@@ -111,8 +113,8 @@ public class BeatCore implements IGameObject, Poolable {
 
 			core.draw(Resources.spriteBatch);
 			ring.draw(Resources.spriteBatch);
-			Resources.font.setColor(Color.BLACK);
-			Resources.font.draw(Resources.spriteBatch, text, worldPos.x - 5,
+			font.setColor(Color.BLACK);
+			font.draw(Resources.spriteBatch, text, worldPos.x - 5,
 					worldPos.y + 5);
 		}
 	}

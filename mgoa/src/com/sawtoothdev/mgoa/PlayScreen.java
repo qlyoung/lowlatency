@@ -2,11 +2,9 @@ package com.sawtoothdev.mgoa;
 
 import java.util.ArrayList;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -35,7 +33,6 @@ public class PlayScreen implements Screen {
 		
 		public WorldManager() {
 			corePool = new CorePool();
-			Resources.font.setColor(Color.WHITE);
 		}
 
 		@Override
