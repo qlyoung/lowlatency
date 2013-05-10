@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -32,14 +31,10 @@ public class MGOA extends Game {
 		Resources.camera = new OrthographicCamera();
 		Resources.camera.setToOrtho(false, Resources.worldDimensions.x, Resources.worldDimensions.y);
 		Resources.camera.position.set(0, 0, 0);
+		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
 		
-		// load an internal song for now
-		FileHandle song = Gdx.files.internal("data/audio/promises.mp3");
-		song = Gdx.files.absolute(song.file().getAbsolutePath());
-		Gdx.app.log("abs path", song.file().getAbsolutePath());
-
 		// and launch!
-		this.setScreen(new LoadScreen(song));
+		this.setScreen(new MenuScreen());
 
 	}
 	

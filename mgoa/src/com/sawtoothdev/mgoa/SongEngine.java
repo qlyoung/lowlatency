@@ -7,16 +7,22 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class SongEngine implements IGameObject {
 
-	private long startTime;
-
-	private long delayMs;
-	private long engineTimer;
+	// misc
+	private ArrayList<ISongEventListener> listeners;
 	private MgoaMusic music;
 
-	private ArrayList<Beat> map;
-	private int index = 0;
-	private final ArrayList<ISongEventListener> listeners;
+	// delay functionality
+	private long delayedStartTime, delayMs, delayedEngineTimer;
+	private final ArrayList<Beat> map;
+	private int delayIndex = 0;
+	
+	// realtime functionality
+	private long realtimeStartTime, realtimeEngineTimer;
+	private final ArrayList<Beat> realtimeMap;
+	private int realtimeIndex = 0;
 
+	
+	// state
 	private boolean running = false;
 	
 
@@ -35,6 +41,8 @@ public class SongEngine implements IGameObject {
 			map = beatMap.hard;
 		}
 		
+		realtimeMap = beatMap.ORIGINAL;
+		
 		this.delayMs = Resources.difficulty.ringTimeMs;
 		this.music = new MgoaMusic(audioFile);
 		this.music.setVolume(1f);
@@ -45,7 +53,7 @@ public class SongEngine implements IGameObject {
 	//core
 	public void start() {
 		this.running = true;
-		startTime = System.currentTimeMillis();
+		delayedStartTime = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -53,23 +61,42 @@ public class SongEngine implements IGameObject {
 		
 		if (running) {
 			
-			engineTimer = System.currentTimeMillis() - startTime;
-
-			if (engineTimer >= delayMs && !music.isPlaying())
-				music.play();
+			{// delayed
+				delayedEngineTimer = System.currentTimeMillis() - delayedStartTime;
 				
-			if (index <= map.size() - 1 && map.get(index).timeMs < engineTimer) {
-				onBeat(map.get(index));
-				index++;
+				if (delayedEngineTimer >= delayMs && !music.isPlaying()){
+					music.play();
+					realtimeStartTime = System.currentTimeMillis();
+				}
+				
+				if (delayIndex <= map.size() - 1 && map.get(delayIndex).timeMs < delayedEngineTimer) {
+					onBeatWarning(map.get(delayIndex));
+					delayIndex++;
+				}
 			}
+			
+			{// realtime
+				realtimeEngineTimer = System.currentTimeMillis() - realtimeStartTime;
+				
+				if (realtimeIndex <= realtimeMap.size() - 1 && realtimeMap.get(realtimeIndex).timeMs < realtimeEngineTimer){
+					onBeat(realtimeMap.get(realtimeIndex));
+					realtimeIndex++;
+				}
+			}
+			
 		}
 		
 	}
 
-	private void onBeat(Beat mo) {
+	private void onBeatWarning(Beat beat) {
 
 		for (ISongEventListener l : listeners)
-			l.onBeatWarning(mo);
+			l.onBeatWarning(beat);
+	}
+	private void onBeat(Beat beat){
+		
+		
+		
 	}
 
 	//extraneous

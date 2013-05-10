@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ public class Resources {
 
 	// general globals
 	public static Game game;
+	public static Music menuMusic;
 	
 	// global settings
 	public static Difficulty difficulty;
@@ -29,8 +31,6 @@ public class Resources {
 	public static SpriteBatch spriteBatch;
 	public static OrthographicCamera camera;
 	
-	
-	// a few useful methods
 	
 	// projects a Vector2 from world space to screen space
 	public static Vector2 projectToScreen(Vector2 worldCoords){

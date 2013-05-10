@@ -41,8 +41,9 @@ public class BeatCore implements IGameObject, Poolable {
 		// delta size / delta time
 		shrinkRateSecs = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
 
-		ring = new Sprite(new TextureRegion(new Texture("data/textures/circ.png"), 175, 175));
-		core = new Sprite(new Texture("data/textures/innerorb.png"));
+		ring = new Sprite(new TextureRegion(new Texture("data/textures/ring.png"), 175, 175));
+		core = new Sprite(new Texture("data/textures/core.png"));
+		core.setScale(.5f);
 
 		reset();
 	}

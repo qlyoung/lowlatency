@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
@@ -44,19 +45,20 @@ public class LoadScreen implements Screen {
 			} catch (IOException e) { Gdx.app.log("Load Screen", e.getMessage()); }
 			
 			
-			ArrayList<Beat> easy, medium, hard;
+			ArrayList<Beat> easy, medium, hard, original;
 			
 			easy = BeatsProcessor.removeCloseBeats(beats, 350);
 			medium = BeatsProcessor.removeCloseBeats(beats, 200);
 			hard = BeatsProcessor.removeCloseBeats(beats, 150);
+			original = beats;
 			
-			map = new BeatMap(easy, medium, hard);
+			map = new BeatMap(easy, medium, hard, original);
 		}
 		
 	}
 	
 	private LoadingThread loadThread;
-	
+	private BitmapFont font = new BitmapFont();
 	
 	public LoadScreen(FileHandle audioFile){
 		loadThread = new LoadingThread(audioFile);
@@ -66,8 +68,13 @@ public class LoadScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
+		Resources.spriteBatch.begin();
+		font.draw(Resources.spriteBatch, "Loading...", 15, 455);
+		Resources.spriteBatch.end();
+		
 		//if done loading, move on
 		if (!loadThread.isAlive()) {
+			Resources.menuMusic.stop();
 			PlayScreen playScreen = new PlayScreen(loadThread.map, loadThread.audioFile);
 			Resources.game.setScreen(playScreen);
 		}
