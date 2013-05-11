@@ -55,13 +55,15 @@ public class BeatCore implements IGameObject, Poolable {
 
 		Color coreColor;
 
-		if (beat.energy > .8)
+		if (beat.energy > .75)
 			coreColor = Color.RED;
 		else if (beat.energy > .6)
 			coreColor = Color.ORANGE;
-		else if (beat.energy > .4)
+		else if (beat.energy > .45)
 			coreColor = Color.YELLOW;
-		else if (beat.energy > .2)
+		else if (beat.energy > .3)
+			coreColor = Color.GREEN;
+		else if (beat.energy > .15)
 			coreColor = Color.BLUE;
 		else
 			coreColor = Color.MAGENTA;

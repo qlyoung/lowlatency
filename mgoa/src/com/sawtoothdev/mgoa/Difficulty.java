@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa;
 
 public class Difficulty {
 	
-	public static enum DifficultyName { EASY, NORMAL, HARD, TESTING };
+	public static enum DifficultyName { EASY, NORMAL, HARD, ORIGINAL };
 	
 	public final DifficultyName name;	
 	public final long ringTimeMs;
@@ -13,16 +13,17 @@ public class Difficulty {
 		
 		switch (name){
 		case EASY:
-			ringTimeMs = 1000;
+			ringTimeMs = 800;
 			break;
 		default:
 		case NORMAL:
-		case TESTING:
-			ringTimeMs = 750;
+			ringTimeMs = 650;
 			break;
 		case HARD:
-			ringTimeMs = 700;
+			ringTimeMs = 600;
 			break;
+		case ORIGINAL:
+			ringTimeMs = 500;
 		}
 		
 	}

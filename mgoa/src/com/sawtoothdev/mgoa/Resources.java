@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -30,6 +31,13 @@ public class Resources {
 	public static Random random;
 	public static SpriteBatch spriteBatch;
 	public static OrthographicCamera camera;
+	
+	// flow control
+	public static FileHandle currentSong;
+	public static final MenuScreen menuScreen = new MenuScreen();
+	public static final ChooseSongScreen chooseSongScreen = new ChooseSongScreen();
+	public static final LoadScreen loadScreen = new LoadScreen();
+	
 	
 	
 	// projects a Vector2 from world space to screen space

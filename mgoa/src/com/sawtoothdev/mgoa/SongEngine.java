@@ -36,9 +36,12 @@ public class SongEngine implements IGameObject {
 		case NORMAL:
 			map = beatMap.medium;
 			break;
-		default:
 		case HARD:
 			map = beatMap.hard;
+			break;
+		default:
+		case ORIGINAL:
+			map = beatMap.ORIGINAL;
 		}
 		
 		realtimeMap = beatMap.ORIGINAL;

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +26,7 @@ public class MGOA extends Game {
 		// a bit of global setup
 		Resources.game = this;
 		Resources.difficulty = new Difficulty(DifficultyName.HARD);
+		
 		Resources.random = new Random();
 		Resources.spriteBatch = new SpriteBatch();
 		Resources.worldDimensions = new Vector2(10, 6);
@@ -33,8 +35,14 @@ public class MGOA extends Game {
 		Resources.camera.position.set(0, 0, 0);
 		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
 		
-		// and launch!
-		this.setScreen(new MenuScreen());
+		// enable this after the UI progression is working
+		//this.setScreen(new MenuScreen());
+		
+		// load an internal song for now
+		FileHandle csTemp = Gdx.files.internal("data/audio/promises.mp3");
+		Resources.currentSong = Gdx.files.absolute(csTemp.file().getAbsolutePath());
+		
+		this.setScreen(Resources.loadScreen);
 
 	}
 	

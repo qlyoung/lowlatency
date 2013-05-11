@@ -29,7 +29,7 @@ class HUD implements IGameObject {
 	private String percentage = "0";
 	
 	// music information
-	private final String songTitle, artist;
+	private final String songInfo;
 	
 
 	public HUD(FileHandle audioFile) {
@@ -41,8 +41,11 @@ class HUD implements IGameObject {
 			Gdx.app.log("error", "bad file");
 		}
 		
-		songTitle = metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
-		artist = metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
+		String title = metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
+		String artist = metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
+		
+		songInfo = artist + " - " + title;
+		
 	}
 
 	@Override
@@ -66,13 +69,21 @@ class HUD implements IGameObject {
 		if (totalBeatsShown != 0)
 			percentage = String.valueOf( (int) (((float)totalBeatsHit / totalBeatsShown) * 100)) + "%";
 		
-		
 		// draw the display
-		scoreFont.draw(Resources.spriteBatch, artist + " - " + songTitle, Gdx.graphics.getWidth() / 2f - 80, 20);
-		Resources.spriteBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, 438);
-		messageFont.draw(Resources.spriteBatch, message, 380, 250);
-		scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 25, 465);
-		scoreFont.draw(Resources.spriteBatch, percentage, 10, 465);
+		{
+			// artist - track
+			scoreFont.draw(Resources.spriteBatch, songInfo, 10, 20);
+			
+			// score and score underline
+			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 25, 465);
+			Resources.spriteBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, 438);
+			
+			// messages
+			messageFont.draw(Resources.spriteBatch, message, 380, 250);
+			
+			// hit percentage
+			scoreFont.draw(Resources.spriteBatch, percentage, 10, 465);
+		}
 
 	}
 
