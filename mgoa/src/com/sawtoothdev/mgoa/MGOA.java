@@ -39,10 +39,10 @@ public class MGOA extends Game {
 		//this.setScreen(new MenuScreen());
 		
 		// load an internal song for now
-		FileHandle csTemp = Gdx.files.internal("data/audio/promises.mp3");
+		FileHandle csTemp = Gdx.files.internal("data/audio/nipple.mp3");
 		Resources.currentSong = Gdx.files.absolute(csTemp.file().getAbsolutePath());
 		
-		this.setScreen(Resources.loadScreen);
+		this.setScreen(Resources.menuScreen);
 
 	}
 	

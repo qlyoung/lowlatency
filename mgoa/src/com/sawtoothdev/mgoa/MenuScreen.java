@@ -2,55 +2,21 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.math.Vector2;
 
 public class MenuScreen implements Screen {
 
 	public boolean switchScreen = false;
-	
-	private Stage stage;
-	
-	public MenuScreen(){
-		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
-		
-		// setup menu UI
-		Table table = new Table();
-		
-		{
-			TextButtonStyle style = new TextButtonStyle();
-			style.font = new BitmapFont();
-			style.fontColor = Color.GREEN;
-			style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/menubutton.png"), 128, 30));
-			
-			TextButton playButton = new TextButton("Play", style);
-			playButton.addListener(new ClickListener() {
-				
-				@Override
-				public boolean handle(Event event) {
-					switchScreen = true;
-					return true;
-				}
-			});
-			TextButton optionsButton = new TextButton("Options", style);
-			table.add(playButton);
-			table.row();
-			table.add(optionsButton);
-		}
+	private Sprite playButton;
 
-		table.setFillParent(true);
-		stage.addActor(table);
+	
+	public MenuScreen() {
+		
+		playButton = new Sprite(new TextureRegion(new Texture("data/textures/menubutton.png"), 128, 50));
 	}
 	
 	@Override
@@ -58,12 +24,15 @@ public class MenuScreen implements Screen {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		stage.act(delta);
-		stage.draw();
+		Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 		
-		if (switchScreen)
+		if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y))
 			Resources.game.setScreen(Resources.chooseSongScreen);
 		
+		
+		Resources.spriteBatch.begin();
+		playButton.draw(Resources.spriteBatch);
+		Resources.spriteBatch.end();
 	}
 	
 	
@@ -77,6 +46,9 @@ public class MenuScreen implements Screen {
 	public void show() {
 		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.play();
+		Vector2 pos = Resources.projectToScreen(new Vector2(5, 3));
+		
+		playButton.setPosition(pos.x - playButton.getWidth() / 2f, pos.y - playButton.getHeight() / 2f);
 	}
 
 	@Override

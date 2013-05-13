@@ -21,22 +21,27 @@ public class ChooseSongScreen implements Screen {
 	private final Table container;
 	private final Table directoryTable;
 	
+	
 	public ChooseSongScreen() {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		
-		
+		//root element
 		container = new Table();
 		container.setFillParent(true);
 		stage.addActor(container);
 		
-		
-
-		
+		//directory and file list
 		directoryTable = new Table();
 		
+		
 		FileHandle external = Gdx.files.getFileHandle(Gdx.files.getExternalStoragePath(), FileType.Absolute);
+		System.out.println(external.path());
+		System.out.println(external.isDirectory());
 		updateTable(external);
+		
+		ScrollPane sp = new ScrollPane(directoryTable);
+		sp.setFadeScrollBars(false);
 		
 		container.add(new ScrollPane(directoryTable));
 		
@@ -57,6 +62,7 @@ public class ChooseSongScreen implements Screen {
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.font = new BitmapFont();
+		directoryTable.clear();
 		
 		for (FileHandle fh : directory.list()){
 			
@@ -74,7 +80,10 @@ public class ChooseSongScreen implements Screen {
 					if (newPath.isDirectory())
 						updateTable(newPath);
 					else {
+						
 						Resources.currentSong = Gdx.files.getFileHandle(actor.getName(), FileType.Absolute);
+						System.out.println(Resources.currentSong.path());
+						Gdx.input.setInputProcessor(null);
 						Resources.game.setScreen(Resources.loadScreen);
 					}
 					
@@ -82,9 +91,8 @@ public class ChooseSongScreen implements Screen {
 				}
 			});
 			
-			container.add(lol);
-			container.row();
-			System.out.println(lol.getName());
+			directoryTable.add(lol);
+			directoryTable.row();
 		}
 	}
 	
