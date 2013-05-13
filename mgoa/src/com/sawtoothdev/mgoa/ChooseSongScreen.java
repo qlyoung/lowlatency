@@ -1,6 +1,5 @@
 package com.sawtoothdev.mgoa;
 
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -23,25 +22,22 @@ public class ChooseSongScreen implements Screen {
 	
 	
 	public ChooseSongScreen() {
-		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 		
-		//root element
-		container = new Table();
-		container.setFillParent(true);
-		stage.addActor(container);
+		{// stage setup
+			stage = new Stage();
+			Gdx.input.setInputProcessor(stage);
+			
+			//root element
+			container = new Table();
+			container.setFillParent(true);
+			stage.addActor(container);
+			
+			//directory and file list
+			directoryTable = new Table();
+		}
 		
-		//directory and file list
-		directoryTable = new Table();
-		
-		
-		FileHandle external = Gdx.files.getFileHandle(Gdx.files.getExternalStoragePath(), FileType.Absolute);
-		System.out.println(external.path());
-		System.out.println(external.isDirectory());
+		FileHandle external = Gdx.files.external("");
 		updateTable(external);
-		
-		ScrollPane sp = new ScrollPane(directoryTable);
-		sp.setFadeScrollBars(false);
 		
 		container.add(new ScrollPane(directoryTable));
 		
@@ -73,15 +69,12 @@ public class ChooseSongScreen implements Screen {
 				@Override
 				public boolean handle(Event event) {
 					Actor actor = event.getListenerActor();
+					FileHandle newPath = Gdx.files.external(actor.getName());
 					
-					System.out.println("hit!");
-					
-					FileHandle newPath = Gdx.files.getFileHandle(actor.getName(), FileType.Absolute);
 					if (newPath.isDirectory())
 						updateTable(newPath);
 					else {
-						
-						Resources.currentSong = Gdx.files.getFileHandle(actor.getName(), FileType.Absolute);
+						Resources.currentSong = Gdx.files.external(actor.getName());
 						System.out.println(Resources.currentSong.path());
 						Gdx.input.setInputProcessor(null);
 						Resources.game.setScreen(Resources.loadScreen);

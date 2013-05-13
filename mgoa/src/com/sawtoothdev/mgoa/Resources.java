@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,15 +22,15 @@ public class Resources {
 
 	// general globals
 	public static Game game;
-	public static Music menuMusic;
+	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
 	
 	// global settings
-	public static Difficulty difficulty;
-	public static Vector2 worldDimensions;
+	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.ORIGINAL);
+	public static Vector2 worldDimensions = new Vector2(10, 6);
 	
 	// heavyweights we only need one of
-	public static Random random;
-	public static SpriteBatch spriteBatch;
+	public static Random random = new Random();
+	public static SpriteBatch spriteBatch = new SpriteBatch();
 	public static OrthographicCamera camera;
 	
 	// flow control
