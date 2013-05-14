@@ -6,7 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -65,9 +65,9 @@ public class ChooseSongScreen implements Screen {
 			TextButton lol = new TextButton(fh.name(), style);
 			lol.setName(fh.path());
 			lol.addListener(new ClickListener() {
-				
 				@Override
-				public boolean handle(Event event) {
+				public void clicked(InputEvent event, float x, float y) {
+					
 					Actor actor = event.getListenerActor();
 					FileHandle newPath = Gdx.files.external(actor.getName());
 					
@@ -79,8 +79,9 @@ public class ChooseSongScreen implements Screen {
 						Gdx.input.setInputProcessor(null);
 						Resources.game.setScreen(Resources.loadScreen);
 					}
+					event.cancel();
 					
-					return false;
+					super.clicked(event, x, y);
 				}
 			});
 			

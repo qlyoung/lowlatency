@@ -25,7 +25,7 @@ public class Resources {
 	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
 	
 	// global settings
-	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.ORIGINAL);
+	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
 	public static Vector2 worldDimensions = new Vector2(10, 6);
 	
 	// heavyweights we only need one of

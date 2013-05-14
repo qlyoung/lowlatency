@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.BeatCore.Accuracy;
 
 class HUD implements IGameObject {
@@ -61,7 +62,6 @@ class HUD implements IGameObject {
 		Color c = messageFont.getColor();
 		if (c.a > 0f) {
 			float alpha = (c.a - delta) < 0 ? 0 : c.a - delta;
-
 			messageFont.setColor(c.r, c.g, c.b, alpha);
 		}
 		
@@ -69,20 +69,28 @@ class HUD implements IGameObject {
 		if (totalBeatsShown != 0)
 			percentage = String.valueOf( (int) (((float)totalBeatsHit / totalBeatsShown) * 100)) + "%";
 		
+		Vector2 position = new Vector2();
+		
 		// draw the display
 		{
 			// artist - track
-			scoreFont.draw(Resources.spriteBatch, songInfo, 10, 20);
+			position = Resources.projectToScreen(new Vector2(-4.9f, -2.75f));
+			scoreFont.draw(Resources.spriteBatch, songInfo, position.x, position.y);
 			
 			// score and score underline
-			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 25, 465);
-			Resources.spriteBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, 438);
+			position = Resources.projectToScreen(new Vector2(-.4f, 2.9f));
+			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), position.x, position.y);
+			
+			position = Resources.projectToScreen(new Vector2(-3.3f, 2.5f));
+			Resources.spriteBatch.draw(underline, position.x, position.y);
 			
 			// messages
-			messageFont.draw(Resources.spriteBatch, message, 380, 250);
+			position = Resources.projectToScreen(new Vector2(0, 0));
+			messageFont.draw(Resources.spriteBatch, message, position.x, position.y);
 			
 			// hit percentage
-			scoreFont.draw(Resources.spriteBatch, percentage, 10, 465);
+			position = Resources.projectToScreen(new Vector2(-4.9f, 2.9f));
+			scoreFont.draw(Resources.spriteBatch, percentage, position.x, position.y);
 		}
 
 	}
