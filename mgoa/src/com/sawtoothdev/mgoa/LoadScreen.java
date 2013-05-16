@@ -61,8 +61,9 @@ public class LoadScreen implements Screen {
 	private LoadingThread loadThread;
 	private BitmapFont font = new BitmapFont();
 	
+	
 	public LoadScreen(){
-
+		font.setScale(.1f);
 	}
 	
 	@Override
@@ -71,7 +72,7 @@ public class LoadScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Resources.spriteBatch.begin();
-		font.draw(Resources.spriteBatch, "Loading...", 15, 455);
+		font.draw(Resources.spriteBatch, "Loading...", -4.8f, 2.8f);
 		Resources.spriteBatch.end();
 		
 		//if done loading, move on

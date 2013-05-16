@@ -10,8 +10,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.BeatCore.Accuracy;
 
 class HUD implements IGameObject {
@@ -19,10 +19,11 @@ class HUD implements IGameObject {
 	// fonts
 	private BitmapFont messageFont = new BitmapFont();
 	private BitmapFont scoreFont = new BitmapFont();
-
+	
 	// gfx
 	private TextureRegion underline = new TextureRegion(new Texture("data/textures/underline.png"));
-
+	private SpriteBatch hudBatch = new SpriteBatch();
+	
 	// game values
 	private int score, displayScore;
 	private String message = "READY";
@@ -36,11 +37,9 @@ class HUD implements IGameObject {
 	public HUD(FileHandle audioFile) {
 		
 		MusicMetadata metadata = null;
-		try {
-			metadata = new MyID3().read(audioFile.file()).merged;
-		} catch (IOException e) {
-			Gdx.app.log("error", "bad file");
-		}
+		
+		try { metadata = new MyID3().read(audioFile.file()).merged;	}
+		catch (IOException e) { Gdx.app.log("warning", "Cannot read metadata! Ogg file?"); }
 		
 		String title = metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
 		String artist = metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
@@ -69,28 +68,26 @@ class HUD implements IGameObject {
 		if (totalBeatsShown != 0)
 			percentage = String.valueOf( (int) (((float)totalBeatsHit / totalBeatsShown) * 100)) + "%";
 		
-		Vector2 position = new Vector2();
 		
-		// draw the display
-		{
+		{// draw the display
 			// artist - track
-			position = Resources.projectToScreen(new Vector2(-4.9f, -2.75f));
-			scoreFont.draw(Resources.spriteBatch, songInfo, position.x, position.y);
+			
+			hudBatch.begin();
+			
+			scoreFont.draw(hudBatch, songInfo, 10, 20);
 			
 			// score and score underline
-			position = Resources.projectToScreen(new Vector2(-.4f, 2.9f));
-			scoreFont.draw(Resources.spriteBatch, String.format("%08d", displayScore), position.x, position.y);
-			
-			position = Resources.projectToScreen(new Vector2(-3.3f, 2.5f));
-			Resources.spriteBatch.draw(underline, position.x, position.y);
-			
-			// messages
-			position = Resources.projectToScreen(new Vector2(0, 0));
-			messageFont.draw(Resources.spriteBatch, message, position.x, position.y);
+			scoreFont.draw(hudBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 25, Gdx.graphics.getHeight() - 10f);
+			hudBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
 			
 			// hit percentage
-			position = Resources.projectToScreen(new Vector2(-4.9f, 2.9f));
-			scoreFont.draw(Resources.spriteBatch, percentage, position.x, position.y);
+			scoreFont.draw(hudBatch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
+			
+			// messages
+			messageFont.draw(hudBatch, message, Gdx.graphics.getWidth() / 2f - 10f, Gdx.graphics.getHeight() / 2f);
+			
+			hudBatch.end();
+			
 		}
 
 	}

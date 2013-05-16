@@ -3,7 +3,6 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,13 +19,12 @@ public class BeatCore implements IGameObject, Poolable {
 
 	// animation
 	private final float shrinkRateSecs;
-	private static final float SYNCH_SIZE = 1 / 3f;
+	private static final float SYNCH_SIZE = .45f;
 
 	// gfx
 	private final Sprite ring, core;
-	private String text = null;
 	private Color c;
-	private static BitmapFont font = new BitmapFont();
+	private float alpha = 1;
 
 	// mechanical
 	private Vector2 position;
@@ -41,9 +39,9 @@ public class BeatCore implements IGameObject, Poolable {
 		// delta size / delta time
 		shrinkRateSecs = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
 
-		ring = new Sprite(new TextureRegion(new Texture("data/textures/ring.png"), 175, 175));
+		ring = new Sprite(new TextureRegion(new Texture("data/textures/ring.png"), 174, 179));
+		ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
 		core = new Sprite(new Texture("data/textures/core.png"));
-		core.setScale(.5f);
 
 		reset();
 	}
@@ -51,7 +49,6 @@ public class BeatCore implements IGameObject, Poolable {
 	// lifecycle
 	public void setup(Beat beat, String text) {
 		this.beat = beat;
-		this.text = text;
 
 		Color coreColor;
 
@@ -77,61 +74,62 @@ public class BeatCore implements IGameObject, Poolable {
 		{// update
 
 			// approach circle update
-			if (ring.getScaleX() > SYNCH_SIZE && !beenHit)
+			if (ring.getScaleX() > SYNCH_SIZE && !beenHit && !fading)
 				ring.scale(delta * shrinkRateSecs);
 			else
 				fading = true;
 
+			
+			
+			{// colors and fading
 
-			// colors and fading
-			c = ring.getColor();
-			if (c.a < .95f){
-				
-				float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
-				
-				ring.setColor(c.r, c.g, c.b, alpha);
-			}
-
-			if (fading) {
-				c = core.getColor();
-				if (c.a > .05) {
-					float alpha = c.a;
-					alpha -= (delta * 2);
-					
-					// make sure the alpha isn't set below 0
-					alpha = alpha < 0 ? 0 : alpha;
-
-					core.setColor(c.r, c.g, c.b, alpha);
-					c = ring.getColor();
+				c = ring.getColor();
+				if (c.a < .95f) {
+					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
 					ring.setColor(c.r, c.g, c.b, alpha);
 				}
-				else if (c.a <= .05f)
-					complete = true;
+
+				if (fading) {
+					if (alpha > .05) {
+						alpha -= (delta * 2);
+
+						// make sure the alpha isn't set below 0
+						alpha = alpha < 0 ? 0 : alpha;
+
+						c = core.getColor();
+						core.setColor(c.r, c.g, c.b, alpha);
+						c = ring.getColor();
+						ring.setColor(c.r, c.g, c.b, alpha);
+					} else if (c.a <= .05f){
+						complete = true;
+						System.out.println("complete");
+					}
+				}
 			}
 
 		}
 
 		{// draw
-			Vector2 worldPos = Resources.projectToScreen(position);
-
+			
 			core.draw(Resources.spriteBatch);
 			ring.draw(Resources.spriteBatch);
-			font.setColor(Color.BLACK);
-			font.draw(Resources.spriteBatch, text, worldPos.x - 5,
-					worldPos.y + 5);
 		}
 	}
 
 	@Override
 	public void reset() {
 
+		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
 		ring.setScale(1);
+		
+		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
+
 		ring.setColor(1, 1, 1, 0f);
 		beat = null;
-		text = null;
 		complete = false;
 		beenHit = false;
 		fading = false;
+		alpha = 1;
 
 	}
 
@@ -140,11 +138,10 @@ public class BeatCore implements IGameObject, Poolable {
 
 		this.position = worldPos;
 
-		Vector2 screenPosition = Resources.projectToScreen(worldPos);
-		ring.setPosition(screenPosition.x - ring.getWidth() / 2f,
-				screenPosition.y - ring.getHeight() / 2f);
-		core.setPosition(screenPosition.x - core.getWidth() / 2f,
-				screenPosition.y - core.getHeight() / 2f);
+		ring.setPosition(worldPos.x - ring.getWidth() / 2f,
+				worldPos.y - ring.getHeight() / 2f);
+		core.setPosition(worldPos.x - core.getWidth() / 2f,
+				worldPos.y - core.getHeight() / 2f);
 
 	}
 
@@ -157,9 +154,8 @@ public class BeatCore implements IGameObject, Poolable {
 			return Accuracy.INACTIVE;
 		else {
 			beenHit = true;
-			fading = true;			
+			fading = true;
 
-				
 			if (diff < -210)
 				return Accuracy.ALMOST;
 			else if (diff < -150)
@@ -201,7 +197,8 @@ public class BeatCore implements IGameObject, Poolable {
 	public Vector2 getPosition() {
 		return position;
 	}
-	public boolean beenHit(){
+
+	public boolean beenHit() {
 		return beenHit;
 	}
 }

@@ -16,7 +16,7 @@ public class MenuScreen implements Screen {
 	
 	public MenuScreen() {
 		
-		playButton = new Sprite(new TextureRegion(new Texture("data/textures/menubutton.png"), 128, 50));
+		playButton = new Sprite(new TextureRegion(new Texture("data/textures/menubutton.png"), 128, 30));
 	}
 	
 	@Override
@@ -25,11 +25,13 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+		touchPos = Resources.projectToWorld(touchPos);
+		System.out.println(touchPos);
 		
 		if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y))
 			Resources.game.setScreen(Resources.chooseSongScreen);
 		
-		
+		Resources.spriteBatch.setProjectionMatrix(Resources.camera.combined);
 		Resources.spriteBatch.begin();
 		playButton.draw(Resources.spriteBatch);
 		Resources.spriteBatch.end();
@@ -46,9 +48,9 @@ public class MenuScreen implements Screen {
 	public void show() {
 		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.play();
-		Vector2 pos = Resources.projectToScreen(new Vector2(5, 3));
-		
-		playButton.setPosition(pos.x - playButton.getWidth() / 2f, pos.y - playButton.getHeight() / 2f);
+
+		playButton.setSize(1.5f, 1.5f * playButton.getHeight() / playButton.getWidth());
+		playButton.setPosition(-playButton.getWidth() / 2f, -playButton.getHeight() / 2f);
 	}
 
 	@Override

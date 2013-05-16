@@ -125,8 +125,7 @@ public class PlayScreen implements Screen {
 						position.set(x, y);
 
 						for (BeatCore c : activeCores) {
-							clean = !(c.getPosition().x == position.x && c
-									.getPosition().y == position.y);
+							clean = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
 							if (!clean)
 								break;
 						}
@@ -185,9 +184,10 @@ public class PlayScreen implements Screen {
 		{
 			engine.render(delta);
 			worldManager.render(delta);
-			hud.render(delta);
 		}
 		Resources.spriteBatch.end();
+		
+		hud.render(delta);
 
 	}
 

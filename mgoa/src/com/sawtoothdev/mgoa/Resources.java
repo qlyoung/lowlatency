@@ -23,18 +23,19 @@ public class Resources {
 	// general globals
 	public static Game game;
 	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
+	public static FileHandle currentSong;
 	
 	// global settings
 	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
 	public static Vector2 worldDimensions = new Vector2(10, 6);
+	//public static Vector2 scaleFactor = new Vector2(Gdx.graphics.getWidth() / 800f, Gdx.graphics.getHeight() / 480f);
 	
 	// heavyweights we only need one of
 	public static Random random = new Random();
 	public static SpriteBatch spriteBatch = new SpriteBatch();
-	public static OrthographicCamera camera;
+	public static OrthographicCamera camera = new OrthographicCamera(10, 6);
 	
 	// flow control
-	public static FileHandle currentSong;
 	public static final MenuScreen menuScreen = new MenuScreen();
 	public static final ChooseSongScreen chooseSongScreen = new ChooseSongScreen();
 	public static final LoadScreen loadScreen = new LoadScreen();
