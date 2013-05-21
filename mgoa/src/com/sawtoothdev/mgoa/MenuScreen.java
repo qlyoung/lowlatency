@@ -24,12 +24,14 @@ public class MenuScreen implements Screen {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-		touchPos = Resources.projectToWorld(touchPos);
-		System.out.println(touchPos);
 		
-		if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y))
-			Resources.game.setScreen(Resources.chooseSongScreen);
+		if (Gdx.input.justTouched()) {
+			Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+			touchPos = Resources.projectToWorld(touchPos);
+			
+			if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y))
+				Resources.game.setScreen(Resources.chooseSongScreen);
+		}
 		
 		Resources.spriteBatch.setProjectionMatrix(Resources.camera.combined);
 		Resources.spriteBatch.begin();

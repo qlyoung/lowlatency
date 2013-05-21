@@ -18,7 +18,7 @@ public class BeatCore implements IGameObject, Poolable {
 	};
 
 	// animation
-	private final float shrinkRateSecs;
+	private final float shrinkRate;
 	private static final float SYNCH_SIZE = .45f;
 
 	// gfx
@@ -37,7 +37,7 @@ public class BeatCore implements IGameObject, Poolable {
 
 	public BeatCore() {
 		// delta size / delta time
-		shrinkRateSecs = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
+		shrinkRate = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
 
 		ring = new Sprite(new TextureRegion(new Texture("data/textures/ring.png"), 174, 179));
 		ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
@@ -73,10 +73,10 @@ public class BeatCore implements IGameObject, Poolable {
 
 		{// update
 
-			// approach circle update
+			// approach circle
 			if (ring.getScaleX() > SYNCH_SIZE && !beenHit && !fading)
-				ring.scale(delta * shrinkRateSecs);
-			else
+				ring.scale(delta * shrinkRate);
+			else if (!fading)
 				fading = true;
 
 			
@@ -84,11 +84,14 @@ public class BeatCore implements IGameObject, Poolable {
 			{// colors and fading
 
 				c = ring.getColor();
-				if (c.a < .95f) {
+				
+				// approach circle fade-in
+				if (c.a < .95f && !fading) {
 					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
 					ring.setColor(c.r, c.g, c.b, alpha);
 				}
 
+				// fade-out
 				if (fading) {
 					if (alpha > .05) {
 						alpha -= (delta * 2);
@@ -100,10 +103,8 @@ public class BeatCore implements IGameObject, Poolable {
 						core.setColor(c.r, c.g, c.b, alpha);
 						c = ring.getColor();
 						ring.setColor(c.r, c.g, c.b, alpha);
-					} else if (c.a <= .05f){
+					} else if (c.a <= .05f)
 						complete = true;
-						System.out.println("complete");
-					}
 				}
 			}
 
@@ -177,6 +178,7 @@ public class BeatCore implements IGameObject, Poolable {
 			else
 				return Accuracy.INACTIVE;
 		}
+		
 	}
 
 	// readers
@@ -184,10 +186,8 @@ public class BeatCore implements IGameObject, Poolable {
 		return complete;
 	}
 
-	public Rectangle getBoundingRectangle() {
-
-		return new Rectangle(position.x - .25f, position.y - .25f, .5f, .5f);
-
+	public Rectangle getHitbox() {
+		return new Rectangle(position.x - .5f, position.y - .5f, 1f, 1f);
 	}
 
 	public int getScoreValue() {

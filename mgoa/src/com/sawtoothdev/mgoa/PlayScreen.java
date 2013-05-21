@@ -21,16 +21,12 @@ public class PlayScreen implements Screen {
 
 	private class WorldManager implements ISongEventListener, IGameObject {
 
-		// le pool
-		CorePool corePool;
-
-		// active object management
-		ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
+		private CorePool corePool;
+		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
+		private int index = 0;
+		private int combo = 0;
 		
-		// index for numbering the beats
-		int index = 0;
 
-		
 		public WorldManager() {
 			corePool = new CorePool();
 		}
@@ -46,37 +42,23 @@ public class PlayScreen implements Screen {
 
 				for (BeatCore core : activeCores) {
 
-					if (core.getBoundingRectangle().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
+					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
 							
 						Accuracy accuracy = core.onHit(engine.getSongTime());
-							
+						
 						if (accuracy != Accuracy.INACTIVE){
-							int divisor = Accuracy.values().length;
 							
-							switch (accuracy) {
-							case ALMOST:
-								divisor -= 1;
-									break;
-							case GOOD:
-								divisor -= 2;
-								break;
-							case EXCELLENT:
-								divisor -= 3;
-								break;
-							case PERFECT:
-								divisor -= 4;
-								break;
-							case STELLAR:
-								divisor -= 5;
-								break;
-							default:
-								break;
-							}
+							int divisor = accuracy.ordinal() + 1;
 							
 							int scoreValue = (int) core.getScoreValue() / divisor;
-							
 							hud.actuateHitEvent(accuracy, scoreValue);
+							
+							combo++;
 						}
+						else
+							combo = 0;
+						
+						hud.setCombo(combo);
 					}
 				}
 			}
@@ -89,8 +71,10 @@ public class PlayScreen implements Screen {
 					BeatCore c = activeCores.get(i);
 
 					if (c.isComplete()) {
+						
 						activeCores.remove(c);
 						corePool.free(c);
+
 						hud.incrementTotalBeatsShown();
 					}
 				}

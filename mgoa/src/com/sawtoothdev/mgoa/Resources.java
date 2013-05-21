@@ -28,7 +28,6 @@ public class Resources {
 	// global settings
 	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
 	public static Vector2 worldDimensions = new Vector2(10, 6);
-	//public static Vector2 scaleFactor = new Vector2(Gdx.graphics.getWidth() / 800f, Gdx.graphics.getHeight() / 480f);
 	
 	// heavyweights we only need one of
 	public static Random random = new Random();

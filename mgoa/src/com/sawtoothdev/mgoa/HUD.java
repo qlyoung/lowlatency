@@ -25,10 +25,8 @@ class HUD implements IGameObject {
 	private SpriteBatch hudBatch = new SpriteBatch();
 	
 	// game values
-	private int score, displayScore;
-	private String message = "READY";
-	private int totalBeatsShown = 0, totalBeatsHit = 0;
-	private String percentage = "0";
+	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo; 
+	private String message = "READY", percentage = "0";
 	
 	// music information
 	private final String songInfo;
@@ -70,14 +68,14 @@ class HUD implements IGameObject {
 		
 		
 		{// draw the display
-			// artist - track
 			
 			hudBatch.begin();
 			
+			//song data
 			scoreFont.draw(hudBatch, songInfo, 10, 20);
 			
 			// score and score underline
-			scoreFont.draw(hudBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 25, Gdx.graphics.getHeight() - 10f);
+			scoreFont.draw(hudBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 30, Gdx.graphics.getHeight() - 10f);
 			hudBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
 			
 			// hit percentage
@@ -85,6 +83,9 @@ class HUD implements IGameObject {
 			
 			// messages
 			messageFont.draw(hudBatch, message, Gdx.graphics.getWidth() / 2f - 10f, Gdx.graphics.getHeight() / 2f);
+			
+			// combo
+			scoreFont.draw(hudBatch, String.valueOf("Combo: " + combo), Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 10f);
 			
 			hudBatch.end();
 			
@@ -104,5 +105,7 @@ class HUD implements IGameObject {
 		score += scoreValue;
 		totalBeatsHit++;
 	}
-
+	public void setCombo(int combo){
+		this.combo = combo;
+	}
 }

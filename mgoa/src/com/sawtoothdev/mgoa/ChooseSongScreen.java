@@ -20,6 +20,30 @@ public class ChooseSongScreen implements Screen {
 	private final Table container;
 	private final Table directoryTable;
 	
+	private ClickListener elementClickListener = new ClickListener() {
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+			
+			Gdx.app.log("clicked", "clicked");
+			
+			Actor actor = event.getListenerActor();
+			FileHandle newPath = Gdx.files.external(actor.getName());
+			
+			if (newPath.isDirectory()) {
+				Gdx.app.log("clicked", newPath.toString());
+				updateTable(newPath);
+			}
+			else {
+				Resources.currentSong = Gdx.files.external(actor.getName());
+				System.out.println(Resources.currentSong.path());
+				Gdx.input.setInputProcessor(null);
+				Resources.game.setScreen(Resources.loadScreen);
+			}
+			event.cancel();
+			
+			super.clicked(event, x, y);
+		}
+	};
 	
 	public ChooseSongScreen() {
 		
@@ -64,30 +88,17 @@ public class ChooseSongScreen implements Screen {
 			
 			TextButton lol = new TextButton(fh.name(), style);
 			lol.setName(fh.path());
-			lol.addListener(new ClickListener() {
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					
-					Actor actor = event.getListenerActor();
-					FileHandle newPath = Gdx.files.external(actor.getName());
-					
-					if (newPath.isDirectory())
-						updateTable(newPath);
-					else {
-						Resources.currentSong = Gdx.files.external(actor.getName());
-						System.out.println(Resources.currentSong.path());
-						Gdx.input.setInputProcessor(null);
-						Resources.game.setScreen(Resources.loadScreen);
-					}
-					event.cancel();
-					
-					super.clicked(event, x, y);
-				}
-			});
+			lol.addListener(elementClickListener);
 			
 			directoryTable.add(lol);
 			directoryTable.row();
 		}
+		
+		TextButton up = new TextButton("UP", style);
+		up.setName(directory.parent().path());
+		up.addListener(elementClickListener);
+		directoryTable.add(up);
+		directoryTable.row();
 	}
 	
 	@Override
