@@ -22,9 +22,6 @@ public class MenuScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		
 		if (Gdx.input.justTouched()) {
 			Vector2 touchPos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 			touchPos = Resources.projectToWorld(touchPos);
@@ -33,9 +30,11 @@ public class MenuScreen implements Screen {
 				Resources.game.setScreen(Resources.chooseSongScreen);
 		}
 		
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		Resources.spriteBatch.setProjectionMatrix(Resources.camera.combined);
 		Resources.spriteBatch.begin();
-		playButton.draw(Resources.spriteBatch);
+			playButton.draw(Resources.spriteBatch);
 		Resources.spriteBatch.end();
 	}
 	

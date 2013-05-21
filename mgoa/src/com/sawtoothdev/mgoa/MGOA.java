@@ -22,6 +22,5 @@ public class MGOA extends Game {
 		this.setScreen(Resources.menuScreen);
 
 	}
-	
 
 }

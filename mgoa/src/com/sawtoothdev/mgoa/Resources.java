@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Some global resources, grouped in one place for convenience
+ * Heavyweights and things we only need one of
  * 
  * @author albatross
  *
@@ -20,45 +20,41 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Resources {
 
-	// general globals
+	// flow control
 	public static Game game;
+	public static final MenuScreen menuScreen = new MenuScreen();
+	public static final ChooseSongScreen chooseSongScreen = new ChooseSongScreen();
+	public static final LoadScreen loadScreen = new LoadScreen();	
+	
+	// gfx
+	public static OrthographicCamera camera = new OrthographicCamera(10, 6);
+	public static SpriteBatch spriteBatch = new SpriteBatch();
+	
+	// audio
 	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
 	public static FileHandle currentSong;
 	
-	// global settings
+	// settings
 	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
-	public static Vector2 worldDimensions = new Vector2(10, 6);
 	
-	// heavyweights we only need one of
+	// miscellaneous
 	public static Random random = new Random();
-	public static SpriteBatch spriteBatch = new SpriteBatch();
-	public static OrthographicCamera camera = new OrthographicCamera(10, 6);
 	
-	// flow control
-	public static final MenuScreen menuScreen = new MenuScreen();
-	public static final ChooseSongScreen chooseSongScreen = new ChooseSongScreen();
-	public static final LoadScreen loadScreen = new LoadScreen();
-	
-	
-	
-	// projects a Vector2 from world space to screen space
+	// projection/unprojection convenience methods
 	public static Vector2 projectToScreen(Vector2 worldCoords){
-		
+
 		Vector3 temp = new Vector3(worldCoords.x, worldCoords.y, 0);
 		camera.project(temp);
-		
+
 		worldCoords = new Vector2(temp.x, temp.y);
 		return worldCoords;
-		
+
 	}
-	// projects a Vector2 from screen space to world space
 	public static Vector2 projectToWorld(Vector2 screenCoords){
 		Vector3 temp = new Vector3(screenCoords.x, screenCoords.y, 0);
 		camera.unproject(temp);
-		
+
 		screenCoords = new Vector2(temp.x, temp.y);
 		return screenCoords;
 	}
-	
-
 }

@@ -19,6 +19,72 @@ import com.sawtoothdev.mgoa.BeatCore.Accuracy;
 
 public class PlayScreen implements Screen {
 
+	// engines and managers
+	private final SongEngine engine;
+	private final WorldManager worldManager;
+	private final HUD hud;
+
+	public PlayScreen(BeatMap map, FileHandle audioFile) {
+
+		// set up the world
+		worldManager = new WorldManager();
+
+		// set up the heads up display
+		hud = new HUD(audioFile);
+
+		// load the map
+		engine = new SongEngine(map, audioFile);
+		engine.addListener(worldManager);
+	}
+
+	@Override
+	public void render(float delta) {
+
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Resources.camera.update();
+
+		Resources.spriteBatch.begin();
+			engine.render(delta);
+			worldManager.render(delta);
+		Resources.spriteBatch.end();
+		
+		hud.render(delta);
+		
+		if (engine.isDone()){
+			Resources.game.setScreen(Resources.menuScreen);
+		}
+	}
+
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void show() {
+		engine.start();
+	}
+
+	@Override
+	public void hide() {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void dispose() {
+
+	}
+
 	private class WorldManager implements ISongEventListener, IGameObject {
 
 		private CorePool corePool;
@@ -137,72 +203,5 @@ public class PlayScreen implements Screen {
 		}
 
 	}
-
-	// engines and managers
-	private final SongEngine engine;
-	private final WorldManager worldManager;
-	private final HUD hud;
-
-	public PlayScreen(BeatMap map, FileHandle audioFile) {
-
-		// set up the world
-		worldManager = new WorldManager();
-
-		// set up the heads up display
-		hud = new HUD(audioFile);
-
-		// load the map
-		engine = new SongEngine(map, audioFile);
-		engine.addListener(worldManager);
-	}
-
-	@Override
-	public void render(float delta) {
-
-		// clear the screen and update the camera
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		Resources.camera.update();
-
-		//update and draw
-		Resources.spriteBatch.begin();
-		{
-			engine.render(delta);
-			worldManager.render(delta);
-		}
-		Resources.spriteBatch.end();
-		
-		hud.render(delta);
-
-	}
-
-	@Override
-	public void resize(int width, int height) {
-
-	}
-
-	@Override
-	public void show() {
-		engine.start();
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
+	
 }

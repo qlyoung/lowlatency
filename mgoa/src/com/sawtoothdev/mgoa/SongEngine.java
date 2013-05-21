@@ -13,7 +13,7 @@ public class SongEngine implements IGameObject {
 
 	// delay functionality
 	private long delayedStartTime, delayMs, delayedEngineTimer;
-	private final ArrayList<Beat> map;
+	private final ArrayList<Beat> delayMap;
 	private int delayIndex = 0;
 	
 	// realtime functionality
@@ -31,17 +31,17 @@ public class SongEngine implements IGameObject {
 		// set the map
 		switch (Resources.difficulty.name) {
 		case EASY:
-			map = beatMap.easy;
+			delayMap = beatMap.easy;
 			break;
 		case NORMAL:
-			map = beatMap.medium;
+			delayMap = beatMap.medium;
 			break;
 		case HARD:
-			map = beatMap.hard;
+			delayMap = beatMap.hard;
 			break;
 		default:
 		case ORIGINAL:
-			map = beatMap.ORIGINAL;
+			delayMap = beatMap.ORIGINAL;
 		}
 		
 		realtimeMap = beatMap.ORIGINAL;
@@ -72,8 +72,8 @@ public class SongEngine implements IGameObject {
 					realtimeStartTime = System.currentTimeMillis();
 				}
 				
-				if (delayIndex <= map.size() - 1 && map.get(delayIndex).timeMs < delayedEngineTimer) {
-					onBeatWarning(map.get(delayIndex));
+				if (delayIndex <= delayMap.size() - 1 && delayMap.get(delayIndex).timeMs < delayedEngineTimer) {
+					onBeatWarning(delayMap.get(delayIndex));
 					delayIndex++;
 				}
 			}
@@ -109,5 +109,13 @@ public class SongEngine implements IGameObject {
 
 	public long getSongTime() {
 		return music.getPosition();
+	}
+	
+	public boolean isDone(){
+		
+		if (!music.isPlaying() && delayIndex == delayMap.size() - 1)
+			return true;
+		else
+			return false;
 	}
 }

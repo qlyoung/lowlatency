@@ -3,8 +3,8 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
@@ -39,9 +39,14 @@ public class BeatCore implements IGameObject, Poolable {
 		// delta size / delta time
 		shrinkRate = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
 
-		ring = new Sprite(new TextureRegion(new Texture("data/textures/ring.png"), 174, 179));
+		Texture t = new Texture("data/textures/ring.png");
+		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		ring = new Sprite(t, 174, 179);
 		ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
-		core = new Sprite(new Texture("data/textures/core.png"));
+		
+		Texture y = new Texture("data/textures/core.png");
+		y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		core = new Sprite(y);
 
 		reset();
 	}
