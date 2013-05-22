@@ -1,4 +1,4 @@
 mgoa
 ====
 
-A work of sound, light and going fast
+A music-adaptive reflex game for Android
