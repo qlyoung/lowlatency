@@ -89,10 +89,13 @@ public class PlayScreen implements Screen {
 
 		private CorePool corePool;
 		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
-		private int index = 0;
-		private int combo = 0;
+		private EffectMaker fx = new EffectMaker();
 		
-
+		private int combo = 0;
+		private int totalBeatsShown = 0;
+		private int totalBeatsHit = 0;
+		private int score = 0;
+		
 		public WorldManager() {
 			corePool = new CorePool();
 		}
@@ -100,10 +103,9 @@ public class PlayScreen implements Screen {
 		@Override
 		public void render(float delta) {
 
-			// input
+			// input and hits
 			if (Gdx.input.isTouched()) {
 
-				// translate touch coords to world coords and check collisions
 				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 				for (BeatCore core : activeCores) {
@@ -115,33 +117,30 @@ public class PlayScreen implements Screen {
 						if (accuracy != Accuracy.INACTIVE){
 							
 							int divisor = accuracy.ordinal() + 1;
-							
 							int scoreValue = (int) core.getScoreValue() / divisor;
-							hud.actuateHitEvent(accuracy, scoreValue);
-							
 							combo++;
+							totalBeatsHit++;
+							score += scoreValue;
+							
+							hud.showMessage(accuracy.toString() + "!");
 						}
 						else
 							combo = 0;
-						
-						hud.setCombo(combo);
 					}
 				}
 			}
 
 			{// rings
 
-				// update
 				for (int i = 0; i < activeCores.size(); i++) {
 
 					BeatCore c = activeCores.get(i);
 
 					if (c.isComplete()) {
-						
 						activeCores.remove(c);
 						corePool.free(c);
-
-						hud.incrementTotalBeatsShown();
+						
+						totalBeatsShown++;
 					}
 				}
 
@@ -149,56 +148,47 @@ public class PlayScreen implements Screen {
 				for (BeatCore core : activeCores)
 					core.render(delta);
 			}
+			
+			hud.update(totalBeatsShown, totalBeatsHit, combo, score);
+			fx.render(delta);
 
 		}
 
 		@Override
-		public void onBeatWarning(Beat b) {
+		public void onBeatWarning(Beat beat) {
 
-			if (b.energy > 0f) {
+			if (beat.energy > 0f) {
 
 				BeatCore core = corePool.obtain();
-				core.setup(b, String.valueOf(index));
-
+				core.setBeat(beat);
+				
 				Vector2 position = new Vector2();
-
-				// place beat at empty position
+				position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
+				
 				if (activeCores.size() > 0) {
 
-					boolean clean = false;
+					boolean emptySpace = false;
 
-					//find a clean position
-					while (!clean) {
+					while (!emptySpace) {
 
-						float y = Resources.random.nextInt(5) - 2;
-						float x = Resources.random.nextInt(9) - 4;
-						position.set(x, y);
+						position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
 
 						for (BeatCore c : activeCores) {
-							clean = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
-							if (!clean)
+							emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
+							if (!emptySpace)
 								break;
 						}
 					}
-					
-				} else {
-					float y = Resources.random.nextInt(5) - 2;
-					float x = Resources.random.nextInt(9) - 4;
-					position.set(x, y);
-				}
+				} 
 
 				core.setPosition(position);
-
-				index++;
-				if (index > 15)
-					index = 0;
 
 				activeCores.add(core);
 			}
 			
 		}
 		@Override
-		public void onBeat(Beat b) {
+		public void onBeat(Beat beat) {
 			
 		}
 

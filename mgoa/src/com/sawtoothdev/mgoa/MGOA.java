@@ -15,10 +15,7 @@ public class MGOA extends Game {
 	@Override
 	public void create() {
 		
-		// a bit of global setup
 		Resources.game = this;
-		
-		// and launch
 		this.setScreen(Resources.menuScreen);
 
 	}

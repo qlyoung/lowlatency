@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.sawtoothdev.mgoa.BeatCore.Accuracy;
 
 class HUD implements IGameObject {
 
@@ -21,13 +20,12 @@ class HUD implements IGameObject {
 	private BitmapFont scoreFont = new BitmapFont(Gdx.files.internal("data/fonts/capacitor.fnt"), false);
 
 	// gfx
-	private TextureRegion underline = new TextureRegion(new Texture(
-			"data/textures/underline.png"));
+	private TextureRegion underline = new TextureRegion(new Texture("data/textures/underline.png"));
 	private SpriteBatch hudBatch = new SpriteBatch();
 
 	// game values
 	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo;
-	private String message = "READY", percentage = "0";
+	private String message = null, percentage = "0";
 
 	// music information
 	private final String songInfo;
@@ -83,7 +81,8 @@ class HUD implements IGameObject {
 			scoreFont.draw(hudBatch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
 
 			// messages
-			messageFont.draw(hudBatch, message, Gdx.graphics.getWidth() / 2f - 50f, Gdx.graphics.getHeight() / 2f);
+			if (message != null)
+				messageFont.draw(hudBatch, message, Gdx.graphics.getWidth() / 2f - 50f, Gdx.graphics.getHeight() / 2f);
 
 			// combo
 			scoreFont.draw(hudBatch, String.valueOf("Combo: " + combo), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
@@ -95,22 +94,16 @@ class HUD implements IGameObject {
 
 	}
 
-	public void incrementTotalBeatsShown() {
-		totalBeatsShown++;
-	}
-
 	public void showMessage(String message) {
 		this.message = message;
 		messageFont.setColor(Color.WHITE);
 	}
-
-	public void actuateHitEvent(Accuracy accuracy, int scoreValue) {
-		showMessage(accuracy.toString());
-		score += scoreValue;
-		totalBeatsHit++;
-	}
-
-	public void setCombo(int combo) {
+	
+	public void update(int totalBeatsShown, int totalBeatsHit, int combo, int score){
+		this.totalBeatsShown = totalBeatsShown;
+		this.totalBeatsHit = totalBeatsHit;
 		this.combo = combo;
+		this.score = score;
 	}
+
 }

@@ -97,9 +97,8 @@ public class SongEngine implements IGameObject {
 			l.onBeatWarning(beat);
 	}
 	private void onBeat(Beat beat){
-		
-		
-		
+		for (ISongEventListener l : listeners)
+			l.onBeat(beat);
 	}
 
 	//extraneous

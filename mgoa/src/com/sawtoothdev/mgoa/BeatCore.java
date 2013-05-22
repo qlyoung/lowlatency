@@ -52,7 +52,7 @@ public class BeatCore implements IGameObject, Poolable {
 	}
 
 	// lifecycle
-	public void setup(Beat beat, String text) {
+	public void setBeat(Beat beat) {
 		this.beat = beat;
 
 		Color coreColor;
