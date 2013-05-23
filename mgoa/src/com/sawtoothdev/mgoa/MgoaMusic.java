@@ -17,7 +17,6 @@ public class MgoaMusic {
 	private long startTime;
 	
 	private boolean paused = false;
-	private boolean playing = false;
 
 	
 	public MgoaMusic(FileHandle audioFile) {
@@ -26,20 +25,20 @@ public class MgoaMusic {
 		// prepare the music player
 		music.play();
 		music.pause();
+		music.setLooping(false);
 	}
 	
 	public void play() {
-		playing = true;
+		paused = false;
 		music.play();
 		startTime = System.currentTimeMillis();
 	}
 	public void pause() {
+		paused = true;
 		music.pause();
-		playing = false;
 	}
 	public void stop() {
 		music.stop();
-		playing = false;
 	}
 	public void setVolume(float volume){
 		this.music.setVolume(volume);
@@ -52,7 +51,7 @@ public class MgoaMusic {
 		return System.currentTimeMillis() - startTime;
 	}
 	public boolean isPlaying() {
-		return playing;
+		return music.isPlaying();
 	}
 	public boolean isPaused() {
 		return paused;

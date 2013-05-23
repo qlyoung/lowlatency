@@ -24,13 +24,10 @@ public class ChooseSongScreen implements Screen {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
 			
-			Gdx.app.log("clicked", "clicked");
-			
 			Actor actor = event.getListenerActor();
 			FileHandle newPath = Gdx.files.external(actor.getName());
 			
 			if (newPath.isDirectory()) {
-				Gdx.app.log("clicked", newPath.toString());
 				updateTable(newPath);
 			}
 			else {
@@ -64,7 +61,6 @@ public class ChooseSongScreen implements Screen {
 		updateTable(external);
 		
 		container.add(new ScrollPane(directoryTable));
-		
 	}
 	
 	@Override
@@ -81,7 +77,7 @@ public class ChooseSongScreen implements Screen {
 	public void updateTable(FileHandle directory){
 		
 		TextButtonStyle style = new TextButtonStyle();
-		style.font = new BitmapFont();
+		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
 		directoryTable.clear();
 		
 		for (FileHandle fh : directory.list()){

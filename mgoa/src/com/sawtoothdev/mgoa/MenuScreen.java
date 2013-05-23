@@ -32,10 +32,10 @@ public class MenuScreen implements Screen {
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		Resources.spriteBatch.setProjectionMatrix(Resources.camera.combined);
-		Resources.spriteBatch.begin();
-			playButton.draw(Resources.spriteBatch);
-		Resources.spriteBatch.end();
+		Resources.worldBatch.setProjectionMatrix(Resources.camera.combined);
+		Resources.worldBatch.begin();
+			playButton.draw(Resources.worldBatch);
+		Resources.worldBatch.end();
 	}
 	
 	

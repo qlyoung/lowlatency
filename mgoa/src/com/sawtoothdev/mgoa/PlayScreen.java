@@ -23,16 +23,14 @@ public class PlayScreen implements Screen {
 	private final SongEngine engine;
 	private final WorldManager worldManager;
 	private final HUD hud;
+	private final EffectMaker fx;
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
-		// set up the world
 		worldManager = new WorldManager();
-
-		// set up the heads up display
 		hud = new HUD(audioFile);
+		fx = new EffectMaker();
 
-		// load the map
 		engine = new SongEngine(map, audioFile);
 		engine.addListener(worldManager);
 	}
@@ -43,12 +41,12 @@ public class PlayScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		Resources.camera.update();
 
-		Resources.spriteBatch.begin();
-			engine.render(delta);
-			worldManager.render(delta);
-		Resources.spriteBatch.end();
+		engine.render(delta);
 		
+		fx.render(delta);
+		worldManager.render(delta);
 		hud.render(delta);
+		
 		
 		if (engine.isDone()){
 			Resources.game.setScreen(Resources.menuScreen);
@@ -87,9 +85,8 @@ public class PlayScreen implements Screen {
 
 	private class WorldManager implements ISongEventListener, IGameObject {
 
-		private CorePool corePool;
+		private CorePool corePool = new CorePool();
 		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
-		private EffectMaker fx = new EffectMaker();
 		
 		private int combo = 0;
 		private int totalBeatsShown = 0;
@@ -97,7 +94,6 @@ public class PlayScreen implements Screen {
 		private int score = 0;
 		
 		public WorldManager() {
-			corePool = new CorePool();
 		}
 
 		@Override
@@ -122,6 +118,8 @@ public class PlayScreen implements Screen {
 							totalBeatsHit++;
 							score += scoreValue;
 							
+							fx.makeBlueExplosion(touchPos);
+							
 							hud.showMessage(accuracy.toString() + "!");
 						}
 						else
@@ -143,14 +141,15 @@ public class PlayScreen implements Screen {
 						totalBeatsShown++;
 					}
 				}
+				
+				Resources.worldBatch.begin();
+					for (BeatCore core : activeCores)
+						core.render(delta);
+				Resources.worldBatch.end();
 
-				// draw
-				for (BeatCore core : activeCores)
-					core.render(delta);
 			}
 			
 			hud.update(totalBeatsShown, totalBeatsHit, combo, score);
-			fx.render(delta);
 
 		}
 
@@ -189,7 +188,6 @@ public class PlayScreen implements Screen {
 		}
 		@Override
 		public void onBeat(Beat beat) {
-			
 		}
 
 	}

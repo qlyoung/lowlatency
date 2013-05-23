@@ -112,9 +112,11 @@ public class SongEngine implements IGameObject {
 	
 	public boolean isDone(){
 		
-		if (!music.isPlaying() && delayIndex == delayMap.size() - 1)
+		if (!music.isPlaying() && delayIndex == delayMap.size())
 			return true;
-		else
-			return false;
+		
+		System.out.println(delayIndex + " " + delayMap.size());
+		System.out.println(music.isPlaying());
+		return false;
 	}
 }

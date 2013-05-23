@@ -28,7 +28,8 @@ public class Resources {
 	
 	// gfx
 	public static OrthographicCamera camera = new OrthographicCamera(10, 6);
-	public static SpriteBatch spriteBatch = new SpriteBatch();
+	public static SpriteBatch worldBatch = new SpriteBatch();
+	public static SpriteBatch screenBatch = new SpriteBatch();
 	
 	// audio
 	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));

@@ -117,8 +117,8 @@ public class BeatCore implements IGameObject, Poolable {
 
 		{// draw
 			
-			core.draw(Resources.spriteBatch);
-			ring.draw(Resources.spriteBatch);
+			core.draw(Resources.worldBatch);
+			ring.draw(Resources.worldBatch);
 		}
 	}
 
