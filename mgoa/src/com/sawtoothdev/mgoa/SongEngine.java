@@ -115,8 +115,8 @@ public class SongEngine implements IGameObject {
 		if (!music.isPlaying() && delayIndex == delayMap.size())
 			return true;
 		
-		System.out.println(delayIndex + " " + delayMap.size());
-		System.out.println(music.isPlaying());
+		//System.out.println(delayIndex + " " + delayMap.size());
+		//System.out.println(music.isPlaying());
 		return false;
 	}
 }

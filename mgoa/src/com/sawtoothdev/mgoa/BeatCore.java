@@ -23,7 +23,7 @@ public class BeatCore implements IGameObject, Poolable {
 
 	// gfx
 	private final Sprite ring, core;
-	private Color c;
+	private Color c, originalColor;
 	private float alpha = 1;
 
 	// mechanical
@@ -31,9 +31,9 @@ public class BeatCore implements IGameObject, Poolable {
 	private Beat beat;
 
 	// state
-	private boolean complete = false;
+	private boolean dead = false;
 	private boolean beenHit = false;
-	private boolean fading = false;
+	private boolean dying = false;
 
 	public BeatCore() {
 		// delta size / delta time
@@ -70,7 +70,10 @@ public class BeatCore implements IGameObject, Poolable {
 		else
 			coreColor = Color.MAGENTA;
 
+		originalColor = coreColor.cpy();
+		
 		this.core.setColor(coreColor);
+		this.ring.setColor(coreColor);
 	}
 
 	@Override
@@ -79,10 +82,10 @@ public class BeatCore implements IGameObject, Poolable {
 		{// update
 
 			// approach circle
-			if (ring.getScaleX() > SYNCH_SIZE && !beenHit && !fading)
+			if (ring.getScaleX() > SYNCH_SIZE && !beenHit && !dying)
 				ring.scale(delta * shrinkRate);
-			else if (!fading)
-				fading = true;
+			else if (!dying)
+				dying = true;
 
 			
 			
@@ -91,13 +94,13 @@ public class BeatCore implements IGameObject, Poolable {
 				c = ring.getColor();
 				
 				// approach circle fade-in
-				if (c.a < .95f && !fading) {
+				if (c.a < .95f && !dying) {
 					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
 					ring.setColor(c.r, c.g, c.b, alpha);
 				}
 
 				// fade-out
-				if (fading) {
+				if (dying) {
 					if (alpha > .05) {
 						alpha -= (delta * 2);
 
@@ -109,7 +112,7 @@ public class BeatCore implements IGameObject, Poolable {
 						c = ring.getColor();
 						ring.setColor(c.r, c.g, c.b, alpha);
 					} else if (c.a <= .05f)
-						complete = true;
+						dead = true;
 				}
 			}
 
@@ -132,9 +135,9 @@ public class BeatCore implements IGameObject, Poolable {
 
 		ring.setColor(1, 1, 1, 0f);
 		beat = null;
-		complete = false;
+		dead = false;
 		beenHit = false;
-		fading = false;
+		dying = false;
 		alpha = 1;
 
 	}
@@ -160,7 +163,7 @@ public class BeatCore implements IGameObject, Poolable {
 			return Accuracy.INACTIVE;
 		else {
 			beenHit = true;
-			fading = true;
+			dying = true;
 
 			if (diff < -210)
 				return Accuracy.ALMOST;
@@ -187,8 +190,8 @@ public class BeatCore implements IGameObject, Poolable {
 	}
 
 	// readers
-	public boolean isComplete() {
-		return complete;
+	public boolean isDead() {
+		return dead;
 	}
 
 	public Rectangle getHitbox() {
@@ -205,5 +208,8 @@ public class BeatCore implements IGameObject, Poolable {
 
 	public boolean beenHit() {
 		return beenHit;
+	}
+	public Color getColor() {
+		return originalColor;
 	}
 }

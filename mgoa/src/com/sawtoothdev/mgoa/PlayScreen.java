@@ -118,7 +118,7 @@ public class PlayScreen implements Screen {
 							totalBeatsHit++;
 							score += scoreValue;
 							
-							fx.makeBlueExplosion(touchPos);
+							fx.makeExplosion(touchPos, core.getColor());
 							
 							hud.showMessage(accuracy.toString() + "!");
 						}
@@ -134,7 +134,7 @@ public class PlayScreen implements Screen {
 
 					BeatCore c = activeCores.get(i);
 
-					if (c.isComplete()) {
+					if (c.isDead()) {
 						activeCores.remove(c);
 						corePool.free(c);
 						
