@@ -14,7 +14,7 @@ public class BeatCore implements IGameObject, Poolable {
 
 	// accuracy feedback
 	public static enum Accuracy {
-		STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST, INACTIVE
+		STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST
 	};
 
 	// animation
@@ -159,35 +159,29 @@ public class BeatCore implements IGameObject, Poolable {
 
 		Gdx.app.log("diff", String.valueOf(diff));
 
-		if (beenHit || diff < -300)
-			return Accuracy.INACTIVE;
-		else {
-			beenHit = true;
-			dying = true;
+		beenHit = true;
+		dying = true;
 
-			if (diff < -210)
-				return Accuracy.ALMOST;
-			else if (diff < -150)
-				return Accuracy.GOOD;
-			else if (diff < -90)
-				return Accuracy.EXCELLENT;
-			else if (diff < -30)
-				return Accuracy.PERFECT;
-			else if (diff < 40)
-				return Accuracy.STELLAR;
-			else if (diff < 120)
-				return Accuracy.PERFECT;
-			else if (diff < 200)
-				return Accuracy.EXCELLENT;
-			else if (diff < 280)
-				return Accuracy.GOOD;
-			else if (diff < 400)
-				return Accuracy.ALMOST;
-			else
-				return Accuracy.INACTIVE;
-		}
-		
+		if (diff < -210)
+			return Accuracy.ALMOST;
+		else if (diff < -150)
+			return Accuracy.GOOD;
+		else if (diff <= -90)
+			return Accuracy.EXCELLENT;
+		else if (diff <= -30)
+			return Accuracy.PERFECT;
+		else if (diff <= 40)
+			return Accuracy.STELLAR;
+		else if (diff <= 120)
+			return Accuracy.PERFECT;
+		else if (diff <= 200)
+			return Accuracy.EXCELLENT;
+		else if (diff <= 280)
+			return Accuracy.GOOD;
+		else
+			return Accuracy.ALMOST;
 	}
+		
 
 	// readers
 	public boolean isDead() {

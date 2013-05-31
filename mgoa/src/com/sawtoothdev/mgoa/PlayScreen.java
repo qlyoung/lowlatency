@@ -89,6 +89,7 @@ public class PlayScreen implements Screen {
 		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 		
 		private int combo = 0;
+		
 		private int totalBeatsShown = 0;
 		private int totalBeatsHit = 0;
 		private int score = 0;
@@ -110,20 +111,15 @@ public class PlayScreen implements Screen {
 							
 						Accuracy accuracy = core.onHit(engine.getSongTime());
 						
-						if (accuracy != Accuracy.INACTIVE){
-							
-							int divisor = accuracy.ordinal() + 1;
-							int scoreValue = (int) core.getScoreValue() / divisor;
-							combo++;
-							totalBeatsHit++;
-							score += scoreValue;
-							
-							fx.makeExplosion(touchPos, core.getColor());
-							
-							hud.showMessage(accuracy.toString() + "!");
-						}
-						else
-							combo = 0;
+						int divisor = accuracy.ordinal() + 1;
+						int scoreValue = (int) core.getScoreValue() / divisor;
+						combo++;
+						totalBeatsHit++;
+						score += scoreValue;
+						
+						fx.makeExplosion(touchPos, core.getColor());
+						
+						hud.showMessage(accuracy.toString() + "!");
 					}
 				}
 			}
@@ -135,6 +131,10 @@ public class PlayScreen implements Screen {
 					BeatCore c = activeCores.get(i);
 
 					if (c.isDead()) {
+						
+						if (!c.beenHit())
+							combo = 0;
+						
 						activeCores.remove(c);
 						corePool.free(c);
 						

@@ -36,7 +36,7 @@ public class Resources {
 	public static FileHandle currentSong;
 	
 	// settings
-	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.EASY);
+	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
 	
 	// miscellaneous
 	public static Random random = new Random();
