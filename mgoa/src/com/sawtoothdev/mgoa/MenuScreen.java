@@ -27,12 +27,12 @@ public class MenuScreen implements Screen {
 			touchPos = Resources.projectToWorld(touchPos);
 			
 			if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y))
-				Resources.game.setScreen(Resources.chooseSongScreen);
+				Resources.game.setScreen(new ChooseSongScreen());
 		}
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		Resources.worldBatch.setProjectionMatrix(Resources.camera.combined);
+		Resources.worldBatch.setProjectionMatrix(Resources.worldCamera.combined);
 		Resources.worldBatch.begin();
 			playButton.draw(Resources.worldBatch);
 		Resources.worldBatch.end();
@@ -52,6 +52,8 @@ public class MenuScreen implements Screen {
 
 		playButton.setSize(1.5f, 1.5f * playButton.getHeight() / playButton.getWidth());
 		playButton.setPosition(-playButton.getWidth() / 2f, -playButton.getHeight() / 2f);
+		
+		System.gc();
 	}
 
 	@Override

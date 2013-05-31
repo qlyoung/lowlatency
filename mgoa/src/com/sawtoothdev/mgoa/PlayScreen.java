@@ -39,7 +39,7 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		Resources.camera.update();
+		Resources.worldCamera.update();
 
 		engine.render(delta);
 		
@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
 		
 		
 		if (engine.isDone()){
-			Resources.game.setScreen(Resources.menuScreen);
+			Resources.game.setScreen(new MenuScreen());
 		}
 	}
 

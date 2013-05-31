@@ -20,6 +20,7 @@ class HUD implements IGameObject {
 
 	// gfx
 	private TextureRegion underline = new TextureRegion(new Texture("data/textures/underline.png"));
+	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
 	// game values
 	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo;
@@ -51,7 +52,7 @@ class HUD implements IGameObject {
 
 		// update the score spinner
 		if (displayScore < score)
-			displayScore += 5;
+			displayScore += 17;
 		else if (displayScore > score)
 			displayScore = score;
 
@@ -69,19 +70,27 @@ class HUD implements IGameObject {
 		
 		Resources.screenBatch.begin();
 		{
+			// gfx
+			Resources.screenBatch.draw(bottomFadeBar, 0, 0);
+			Resources.screenBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
+			
+			
 			// song data
 			hudFont.draw(Resources.screenBatch, songInfo, 10, 23);
 
 			// score and score underline
-			hudFont.draw(Resources.screenBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() - 8f);
-			Resources.screenBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
+			hudFont.draw(Resources.screenBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60f, Gdx.graphics.getHeight() - 8f);
 
 			// hit percentage
 			hudFont.draw(Resources.screenBatch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
 
 			// messages
-			if (message != null)
-				messageFont.draw(Resources.screenBatch, message, Gdx.graphics.getWidth() / 2f - 70f, Gdx.graphics.getHeight() / 2f);
+			if (message != null){
+				float length = messageFont.getBounds(message).width;
+				messageFont.draw(Resources.screenBatch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
+			}
+			
+			
 
 			// combo
 			hudFont.draw(Resources.screenBatch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);

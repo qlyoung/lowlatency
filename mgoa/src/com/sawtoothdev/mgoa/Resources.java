@@ -22,12 +22,9 @@ public class Resources {
 
 	// flow control
 	public static Game game;
-	public static final MenuScreen menuScreen = new MenuScreen();
-	public static final ChooseSongScreen chooseSongScreen = new ChooseSongScreen();
-	public static final LoadScreen loadScreen = new LoadScreen();	
 	
 	// gfx
-	public static OrthographicCamera camera = new OrthographicCamera(10, 6);
+	public static OrthographicCamera worldCamera = new OrthographicCamera(10, 6);
 	public static SpriteBatch worldBatch = new SpriteBatch();
 	public static SpriteBatch screenBatch = new SpriteBatch();
 	
@@ -45,7 +42,7 @@ public class Resources {
 	public static Vector2 projectToScreen(Vector2 worldCoords){
 
 		Vector3 temp = new Vector3(worldCoords.x, worldCoords.y, 0);
-		camera.project(temp);
+		worldCamera.project(temp);
 
 		worldCoords = new Vector2(temp.x, temp.y);
 		return worldCoords;
@@ -53,7 +50,7 @@ public class Resources {
 	}
 	public static Vector2 projectToWorld(Vector2 screenCoords){
 		Vector3 temp = new Vector3(screenCoords.x, screenCoords.y, 0);
-		camera.unproject(temp);
+		worldCamera.unproject(temp);
 
 		screenCoords = new Vector2(temp.x, temp.y);
 		return screenCoords;

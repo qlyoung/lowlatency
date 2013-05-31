@@ -16,7 +16,7 @@ public class MGOA extends Game {
 	public void create() {
 		
 		Resources.game = this;
-		this.setScreen(Resources.menuScreen);
+		this.setScreen(new MenuScreen());
 
 	}
 
