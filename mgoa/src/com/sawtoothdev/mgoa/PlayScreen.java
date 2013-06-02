@@ -117,7 +117,7 @@ public class PlayScreen implements Screen {
 						totalBeatsHit++;
 						score += scoreValue;
 						
-						fx.makeExplosion(touchPos, core.getColor());
+						fx.makeExplosion(core.getPosition(), core.getColor());
 						
 						hud.showMessage(accuracy.toString() + "!");
 					}
