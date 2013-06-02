@@ -5,25 +5,43 @@ import java.util.ArrayList;
 import com.badlogic.gdx.files.FileHandle;
 import com.sawtoothdev.audioanalysis.Beat;
 
-public class SongEngine implements IGameObject {
+/**
+ * 
+ * Plays a song and provides song event notifications in real time
+ * 
+ * @author albatross
+ *
+ */
 
+public class SongEngine implements IGameObject {
+	
+	public interface ISongEventListener {
+		
+		public void onBeatWarning(Beat b);
+		public void onBeat(Beat b);
+	}
+
+	private enum EngineState { INITIALIZED, RUNNING, DONE };
+
+	
 	// misc
-	private ArrayList<ISongEventListener> listeners;
 	private MgoaMusic music;
 
-	// delay functionality
+	// delay
 	private long delayedStartTime, delayMs, delayedEngineTimer;
 	private final ArrayList<Beat> delayMap;
 	private int delayIndex = 0;
 	
-	// realtime functionality
+	// realtime
 	private long realtimeStartTime, realtimeEngineTimer;
 	private final ArrayList<Beat> realtimeMap;
 	private int realtimeIndex = 0;
 
+	// notify
+	private ArrayList<ISongEventListener> listeners;
 	
 	// state
-	private boolean running = false;
+	private EngineState state;
 	
 
 	public SongEngine(BeatMap beatMap, FileHandle audioFile) {
@@ -51,18 +69,26 @@ public class SongEngine implements IGameObject {
 		this.music.setVolume(1f);
 		
 		listeners = new ArrayList<ISongEventListener>();
+		
+		state = EngineState.INITIALIZED;
 	}
 
 	//core
 	public void start() {
-		this.running = true;
+		state = EngineState.RUNNING;
 		delayedStartTime = System.currentTimeMillis();
 	}
 	
 	@Override
 	public void render(float delta) {
 		
-		if (running) {
+		// state update
+		if (!music.isPlaying() && delayIndex == delayMap.size())
+			state = EngineState.DONE;
+		
+		
+		
+		if (state == EngineState.RUNNING) {
 			
 			{// delayed
 				delayedEngineTimer = System.currentTimeMillis() - delayedStartTime;
@@ -86,11 +112,13 @@ public class SongEngine implements IGameObject {
 					realtimeIndex++;
 				}
 			}
-			
 		}
 		
 	}
 
+	public void addListener(ISongEventListener l) {
+		this.listeners.add(l);
+	}
 	private void onBeatWarning(Beat beat) {
 
 		for (ISongEventListener l : listeners)
@@ -102,21 +130,10 @@ public class SongEngine implements IGameObject {
 	}
 
 	//extraneous
-	public void addListener(ISongEventListener l) {
-		this.listeners.add(l);
-	}
-
 	public long getSongTime() {
 		return music.getPosition();
 	}
-	
 	public boolean isDone(){
-		
-		if (!music.isPlaying() && delayIndex == delayMap.size())
-			return true;
-		
-		//System.out.println(delayIndex + " " + delayMap.size());
-		//System.out.println(music.isPlaying());
-		return false;
+		return state == EngineState.DONE;
 	}
 }

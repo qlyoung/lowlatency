@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.BeatCore.Accuracy;
+import com.sawtoothdev.mgoa.SongEngine.ISongEventListener;
 
 /**
  * Heart of the game, controls gameplay itself.

@@ -41,7 +41,7 @@ public class MgoaMusic {
 		music.stop();
 	}
 	public void setVolume(float volume){
-		this.music.setVolume(volume);
+		music.setVolume(volume);
 	}
 
 	/**
