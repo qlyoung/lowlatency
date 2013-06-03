@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.BeatCore.Accuracy;
+import com.sawtoothdev.mgoa.SongEngine.EngineState;
 import com.sawtoothdev.mgoa.SongEngine.ISongEventListener;
 
 /**
@@ -25,6 +26,10 @@ public class PlayScreen implements Screen {
 	private final WorldManager worldManager;
 	private final HUD hud;
 	private final EffectMaker fx;
+	
+	//state
+	private enum ScreenState {INITIALIZED, RUNNING, DONE, PAUSED};
+	private ScreenState state;
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
@@ -34,23 +39,41 @@ public class PlayScreen implements Screen {
 
 		engine = new SongEngine(map, audioFile);
 		engine.addListener(worldManager);
+		
+		state = ScreenState.INITIALIZED;
 	}
 
 	@Override
 	public void render(float delta) {
 
+		//state update
+		if (engine.getState() == EngineState.DONE)
+			this.state = ScreenState.DONE;
+		
+		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		Resources.worldCamera.update();
-
-		engine.render(delta);
 		
-		fx.render(delta);
-		worldManager.render(delta);
-		hud.render(delta);
+		switch (state) {
 		
-		
-		if (engine.isDone()){
+		case INITIALIZED:
+			break;
+			
+		case RUNNING:
+			Resources.worldCamera.update();
+			
+			engine.render(delta);
+			fx.render(delta);
+			worldManager.render(delta);
+			hud.render(delta);
+			
+			break;
+			
+		case DONE:
 			Resources.game.setScreen(new MenuScreen());
+			break;
+			
+		case PAUSED:
+			break;
 		}
 	}
 
@@ -62,6 +85,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void show() {
 		engine.start();
+		state = ScreenState.RUNNING;
 	}
 
 	@Override
@@ -143,6 +167,7 @@ public class PlayScreen implements Screen {
 					}
 				}
 				
+				Resources.worldBatch.setProjectionMatrix(Resources.worldCamera.combined);
 				Resources.worldBatch.begin();
 					for (BeatCore core : activeCores)
 						core.render(delta);
@@ -150,6 +175,7 @@ public class PlayScreen implements Screen {
 
 			}
 			
+			// hud
 			hud.update(totalBeatsShown, totalBeatsHit, combo, score);
 
 		}

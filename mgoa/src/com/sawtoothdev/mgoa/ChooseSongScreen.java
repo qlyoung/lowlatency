@@ -55,6 +55,7 @@ public class ChooseSongScreen implements Screen {
 			
 			//directory and file list
 			directoryTable = new Table();
+			directoryTable.center();
 		}
 		
 		FileHandle external = Gdx.files.external("");
@@ -72,7 +73,6 @@ public class ChooseSongScreen implements Screen {
 		stage.draw();
 		
 	}
-
 	
 	public void updateTable(FileHandle directory){
 		
@@ -82,12 +82,17 @@ public class ChooseSongScreen implements Screen {
 		
 		for (FileHandle fh : directory.list()){
 			
-			TextButton lol = new TextButton(fh.name(), style);
-			lol.setName(fh.path());
-			lol.addListener(elementClickListener);
+			System.out.println(fh.extension());
 			
-			directoryTable.add(lol);
-			directoryTable.row();
+			if (fh.isDirectory() || fh.extension().toLowerCase().contains("mp3") || fh.extension().toLowerCase().contains("ogg")) {
+			
+				TextButton lol = new TextButton(fh.name(), style);
+				lol.setName(fh.path());
+				lol.addListener(elementClickListener);
+			
+				directoryTable.add(lol);
+				directoryTable.row();
+			}
 		}
 		
 		TextButton up = new TextButton("UP", style);

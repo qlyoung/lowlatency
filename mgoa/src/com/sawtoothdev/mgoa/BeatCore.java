@@ -1,6 +1,5 @@
 package com.sawtoothdev.mgoa;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -122,6 +121,7 @@ public class BeatCore implements IGameObject, Poolable {
 			
 			core.draw(Resources.worldBatch);
 			ring.draw(Resources.worldBatch);
+		
 		}
 	}
 
@@ -156,8 +156,6 @@ public class BeatCore implements IGameObject, Poolable {
 
 	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
-
-		Gdx.app.log("diff", String.valueOf(diff));
 
 		beenHit = true;
 		dying = true;

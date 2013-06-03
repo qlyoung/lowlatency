@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,9 +35,12 @@ public class Resources {
 	
 	// settings
 	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
+	public static Preferences settings;
 	
 	// miscellaneous
 	public static Random random = new Random();
+
+	
 	
 	// projection/unprojection convenience methods
 	public static Vector2 projectToScreen(Vector2 worldCoords){

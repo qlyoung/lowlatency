@@ -1,7 +1,5 @@
 package com.sawtoothdev.mgoa;
 
-import java.io.IOException;
-
 import org.cmc.music.metadata.MusicMetadata;
 import org.cmc.music.myid3.MyID3;
 
@@ -36,12 +34,12 @@ class HUD implements IGameObject {
 
 		try {
 			metadata = new MyID3().read(audioFile.file()).merged;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Gdx.app.log("warning", "Cannot read metadata! Ogg file?");
 		}
 
-		String title = metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
-		String artist = metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
+		String title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
+		String artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
 
 		songInfo = artist + " - " + title;
 

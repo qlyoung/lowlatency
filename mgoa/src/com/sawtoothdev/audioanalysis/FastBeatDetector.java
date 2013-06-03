@@ -41,7 +41,6 @@ public class FastBeatDetector {
 		 */
 		public static ArrayList<Float> getSpectralFluxes(FileHandle f) {
 
-
 			Decoder decoder = null;
 
 			String ext = f.extension().toLowerCase();

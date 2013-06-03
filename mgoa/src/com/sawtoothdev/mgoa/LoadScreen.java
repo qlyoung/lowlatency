@@ -43,8 +43,12 @@ public class LoadScreen implements Screen {
 			
 			try {
 				beats = FastBeatDetector.detectBeats(sensitivity, audioFile);
-			} catch (IOException e) { Gdx.app.log("Load Screen", e.getMessage()); }
+			} catch (IOException e) {
+				Gdx.app.log("Load Screen", e.getMessage());
+				//return;
+			}
 			
+			Gdx.app.log("load screen", "load complete, adjusting difficulty...");
 			
 			ArrayList<Beat> easy, medium, hard, original;
 			
@@ -54,6 +58,11 @@ public class LoadScreen implements Screen {
 			original = beats;
 			
 			map = new BeatMap(easy, medium, hard, original);
+			
+			Gdx.app.log("Load thread", "garbage collecting...");
+			System.gc();
+			Gdx.app.log("load thread", "processing complete");
+			
 		}
 		
 	}
@@ -76,10 +85,14 @@ public class LoadScreen implements Screen {
 		
 		//if done loading, move on
 		if (!loadThread.isAlive()) {
-			Resources.menuMusic.stop();
-			PlayScreen playScreen = new PlayScreen(loadThread.map, loadThread.audioFile);
-			Resources.game.setScreen(playScreen);
-		}
+			
+			if (loadThread.map != null) {
+				Resources.menuMusic.stop();
+				PlayScreen playScreen = new PlayScreen(loadThread.map, loadThread.audioFile);
+				Resources.game.setScreen(playScreen);
+			} else
+				Resources.game.setScreen(new ChooseSongScreen());
+		}	
 	}
 
 	@Override

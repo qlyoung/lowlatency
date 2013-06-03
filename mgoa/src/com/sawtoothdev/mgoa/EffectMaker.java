@@ -49,9 +49,6 @@ public class EffectMaker implements IGameObject {
 		
 		ParticleEffect effect = pool.obtain();
 		
-		System.out.println(color.toIntBits());
-		System.out.println(Color.MAGENTA.toIntBits());
-		
 		if (color.toIntBits() == Color.MAGENTA.toIntBits())
 			effect.load(Gdx.files.internal("data/effects/purple-explosion.p"), Gdx.files.internal("data/effects/"));
 		else if (color.toIntBits() == Color.BLUE.toIntBits())

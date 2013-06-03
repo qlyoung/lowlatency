@@ -10,20 +10,21 @@ import com.sawtoothdev.audioanalysis.Beat;
  * Plays a song and provides song event notifications in real time
  * 
  * @author albatross
- *
+ * 
  */
 
 public class SongEngine implements IGameObject {
-	
+
 	public interface ISongEventListener {
-		
+
 		public void onBeatWarning(Beat b);
+
 		public void onBeat(Beat b);
 	}
+	public enum EngineState {
+		INITIALIZED, RUNNING, DONE
+	};
 
-	private enum EngineState { INITIALIZED, RUNNING, DONE };
-
-	
 	// misc
 	private MgoaMusic music;
 
@@ -31,7 +32,7 @@ public class SongEngine implements IGameObject {
 	private long delayedStartTime, delayMs, delayedEngineTimer;
 	private final ArrayList<Beat> delayMap;
 	private int delayIndex = 0;
-	
+
 	// realtime
 	private long realtimeStartTime, realtimeEngineTimer;
 	private final ArrayList<Beat> realtimeMap;
@@ -39,13 +40,13 @@ public class SongEngine implements IGameObject {
 
 	// notify
 	private ArrayList<ISongEventListener> listeners;
-	
+
 	// state
 	private EngineState state;
-	
 
+	
 	public SongEngine(BeatMap beatMap, FileHandle audioFile) {
-		
+
 		// set the map
 		switch (Resources.difficulty.name) {
 		case EASY:
@@ -61,79 +62,93 @@ public class SongEngine implements IGameObject {
 		case ORIGINAL:
 			delayMap = beatMap.ORIGINAL;
 		}
-		
+
 		realtimeMap = beatMap.ORIGINAL;
-		
+
 		this.delayMs = Resources.difficulty.ringTimeMs;
 		this.music = new MgoaMusic(audioFile);
 		this.music.setVolume(1f);
-		
+
 		listeners = new ArrayList<ISongEventListener>();
-		
+
 		state = EngineState.INITIALIZED;
 	}
 
-	//core
+	// core
 	public void start() {
 		state = EngineState.RUNNING;
 		delayedStartTime = System.currentTimeMillis();
 	}
-	
+
 	@Override
 	public void render(float delta) {
-		
+
 		// state update
 		if (!music.isPlaying() && delayIndex == delayMap.size())
 			state = EngineState.DONE;
 		
+
+		switch (state) {
 		
+		case INITIALIZED:
+			break;
 		
-		if (state == EngineState.RUNNING) {
-			
+		case RUNNING:
 			{// delayed
 				delayedEngineTimer = System.currentTimeMillis() - delayedStartTime;
 				
-				if (delayedEngineTimer >= delayMs && !music.isPlaying()){
+				if (delayedEngineTimer >= delayMs && !music.isPlaying()) {
 					music.play();
 					realtimeStartTime = System.currentTimeMillis();
 				}
 				
-				if (delayIndex <= delayMap.size() - 1 && delayMap.get(delayIndex).timeMs < delayedEngineTimer) {
+				if (delayIndex <= delayMap.size() - 1
+						&& delayMap.get(delayIndex).timeMs < delayedEngineTimer) {
 					onBeatWarning(delayMap.get(delayIndex));
 					delayIndex++;
 				}
 			}
 			
 			{// realtime
-				realtimeEngineTimer = System.currentTimeMillis() - realtimeStartTime;
+				realtimeEngineTimer = System.currentTimeMillis()
+						- realtimeStartTime;
 				
-				if (realtimeIndex <= realtimeMap.size() - 1 && realtimeMap.get(realtimeIndex).timeMs < realtimeEngineTimer){
+				if (realtimeIndex <= realtimeMap.size() - 1
+						&& realtimeMap.get(realtimeIndex).timeMs < realtimeEngineTimer) {
 					onBeat(realtimeMap.get(realtimeIndex));
 					realtimeIndex++;
 				}
 			}
+			break;
+			
+		case DONE:
+			break;
+			
 		}
-		
+
 	}
 
-	public void addListener(ISongEventListener l) {
-		this.listeners.add(l);
-	}
 	private void onBeatWarning(Beat beat) {
 
 		for (ISongEventListener l : listeners)
 			l.onBeatWarning(beat);
 	}
-	private void onBeat(Beat beat){
+
+	private void onBeat(Beat beat) {
 		for (ISongEventListener l : listeners)
 			l.onBeat(beat);
 	}
+	
+	// accessors
+	public void addListener(ISongEventListener l) {
+		this.listeners.add(l);
+	}
 
-	//extraneous
 	public long getSongTime() {
 		return music.getPosition();
 	}
-	public boolean isDone(){
-		return state == EngineState.DONE;
+	
+	public EngineState getState(){
+		return state;
 	}
 }
