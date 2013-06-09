@@ -88,8 +88,8 @@ public class LoadScreen implements Screen {
 			
 			if (loadThread.map != null) {
 				Resources.menuMusic.stop();
-				PlayScreen playScreen = new PlayScreen(loadThread.map, loadThread.audioFile);
-				Resources.game.setScreen(playScreen);
+				PreviewScreen previewScreen = new PreviewScreen(loadThread.map, loadThread.audioFile);
+				Resources.game.setScreen(previewScreen);
 			} else
 				Resources.game.setScreen(new ChooseSongScreen());
 		}	

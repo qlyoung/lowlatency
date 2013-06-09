@@ -24,8 +24,8 @@ public class MenuScreen implements Screen {
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+		style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/menubutton.png"), 256, 40));
 		
-		TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/menubutton.png")));
 		
 		
 		TextButton
@@ -33,10 +33,6 @@ public class MenuScreen implements Screen {
 			optionsButton = new TextButton("Options", style),
 			statsButton = new TextButton("Leaderboards", style),
 			creditsButton = new TextButton("Credits", style);
-		playButton.setBackground(buttonDrawable);
-		optionsButton.setBackground(buttonDrawable);
-		statsButton.setBackground(buttonDrawable);
-		creditsButton.setBackground(buttonDrawable);
 		
 		playButton.addListener(new ClickListener() {
 			@Override
@@ -48,7 +44,7 @@ public class MenuScreen implements Screen {
 
 		Table table = new Table();
 		table.setFillParent(true);
-		table.defaults().uniform();
+		table.defaults().uniform().padBottom(10);
 		
 		table.add(playButton);
 		table.row();

@@ -55,7 +55,7 @@ public class ChooseSongScreen implements Screen {
 			
 			//directory and file list
 			directoryTable = new Table();
-			directoryTable.center();
+			directoryTable.center().defaults().width(Gdx.graphics.getWidth());
 		}
 		
 		FileHandle external = Gdx.files.external("");
