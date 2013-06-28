@@ -82,8 +82,6 @@ public class ChooseSongScreen implements Screen {
 		
 		for (FileHandle fh : directory.list()){
 			
-			System.out.println(fh.extension());
-			
 			if (fh.isDirectory() || fh.extension().toLowerCase().contains("mp3") || fh.extension().toLowerCase().contains("ogg")) {
 			
 				TextButton lol = new TextButton(fh.name(), style);

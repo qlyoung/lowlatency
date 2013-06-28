@@ -26,7 +26,7 @@ public class SongEngine implements IGameObject {
 	};
 
 	// misc
-	private MgoaMusic music;
+	private MusicPlayer music;
 
 	// delay
 	private long delayedStartTime, delayMs, delayedEngineTimer;
@@ -66,8 +66,7 @@ public class SongEngine implements IGameObject {
 		realtimeMap = beatMap.ORIGINAL;
 
 		this.delayMs = Resources.difficulty.ringTimeMs;
-		this.music = new MgoaMusic(audioFile);
-		this.music.setVolume(1f);
+		this.music = new MusicPlayer(audioFile);
 
 		listeners = new ArrayList<ISongEventListener>();
 
@@ -109,6 +108,7 @@ public class SongEngine implements IGameObject {
 				}
 			}
 			
+			if (music.isPlaying())
 			{// realtime
 				realtimeEngineTimer = System.currentTimeMillis()
 						- realtimeStartTime;
@@ -145,7 +145,8 @@ public class SongEngine implements IGameObject {
 	}
 
 	public long getSongTime() {
-		return music.getPosition();
+		System.out.println(realtimeEngineTimer);
+		return realtimeEngineTimer;
 	}
 	
 	public EngineState getState(){

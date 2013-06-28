@@ -3,9 +3,7 @@ package com.sawtoothdev.mgoa;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,7 +28,7 @@ public class Resources {
 	public static SpriteBatch screenBatch = new SpriteBatch();
 	
 	// audio
-	public static Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("data/audio/title.mp3"));
+	public static MusicPlayer menuMusic;
 	public static FileHandle currentSong;
 	
 	// settings

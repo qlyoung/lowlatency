@@ -26,6 +26,11 @@ public class MGOA extends Game {
 		else if (Resources.settings.getBoolean("firstrun"))
 			Resources.settings.putBoolean("firstrun", false);
 		
+		// copy what we need to external storage
+		Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external("tmp/title.mp3"));
+
+		// initialize necessary resources
+		Resources.menuMusic = new MusicPlayer(Gdx.files.external("tmp/title.mp3"));
 		
 		this.setScreen(new MenuScreen());
 

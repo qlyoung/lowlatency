@@ -77,9 +77,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.play();
-		
 		System.gc();
 	}
 
