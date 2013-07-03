@@ -26,6 +26,7 @@ public class PlayScreen implements Screen {
 	private final WorldManager worldManager;
 	private final HUD hud;
 	private final EffectMaker fx;
+	private final Visualizer visualizer;
 	
 	//state
 	private enum ScreenState {INITIALIZED, RUNNING, DONE, PAUSED};
@@ -39,6 +40,8 @@ public class PlayScreen implements Screen {
 
 		engine = new SongEngine(map, audioFile);
 		engine.addListener(worldManager);
+		
+		visualizer = new Visualizer(engine.getMusic());
 		
 		state = ScreenState.INITIALIZED;
 	}
@@ -62,6 +65,7 @@ public class PlayScreen implements Screen {
 			Resources.worldCamera.update();
 			
 			engine.render(delta);
+			visualizer.render(delta);
 			fx.render(delta);
 			worldManager.render(delta);
 			hud.render(delta);

@@ -8,78 +8,123 @@ import com.badlogic.gdx.audio.io.VorbisDecoder;
 import com.badlogic.gdx.files.FileHandle;
 
 public class MusicPlayer {
+
+	public enum PlayerState {
+		PLAYING, PAUSED, STOPPED
+	};
 	
-	public enum PlayerState {PLAYING, PAUSED, STOPPED};
+	class PlayerThread extends Thread {
+		
+		private Decoder decoder;
+		private AudioDevice device;
+		private FileHandle audioHandle;
+		
+		private boolean virgin = true;
+		
+		private short[] samples = new short[2048];
+		int sampleCount = 0;
+		
+		public PlayerThread(FileHandle audioHandle) {
+			this.audioHandle = audioHandle;
+			
+			String ext = audioHandle.extension().toLowerCase();
+
+			if (ext.contains("mp3"))
+				decoder = new Mpg123Decoder(audioHandle);
+			else if (ext.contains("ogg"))
+				decoder = new VorbisDecoder(audioHandle);
+			else
+				return;
+
+			// initialize device
+			device = Gdx.audio.newAudioDevice(decoder.getRate(),
+					decoder.getChannels() == 1);
+		}
+		
+		@Override
+		public void run() {
+			int readSamples = 0;
+			
+			while (true){
+				
+				// allow other threads to execute
+				Thread.yield();
+				
+				if (state == PlayerState.PLAYING){
+					
+					if (virgin)
+						virgin = false;
+					
+					readSamples = decoder.readSamples(samples, 0, samples.length);
+					
+					if (readSamples > 0) {
+						device.writeSamples(samples, 0, readSamples);
+						sampleCount += readSamples;
+					}
+					else {
+						state = PlayerState.STOPPED;
+						reinitialize();
+					}
+				}
+				else if (state == PlayerState.STOPPED) {
+					if (looping && !virgin)
+						state = PlayerState.PLAYING;
+				}
+			}
+		}
+		
+		private void reinitialize(){
+			if (decoder instanceof Mpg123Decoder)
+				decoder = new Mpg123Decoder(audioHandle);
+			else if (decoder instanceof VorbisDecoder)
+				decoder = new VorbisDecoder(audioHandle);
+			
+			device = Gdx.audio.newAudioDevice(decoder.getRate(),
+					decoder.getChannels() == 1);
+				
+		}
+		
+	}
+
+	private boolean looping;
 	
 	private PlayerState state;
-	private Decoder decoder;
-	private AudioDevice device;
-	Thread playerThread;
-	
-	private short[] samples = new short[2048];
-	int sampleCount = 0;
-	
-	
-	public MusicPlayer(FileHandle songHandle)  {
-		
-		// initialize decoder
-		String ext = songHandle.extension().toLowerCase();
-		
-		if (ext.contains("mp3"))
-			decoder = new Mpg123Decoder(songHandle);
-		else if (ext.contains("ogg"))
-			decoder = new VorbisDecoder(songHandle);
-		else
-			return;
-		
-		// initialize device
-		device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1);
+	private PlayerThread playerThread;
+
+	public MusicPlayer(FileHandle songHandle) {
 
 		// set the player to stopped
 		state = PlayerState.STOPPED;
-		
-		// make a new thread
-		playerThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				int readSamples = 0;
-				
-				while (state == PlayerState.PLAYING && (readSamples = decoder.readSamples(samples, 0, samples.length)) > 0){
-					device.writeSamples(samples, 0, readSamples);
-					sampleCount += readSamples;
-				}
-				
-				
-				state = PlayerState.STOPPED;
-			}
-		});
+
+		playerThread = new PlayerThread(songHandle);
 		playerThread.setDaemon(true);
-
-	}
 	
-	public short[] getLatestSamples(){
-		return samples;
 	}
 
-	public void play(){
-		this.state = PlayerState.PLAYING;
-		playerThread.start();
+	public void play() {
+		if (!playerThread.isAlive())
+			playerThread.start();
+		
+		state = PlayerState.PLAYING;
 	}
-	public void pause(){
-		this.state = PlayerState.PAUSED;
+
+	public void pause() {
+		state = PlayerState.PAUSED;
 	}
-	public void stop(){
-		this.state = PlayerState.STOPPED;
+
+	public void stop() {
+		state = PlayerState.STOPPED;
 	}
-	
-	public boolean isPlaying(){
+
+	public boolean isPlaying() {
 		return state == PlayerState.PLAYING;
 	}
-	public long getPosition(){
-		// calculate the current song time in milliseconds
-		long time = (long) (((float) sampleCount / decoder.getRate()) * 1000);
-		
-		System.out.println(time);
-		return time;
+	
+	public short[] getLatestSamples() {
+		return playerThread.samples;
+	}
+
+	public void setLooping(boolean looping){
+		this.looping = looping;
 	}
 }

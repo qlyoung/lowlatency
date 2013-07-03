@@ -32,7 +32,6 @@ public class ChooseSongScreen implements Screen {
 			}
 			else {
 				Resources.currentSong = Gdx.files.external(actor.getName());
-				System.out.println(Resources.currentSong.path());
 				Gdx.input.setInputProcessor(null);
 				Resources.game.setScreen(new LoadScreen());
 			}

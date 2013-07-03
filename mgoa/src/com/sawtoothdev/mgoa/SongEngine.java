@@ -16,11 +16,11 @@ import com.sawtoothdev.audioanalysis.Beat;
 public class SongEngine implements IGameObject {
 
 	public interface ISongEventListener {
-
 		public void onBeatWarning(Beat b);
 
 		public void onBeat(Beat b);
 	}
+
 	public enum EngineState {
 		INITIALIZED, RUNNING, DONE
 	};
@@ -38,13 +38,12 @@ public class SongEngine implements IGameObject {
 	private final ArrayList<Beat> realtimeMap;
 	private int realtimeIndex = 0;
 
-	// notify
+	// event
 	private ArrayList<ISongEventListener> listeners;
 
 	// state
 	private EngineState state;
 
-	
 	public SongEngine(BeatMap beatMap, FileHandle audioFile) {
 
 		// set the map
@@ -85,45 +84,43 @@ public class SongEngine implements IGameObject {
 		// state update
 		if (!music.isPlaying() && delayIndex == delayMap.size())
 			state = EngineState.DONE;
-		
 
 		switch (state) {
-		
+
 		case INITIALIZED:
 			break;
-		
-		case RUNNING:
+
+		case RUNNING: 
 			{// delayed
 				delayedEngineTimer = System.currentTimeMillis() - delayedStartTime;
-				
+
 				if (delayedEngineTimer >= delayMs && !music.isPlaying()) {
 					music.play();
 					realtimeStartTime = System.currentTimeMillis();
 				}
-				
-				if (delayIndex <= delayMap.size() - 1
-						&& delayMap.get(delayIndex).timeMs < delayedEngineTimer) {
+
+				if (delayIndex <= delayMap.size() - 1 && delayMap.get(delayIndex).timeMs < delayedEngineTimer) {
 					onBeatWarning(delayMap.get(delayIndex));
 					delayIndex++;
 				}
 			}
-			
-			if (music.isPlaying())
+
 			{// realtime
-				realtimeEngineTimer = System.currentTimeMillis()
-						- realtimeStartTime;
-				
+				if (music.isPlaying())
+					realtimeEngineTimer = System.currentTimeMillis() - realtimeStartTime;
+
 				if (realtimeIndex <= realtimeMap.size() - 1
 						&& realtimeMap.get(realtimeIndex).timeMs < realtimeEngineTimer) {
 					onBeat(realtimeMap.get(realtimeIndex));
 					realtimeIndex++;
 				}
 			}
-			break;
 			
+			break;
+
 		case DONE:
 			break;
-			
+
 		}
 
 	}
@@ -138,7 +135,7 @@ public class SongEngine implements IGameObject {
 		for (ISongEventListener l : listeners)
 			l.onBeat(beat);
 	}
-	
+
 	// accessors
 	public void addListener(ISongEventListener l) {
 		this.listeners.add(l);
@@ -148,8 +145,12 @@ public class SongEngine implements IGameObject {
 		System.out.println(realtimeEngineTimer);
 		return realtimeEngineTimer;
 	}
-	
-	public EngineState getState(){
+
+	public EngineState getState() {
 		return state;
+	}
+
+	public MusicPlayer getMusic() {
+		return music;
 	}
 }

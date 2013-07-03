@@ -17,10 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
+	private Visualizer visualizer;
 
 	
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
+		visualizer = new Visualizer(Resources.menuMusic);
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
@@ -62,13 +64,12 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		visualizer.render(delta);
 		
 		stage.act();
 		stage.draw();
 		
 	}
-	
-	
 
 	@Override
 	public void resize(int width, int height) {
