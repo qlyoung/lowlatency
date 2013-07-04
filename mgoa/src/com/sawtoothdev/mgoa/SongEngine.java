@@ -47,24 +47,20 @@ public class SongEngine implements IGameObject {
 	public SongEngine(BeatMap beatMap, FileHandle audioFile) {
 
 		// set the map
-		switch (Resources.difficulty.name) {
-		case EASY:
-			delayMap = beatMap.easy;
-			break;
-		case NORMAL:
-			delayMap = beatMap.medium;
-			break;
-		case HARD:
-			delayMap = beatMap.hard;
-			break;
-		default:
-		case ORIGINAL:
+		if (Playthrough.difficulty == Difficulty.EASY)
+			delayMap = beatMap.EASY;
+		else if (Playthrough.difficulty == Difficulty.NORMAL)
+			delayMap = beatMap.NORMAL;
+		else if (Playthrough.difficulty == Difficulty.HARD)
+			delayMap = beatMap.HARD;
+		else if (Playthrough.difficulty == Difficulty.ORIGINAL)
 			delayMap = beatMap.ORIGINAL;
-		}
+		else
+			delayMap = beatMap.NORMAL;
 
 		realtimeMap = beatMap.ORIGINAL;
 
-		this.delayMs = Resources.difficulty.ringTimeMs;
+		this.delayMs = Playthrough.difficulty.ringTimeMs;
 		this.music = new MusicPlayer(audioFile);
 
 		listeners = new ArrayList<ISongEventListener>();
@@ -142,7 +138,6 @@ public class SongEngine implements IGameObject {
 	}
 
 	public long getSongTime() {
-		System.out.println(realtimeEngineTimer);
 		return realtimeEngineTimer;
 	}
 

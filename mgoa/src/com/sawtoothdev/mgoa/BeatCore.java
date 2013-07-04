@@ -36,7 +36,7 @@ public class BeatCore implements IGameObject, Poolable {
 
 	public BeatCore() {
 		// delta size / delta time
-		shrinkRate = (1 - SYNCH_SIZE) / (0 - (Resources.difficulty.ringTimeMs / 1000f));
+		shrinkRate = (1 - SYNCH_SIZE) / (0 - (Playthrough.difficulty.ringTimeMs / 1000f));
 
 		Texture t = new Texture("data/textures/ring.png");
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);

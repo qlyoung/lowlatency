@@ -56,6 +56,7 @@ public class PlayScreen implements Screen {
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		
 		switch (state) {
 		
 		case INITIALIZED:
@@ -137,17 +138,23 @@ public class PlayScreen implements Screen {
 				for (BeatCore core : activeCores) {
 
 					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
-							
+						
+						// register a hit event with the beat and note the accuracy
 						Accuracy accuracy = core.onHit(engine.getSongTime());
 						
+						// calculate the score value based on accuracy
 						int divisor = accuracy.ordinal() + 1;
 						int scoreValue = (int) core.getScoreValue() / divisor;
+						
+						// statistics & scoring
 						combo++;
 						totalBeatsHit++;
 						score += scoreValue;
 						
+						// pretty lights
 						fx.makeExplosion(core.getPosition(), core.getColor());
 						
+						// user feedback
 						hud.showMessage(accuracy.toString() + "!");
 					}
 				}

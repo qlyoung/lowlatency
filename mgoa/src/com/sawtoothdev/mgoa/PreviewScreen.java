@@ -3,51 +3,91 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class PreviewScreen implements Screen {
 
 	private Stage stage = new Stage();
+	Label difficulty, txtTotalBeats, beatCount, length;
+	SelectBox difficultySelector;
+	TextButton playButton;
+	
+	private int totalBeats = 0;
+	
 	
 	public PreviewScreen(final BeatMap map, final FileHandle fileHandle) {
 		Gdx.input.setInputProcessor(this.stage);
 		
+		// styles
 		LabelStyle lStyle = new LabelStyle();
 		lStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
 		TextButtonStyle tStyle = new TextButtonStyle();
 		tStyle.font = lStyle.font;
 		
-		Label diff = new Label("Difficulty - " + Resources.difficulty.name.toString(), lStyle);
+		TextureRegionDrawable sbBackground = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/sb_background.png"))));
+		TextureRegionDrawable sbDefault = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/sb_default.png"))));
+		SelectBoxStyle sbStyle = new SelectBoxStyle(lStyle.font, 
+				Color.WHITE, 
+				sbBackground,
+				sbDefault,
+				sbDefault);
+		sbStyle.font = lStyle.font;
 		
-		int totalBeats = 0;
-		switch (Resources.difficulty.name){
-		case EASY:
-			totalBeats = map.easy.size();
-			break;
-		case NORMAL:
-			totalBeats = map.medium.size();
-			break;
-		case HARD:
-			totalBeats = map.hard.size();
-			break;
-		case ORIGINAL:
-			totalBeats = map.ORIGINAL.size();
-			break;
-		}
+		// actors
+		txtTotalBeats = new Label("Total beats - ", lStyle);
+		beatCount = new Label(String.valueOf(0), lStyle);
 		
-		Label beatCount = new Label("Total beats - " + String.valueOf(totalBeats), lStyle);
-		Label length = new Label("Song Length - ", lStyle);
-		TextButton tButton = new TextButton("Play", tStyle);
-		tButton.addListener(new ClickListener(){
+		difficulty = new Label("Difficulty:", lStyle);
+		
+		difficultySelector = new SelectBox(new String[] {"Easy", "Normal", "Hard", "Insane"}, sbStyle);
+		difficultySelector.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				SelectBox sb = (SelectBox) actor;
+				
+				switch (sb.getSelectionIndex()){
+				case 0:
+					Playthrough.difficulty = Difficulty.EASY;
+					totalBeats = map.EASY.size();
+					break;
+				case 1:
+					Playthrough.difficulty = Difficulty.NORMAL;
+					totalBeats = map.NORMAL.size();
+					break;
+				case 2:
+					Playthrough.difficulty = Difficulty.HARD;
+					totalBeats = map.HARD.size();
+					break;
+				case 3:
+					Playthrough.difficulty = Difficulty.ORIGINAL;
+					totalBeats = map.ORIGINAL.size();
+					break;
+				}
+				
+				beatCount.setText(String.valueOf(totalBeats));
+				
+			}
+		});
+		
+		playButton = new TextButton("Play", tStyle);
+		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Resources.game.setScreen(new PlayScreen(map, fileHandle));
@@ -55,14 +95,15 @@ public class PreviewScreen implements Screen {
 			}
 		});
 		
+		// setup
 		Table container = new Table();
-		container.add(diff);
+		container.add(difficulty);
+		container.add(difficultySelector);
 		container.row();
-		container.add(length);
-		container.row();
+		container.add(txtTotalBeats);
 		container.add(beatCount);
 		container.row();
-		container.add(tButton);
+		container.add(playButton);
 		container.row();
 		
 		container.setFillParent(true);

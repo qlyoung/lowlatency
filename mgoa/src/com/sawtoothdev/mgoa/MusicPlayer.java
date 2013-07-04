@@ -10,7 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class MusicPlayer {
 
 	public enum PlayerState {
-		PLAYING, PAUSED, STOPPED
+		PLAYING, PAUSED, STOPPED, FINISHED
 	};
 	
 	class PlayerThread extends Thread {
@@ -62,11 +62,11 @@ public class MusicPlayer {
 						sampleCount += readSamples;
 					}
 					else {
-						state = PlayerState.STOPPED;
+						state = PlayerState.FINISHED;
 						reinitialize();
 					}
 				}
-				else if (state == PlayerState.STOPPED) {
+				else if (state == PlayerState.FINISHED) {
 					if (looping && !virgin)
 						state = PlayerState.PLAYING;
 				}

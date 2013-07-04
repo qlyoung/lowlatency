@@ -97,7 +97,7 @@ public class LoadScreen implements Screen {
 
 	@Override
 	public void show() {
-		loadThread = new LoadingThread(Resources.currentSong);
+		loadThread = new LoadingThread(Playthrough.songHandle);
 		loadThread.start();
 	}
 	

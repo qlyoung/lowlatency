@@ -6,12 +6,12 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class BeatMap {
 
-	public ArrayList<Beat> easy, medium, hard, ORIGINAL;
+	public final ArrayList<Beat> EASY, NORMAL, HARD, ORIGINAL;
 	
-	public BeatMap(ArrayList<Beat> easy, ArrayList<Beat> medium, ArrayList<Beat> hard, ArrayList<Beat> original){
-		this.easy = easy;
-		this.medium = medium;
-		this.hard = hard;
+	public BeatMap(ArrayList<Beat> easy, ArrayList<Beat> normal, ArrayList<Beat> hard, ArrayList<Beat> original){
+		this.EASY = easy;
+		this.NORMAL = normal;
+		this.HARD = hard;
 		this.ORIGINAL = original;
 	}
 	

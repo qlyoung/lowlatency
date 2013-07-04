@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -29,15 +28,12 @@ public class Resources {
 	
 	// audio
 	public static MusicPlayer menuMusic;
-	public static FileHandle currentSong;
 	
 	// settings
-	public static Difficulty difficulty = new Difficulty(Difficulty.DifficultyName.HARD);
 	public static Preferences settings;
 	
 	// miscellaneous
 	public static Random random = new Random();
-
 	
 	
 	// projection/unprojection convenience methods
