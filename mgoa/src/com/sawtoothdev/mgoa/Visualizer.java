@@ -2,66 +2,86 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.analysis.KissFFT;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Visualizer implements IGameObject {
+public class Visualizer {
 
-	MusicPlayer player;
-	KissFFT fft;
-	int NUMBER_OF_BARS = 31;
-	float barWidth = ((float) Gdx.graphics.getWidth() / (float) NUMBER_OF_BARS);
-	Texture colors;
-	float[] spectrum = new float[2048];
-	OrthographicCamera camera = new OrthographicCamera();
+	final KissFFT fft;
+	final float[] spectrum;
+
+	final Texture colors = new Texture(
+			Gdx.files.internal("data/textures/colors-borders.png"));
 	
-	public Visualizer(MusicPlayer player){
-		this.player = player;
-		fft = new KissFFT(2048);
-		colors = new Texture(Gdx.files.internal("data/textures/colors-borders.png"));
+	private OrthographicCamera camera = new OrthographicCamera();
+
+	/**
+	 * A frame-by-frame music visualizer
+	 * @param frameSize The size of the sample frames you'll be passing to this class.
+	 * You must pass this size frame!
+	 */
+	public Visualizer(int frameSize) {
+		fft = new KissFFT(frameSize);
+		spectrum = new float[frameSize];
+		
 		camera.setToOrtho(false);
 	}
-	
-	@Override
-	public void render(float delta) {
+
+	/**
+	 * Renders a single sample frame
+	 * @param samples The samples to render
+	 * @param bars The amount of bars in the visualizer
+	 * @param color The color to render in
+	 */
+	public void renderFrame(short[] samples, int bars, Color color, SpriteBatch batch) {
 		
-		if (player.isPlaying()){
-			short[] samples = player.getLatestSamples();
-			fft.spectrum(samples, spectrum);
+		float barWidth = ((float) Gdx.graphics.getWidth() / (float) bars);
+		fft.spectrum(samples, spectrum);
 
-			
-			camera.update();
-			Resources.screenBatch.setProjectionMatrix(camera.combined);
-			
-			Resources.screenBatch.begin();
-			
-			for (int i = 0; i < NUMBER_OF_BARS; i++) {
-				int histoX = 0;
-				if (i < NUMBER_OF_BARS / 2) {
-					histoX = NUMBER_OF_BARS / 2 - i;
-				} else {
-					histoX = i - NUMBER_OF_BARS / 2;
-				}
-
-				int nb = (samples.length / NUMBER_OF_BARS) / 2;
-
-				// drawing spectrum (in blue)
-				Resources.screenBatch.draw(colors, i * barWidth, 0, barWidth, scale(avg(histoX, nb)), 0, 0, 16, 5, false, false);
-
+		
+		for (int i = 0; i < bars; i++) {
+			int histoX = 0;
+			if (i < bars / 2) {
+				histoX = bars / 2 - i;
+			} else {
+				histoX = i - bars / 2;
 			}
+
+			int nb = (samples.length / bars) / 2;
+			float avg = avg(histoX, nb);
 			
-			Resources.screenBatch.end();
+			if (avg > 40)
+				color = Color.RED;
+			else if (avg > 30)
+				color = Color.ORANGE;
+			else if (avg > 20)
+				color = Color.YELLOW;
+			else if (avg > 10)
+				color = Color.GREEN;
+			else
+				color = Color.BLUE;
+			
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+			{
+				batch.setColor(color);
+				batch.draw(colors, i * barWidth, 0, barWidth, scale(avg), 0, 0, 16, 5, false, false);
+				batch.setColor(Color.WHITE);
+			}
+			batch.end();
 		}
+		
 	}
 	
 	private float scale(float x) {
 		return x / 256 * Gdx.graphics.getHeight() * 2.0f;
 	}
-
 	private float avg(int pos, int nb) {
 		int sum = 0;
 		for (int i = 0; i < nb; i++) {
-			
+
 			sum += spectrum[pos + i];
 		}
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -33,6 +34,7 @@ public class PreviewScreen implements Screen {
 	
 	
 	public PreviewScreen(final BeatMap map, final FileHandle fileHandle) {
+		
 		Gdx.input.setInputProcessor(this.stage);
 		
 		// styles
@@ -41,22 +43,24 @@ public class PreviewScreen implements Screen {
 		TextButtonStyle tStyle = new TextButtonStyle();
 		tStyle.font = lStyle.font;
 		
-		TextureRegionDrawable sbBackground = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/sb_background.png"))));
-		TextureRegionDrawable sbDefault = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/sb_default.png"))));
+		TextureRegionDrawable downArrow = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/downarrow.png"))));
+		TextureRegionDrawable graybg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/dropdown-bg.png"))));
+		TextureRegionDrawable clearbg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/clear-bg.png"))));
 		SelectBoxStyle sbStyle = new SelectBoxStyle(lStyle.font, 
 				Color.WHITE, 
-				sbBackground,
-				sbDefault,
-				sbDefault);
+				clearbg,
+				graybg,
+				graybg);
 		sbStyle.font = lStyle.font;
 		
 		// actors
 		txtTotalBeats = new Label("Total beats - ", lStyle);
-		beatCount = new Label(String.valueOf(0), lStyle);
+		beatCount = new Label(String.valueOf(map.NORMAL.size()), lStyle);
 		
 		difficulty = new Label("Difficulty:", lStyle);
 		
 		difficultySelector = new SelectBox(new String[] {"Easy", "Normal", "Hard", "Insane"}, sbStyle);
+		difficultySelector.setSelection(1);
 		difficultySelector.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
@@ -99,10 +103,11 @@ public class PreviewScreen implements Screen {
 		Table container = new Table();
 		container.add(difficulty);
 		container.add(difficultySelector);
+		container.add(new Image(downArrow));
 		container.row();
 		container.add(txtTotalBeats);
 		container.add(beatCount);
-		container.row();
+		container.row().fill();
 		container.add(playButton);
 		container.row();
 		

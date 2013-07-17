@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -22,9 +22,7 @@ public class Resources {
 	public static Game game;
 	
 	// gfx
-	public static OrthographicCamera worldCamera = new OrthographicCamera(10, 6);
-	public static SpriteBatch worldBatch = new SpriteBatch();
-	public static SpriteBatch screenBatch = new SpriteBatch();
+	public static SpriteBatch defaultSpriteBatch = new SpriteBatch();
 	
 	// audio
 	public static MusicPlayer menuMusic;
@@ -37,7 +35,7 @@ public class Resources {
 	
 	
 	// projection/unprojection convenience methods
-	public static Vector2 projectToScreen(Vector2 worldCoords){
+	public static Vector2 projectToScreen(Vector2 worldCoords, Camera worldCamera){
 
 		Vector3 temp = new Vector3(worldCoords.x, worldCoords.y, 0);
 		worldCamera.project(temp);
@@ -46,7 +44,7 @@ public class Resources {
 		return worldCoords;
 
 	}
-	public static Vector2 projectToWorld(Vector2 screenCoords){
+	public static Vector2 projectToWorld(Vector2 screenCoords, Camera worldCamera){
 		Vector3 temp = new Vector3(screenCoords.x, screenCoords.y, 0);
 		worldCamera.unproject(temp);
 

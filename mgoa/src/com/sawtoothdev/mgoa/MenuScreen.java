@@ -2,6 +2,7 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,11 +23,11 @@ public class MenuScreen implements Screen {
 	
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
-		visualizer = new Visualizer(Resources.menuMusic);
+		visualizer = new Visualizer(2048);
 		
 		TextButtonStyle style = new TextButtonStyle();
 		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
-		style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/menubutton.png"), 256, 40));
+		style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/ui/menubutton.png")));
 		
 		
 		
@@ -64,7 +65,7 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		visualizer.render(delta);
+		visualizer.renderFrame(Resources.menuMusic.getLatestSamples(), 61, Color.GREEN, Resources.defaultSpriteBatch);
 		
 		stage.act();
 		stage.draw();

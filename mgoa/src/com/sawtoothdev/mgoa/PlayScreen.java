@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.BeatCore.Accuracy;
@@ -21,9 +24,132 @@ import com.sawtoothdev.mgoa.SongEngine.ISongEventListener;
 
 public class PlayScreen implements Screen {
 
+	private class CoreManager implements IDrawableGameObject, ISongEventListener {
+
+		// pools and cores
+		private CorePool corePool = new CorePool();
+		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
+		
+		// guts
+		private OrthographicCamera camera = new OrthographicCamera(10, 6);
+		
+		// vars
+		public int combo = 0;
+		public int totalBeatsShown = 0;
+		public int totalBeatsHit = 0;
+		public int score = 0;
+		
+		@Override
+		public void update(float delta) {
+			// input
+			if (Gdx.input.isTouched()) {
+
+				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), camera);
+
+				for (BeatCore core : activeCores) {
+
+					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
+						
+						// register a hit event with the beat and note the accuracy
+						Accuracy accuracy = core.onHit(engine.getSongTime());
+						
+						// calculate the score value based on accuracy
+						int divisor = accuracy.ordinal() + 1;
+						int scoreValue = (int) core.getScoreValue() / divisor;
+						
+						// statistics & scoring
+						combo++;
+						totalBeatsHit++;
+						score += scoreValue;
+						
+						// pretty lights
+						fx.makeExplosion(core.getPosition(), core.getColor());
+						
+						// user feedback
+						hud.showMessage(accuracy.toString() + "!");
+						
+					}
+				}
+			}
+			
+			// update
+			for (int i = 0; i < activeCores.size(); i++) {
+
+				BeatCore c = activeCores.get(i);
+				
+				// free the dead ones
+				if (c.isDead()) {
+					
+					// check if the current combo has been broken
+					if (!c.beenHit())
+						combo = 0;
+					
+					activeCores.remove(c);
+					corePool.free(c);
+					
+					totalBeatsShown++;
+				}					
+			}
+			
+			for (BeatCore core : activeCores)
+				core.update(delta);
+		}
+		@Override
+		public void draw(SpriteBatch batch) {
+			
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+			{
+				for (BeatCore core : activeCores)
+					core.draw(Resources.defaultSpriteBatch);
+			}
+			batch.end();
+			
+		}
+		
+		@Override
+		public void onBeatWarning(Beat beat) {
+
+			if (beat.energy > 0f) {
+
+				BeatCore core = corePool.obtain();
+				core.setBeat(beat);
+				
+				Vector2 position = new Vector2();
+				position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
+				
+				if (activeCores.size() > 0) {
+
+					boolean emptySpace = false;
+
+					while (!emptySpace) {
+
+						position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
+
+						for (BeatCore c : activeCores) {
+							emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
+							if (!emptySpace)
+								break;
+						}
+					}
+				} 
+
+				core.setPosition(position);
+
+				activeCores.add(core);
+			}
+			
+		}
+		@Override
+		public void onBeat(Beat beat) {
+		}
+	}
+	
+
+	
 	// engines and managers
 	private final SongEngine engine;
-	private final WorldManager worldManager;
+	private final CoreManager coreManager;
 	private final HUD hud;
 	private final EffectMaker fx;
 	private final Visualizer visualizer;
@@ -34,15 +160,17 @@ public class PlayScreen implements Screen {
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
-		worldManager = new WorldManager();
+		// init
+		engine = new SongEngine(map, audioFile);
+		coreManager = new CoreManager();
 		hud = new HUD(audioFile);
 		fx = new EffectMaker();
+		visualizer = new Visualizer(2048);
 
-		engine = new SongEngine(map, audioFile);
-		engine.addListener(worldManager);
+		// wiring
+		engine.addListener(coreManager);
 		
-		visualizer = new Visualizer(engine.getMusic());
-		
+		// IT BEGINS
 		state = ScreenState.INITIALIZED;
 	}
 
@@ -53,23 +181,31 @@ public class PlayScreen implements Screen {
 		if (engine.getState() == EngineState.DONE)
 			this.state = ScreenState.DONE;
 		
-		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		
 		switch (state) {
 		
 		case INITIALIZED:
 			break;
 			
 		case RUNNING:
-			Resources.worldCamera.update();
 			
-			engine.render(delta);
-			visualizer.render(delta);
-			fx.render(delta);
-			worldManager.render(delta);
-			hud.render(delta);
+			
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			
+			// update
+			engine.update(delta);
+			coreManager.update(delta);
+			fx.update(delta);
+			hud.updateDisplay(coreManager.totalBeatsShown, 
+					coreManager.totalBeatsHit,
+					coreManager.combo, 
+					coreManager.score);
+			hud.update(delta);
+			
+			// draw
+			visualizer.renderFrame(engine.getMusic().getLatestSamples(), 61, Color.ORANGE, Resources.defaultSpriteBatch);
+			fx.draw(Resources.defaultSpriteBatch);
+			coreManager.draw(Resources.defaultSpriteBatch);
+			hud.draw(Resources.defaultSpriteBatch);
 			
 			break;
 			
@@ -110,123 +246,6 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
-	}
-
-	private class WorldManager implements ISongEventListener, IGameObject {
-
-		private CorePool corePool = new CorePool();
-		private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
-		
-		private int combo = 0;
-		
-		private int totalBeatsShown = 0;
-		private int totalBeatsHit = 0;
-		private int score = 0;
-		
-		public WorldManager() {
-		}
-
-		@Override
-		public void render(float delta) {
-
-			// input and hits
-			if (Gdx.input.isTouched()) {
-
-				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-
-				for (BeatCore core : activeCores) {
-
-					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
-						
-						// register a hit event with the beat and note the accuracy
-						Accuracy accuracy = core.onHit(engine.getSongTime());
-						
-						// calculate the score value based on accuracy
-						int divisor = accuracy.ordinal() + 1;
-						int scoreValue = (int) core.getScoreValue() / divisor;
-						
-						// statistics & scoring
-						combo++;
-						totalBeatsHit++;
-						score += scoreValue;
-						
-						// pretty lights
-						fx.makeExplosion(core.getPosition(), core.getColor());
-						
-						// user feedback
-						hud.showMessage(accuracy.toString() + "!");
-					}
-				}
-			}
-
-			{// rings
-
-				for (int i = 0; i < activeCores.size(); i++) {
-
-					BeatCore c = activeCores.get(i);
-
-					if (c.isDead()) {
-						
-						if (!c.beenHit())
-							combo = 0;
-						
-						activeCores.remove(c);
-						corePool.free(c);
-						
-						totalBeatsShown++;
-					}
-				}
-				
-				Resources.worldBatch.setProjectionMatrix(Resources.worldCamera.combined);
-				Resources.worldBatch.begin();
-					for (BeatCore core : activeCores)
-						core.render(delta);
-				Resources.worldBatch.end();
-
-			}
-			
-			// hud
-			hud.update(totalBeatsShown, totalBeatsHit, combo, score);
-
-		}
-
-		@Override
-		public void onBeatWarning(Beat beat) {
-
-			if (beat.energy > 0f) {
-
-				BeatCore core = corePool.obtain();
-				core.setBeat(beat);
-				
-				Vector2 position = new Vector2();
-				position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
-				
-				if (activeCores.size() > 0) {
-
-					boolean emptySpace = false;
-
-					while (!emptySpace) {
-
-						position.set(Resources.random.nextInt(9) - 4, Resources.random.nextInt(5) - 2);
-
-						for (BeatCore c : activeCores) {
-							emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
-							if (!emptySpace)
-								break;
-						}
-					}
-				} 
-
-				core.setPosition(position);
-
-				activeCores.add(core);
-			}
-			
-		}
-		@Override
-		public void onBeat(Beat beat) {
-		}
 
 	}
 	

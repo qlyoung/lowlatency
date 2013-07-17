@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
 
-public class BeatCore implements IGameObject, Poolable {
+public class BeatCore implements IDrawableGameObject, Poolable {
 
 	// accuracy feedback
 	public static enum Accuracy {
@@ -76,7 +77,7 @@ public class BeatCore implements IGameObject, Poolable {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void update(float delta) {
 
 		{// update
 
@@ -116,13 +117,10 @@ public class BeatCore implements IGameObject, Poolable {
 			}
 
 		}
-
-		{// draw
-			
-			core.draw(Resources.worldBatch);
-			ring.draw(Resources.worldBatch);
-		
-		}
+	}
+	public void draw(SpriteBatch batch){
+		core.draw(batch);
+		ring.draw(batch);
 	}
 
 	@Override

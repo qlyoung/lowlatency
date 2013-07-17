@@ -50,26 +50,31 @@ public class MusicPlayer {
 				// allow other threads to execute
 				Thread.yield();
 				
-				if (state == PlayerState.PLAYING){
+				// don't let the other side modify the state in the middle of state checking!
+				synchronized (state) {
 					
-					if (virgin)
-						virgin = false;
-					
-					readSamples = decoder.readSamples(samples, 0, samples.length);
-					
-					if (readSamples > 0) {
-						device.writeSamples(samples, 0, readSamples);
-						sampleCount += readSamples;
+					if (state == PlayerState.PLAYING){
+						
+						if (virgin)
+							virgin = false;
+						
+						readSamples = decoder.readSamples(samples, 0, samples.length);
+						
+						if (readSamples > 0) {
+							device.writeSamples(samples, 0, readSamples);
+							sampleCount += readSamples;
+						}
+						else {
+							state = PlayerState.FINISHED;
+							reinitialize();
+						}
 					}
-					else {
-						state = PlayerState.FINISHED;
-						reinitialize();
+					else if (state == PlayerState.FINISHED) {
+						if (looping && !virgin)
+							state = PlayerState.PLAYING;
 					}
 				}
-				else if (state == PlayerState.FINISHED) {
-					if (looping && !virgin)
-						state = PlayerState.PLAYING;
-				}
+
 			}
 		}
 		

@@ -2,6 +2,10 @@ package com.sawtoothdev.mgoa;
 
 public interface IGameObject {
 	
-	public void render(float delta);
+	/**
+	 * Updates this object's logic
+	 * @param delta
+	 */
+	public void update(float delta);
 
 }

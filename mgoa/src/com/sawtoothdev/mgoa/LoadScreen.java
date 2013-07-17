@@ -7,7 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
@@ -24,6 +26,9 @@ import com.sawtoothdev.audioanalysis.FastBeatDetector;
  */
 
 public class LoadScreen implements Screen {
+	
+	private OrthographicCamera camera = new OrthographicCamera();
+	private SpriteBatch batch = Resources.defaultSpriteBatch;
 	
 	public class LoadingThread extends Thread{
 		
@@ -72,18 +77,13 @@ public class LoadScreen implements Screen {
 	
 	
 	public LoadScreen(){
+		camera.setToOrtho(false);
 	}
 	
 	@Override
 	public void render(float delta) {
 		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		Resources.screenBatch.begin();
-			font.draw(Resources.screenBatch, "Loading...", 20, Gdx.graphics.getHeight() - 50f);
-		Resources.screenBatch.end();
-		
-		//if done loading, move on
+		// update
 		if (!loadThread.isAlive()) {
 			
 			if (loadThread.map != null) {
@@ -92,7 +92,18 @@ public class LoadScreen implements Screen {
 				Resources.game.setScreen(previewScreen);
 			} else
 				Resources.game.setScreen(new ChooseSongScreen());
-		}	
+		}
+		
+		// draw
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+		{
+			font.draw(Resources.defaultSpriteBatch, "Loading...", 20, Gdx.graphics.getHeight() - 50f);
+		}
+		batch.end();
+		
 	}
 
 	@Override

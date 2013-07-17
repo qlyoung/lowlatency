@@ -6,11 +6,13 @@ import org.cmc.music.myid3.MyID3;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-class HUD implements IGameObject {
+class HUD implements IDrawableGameObject {
 
 	// fonts
 	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
@@ -20,6 +22,9 @@ class HUD implements IGameObject {
 	private TextureRegion underline = new TextureRegion(new Texture("data/textures/underline.png"));
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
+	// guts
+	OrthographicCamera camera = new OrthographicCamera();
+	
 	// game values
 	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo;
 	private String message = null, percentage = "0";
@@ -29,7 +34,8 @@ class HUD implements IGameObject {
 
 	public HUD(FileHandle audioFile) {
 		
-
+		camera.setToOrtho(false);
+		
 		MusicMetadata metadata = null;
 
 		try {
@@ -46,7 +52,7 @@ class HUD implements IGameObject {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void update(float delta) {
 
 		// update the score spinner
 		if (displayScore < score)
@@ -65,40 +71,40 @@ class HUD implements IGameObject {
 		if (totalBeatsShown != 0)
 			percentage = String.valueOf((int) (((float) totalBeatsHit / totalBeatsShown) * 100)) + "%";
 
+	}
+	@Override
+	public void draw(SpriteBatch batch){
 		
-		Resources.screenBatch.begin();
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
 		{
 			// gfx
-			Resources.screenBatch.draw(bottomFadeBar, 0, 0);
-			Resources.screenBatch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
-			
+			batch.draw(bottomFadeBar, 0, 0);
+			batch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
 			
 			// song data
-			hudFont.draw(Resources.screenBatch, songInfo, 10, 23);
+			hudFont.draw(batch, songInfo, 10, 23);
 
 			// score and score underline
-			hudFont.draw(Resources.screenBatch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60f, Gdx.graphics.getHeight() - 8f);
+			hudFont.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60f, Gdx.graphics.getHeight() - 8f);
 
 			// hit percentage
-			hudFont.draw(Resources.screenBatch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
+			hudFont.draw(batch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
 
 			// messages
 			if (message != null){
 				float length = messageFont.getBounds(message).width;
-				messageFont.draw(Resources.screenBatch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
+				messageFont.draw(batch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
 			}
 			
-			
-
 			// combo
-			hudFont.draw(Resources.screenBatch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
+			hudFont.draw(batch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
 			
 			// fps counter
-			hudFont.draw(Resources.screenBatch, "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), Gdx.graphics.getWidth() - 100, 20);
+			hudFont.draw(batch, "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), Gdx.graphics.getWidth() - 100, 20);
 			
 		}
-		Resources.screenBatch.end();
-
+		batch.end();
 	}
 
 	public void showMessage(String message) {
@@ -106,7 +112,7 @@ class HUD implements IGameObject {
 		messageFont.setColor(Color.WHITE);
 	}
 	
-	public void update(int totalBeatsShown, int totalBeatsHit, int combo, int score){
+	public void updateDisplay(int totalBeatsShown, int totalBeatsHit, int combo, int score){
 		this.totalBeatsShown = totalBeatsShown;
 		this.totalBeatsHit = totalBeatsHit;
 		this.combo = combo;

@@ -75,7 +75,7 @@ public class SongEngine implements IGameObject {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void update(float delta) {
 
 		// state update
 		if (!music.isPlaying() && delayIndex == delayMap.size())
