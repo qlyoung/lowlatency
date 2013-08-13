@@ -143,8 +143,7 @@ public class PlayScreen implements Screen {
 		@Override
 		public void onBeat(Beat beat) {
 		}
-	}
-	
+	}	
 
 	
 	// engines and managers
@@ -155,8 +154,8 @@ public class PlayScreen implements Screen {
 	private final Visualizer visualizer;
 	
 	//state
-	private enum ScreenState {INITIALIZED, RUNNING, DONE, PAUSED};
-	private ScreenState state;
+	private enum GameScreenState {INITIALIZED, RUNNING, DONE, PAUSED};
+	private GameScreenState state;
 
 	public PlayScreen(BeatMap map, FileHandle audioFile) {
 
@@ -171,7 +170,7 @@ public class PlayScreen implements Screen {
 		engine.addListener(coreManager);
 		
 		// IT BEGINS
-		state = ScreenState.INITIALIZED;
+		state = GameScreenState.INITIALIZED;
 	}
 
 	@Override
@@ -179,7 +178,7 @@ public class PlayScreen implements Screen {
 
 		//state update
 		if (engine.getState() == EngineState.DONE)
-			this.state = ScreenState.DONE;
+			this.state = GameScreenState.DONE;
 		
 		switch (state) {
 		
@@ -187,7 +186,6 @@ public class PlayScreen implements Screen {
 			break;
 			
 		case RUNNING:
-			
 			
 			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 			
@@ -226,7 +224,7 @@ public class PlayScreen implements Screen {
 	@Override
 	public void show() {
 		engine.start();
-		state = ScreenState.RUNNING;
+		state = GameScreenState.RUNNING;
 	}
 
 	@Override
