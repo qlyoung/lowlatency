@@ -38,17 +38,15 @@ class HUD implements IDrawableGameObject {
 		
 		MusicMetadata metadata = null;
 
-		try {
-			metadata = new MyID3().read(audioFile.file()).merged;
-		} catch (Exception e) {
-			Gdx.app.log("warning", "Cannot read metadata! Ogg file?");
-		}
+		try 
+			{ metadata = new MyID3().read(audioFile.file()).merged; }
+		catch (Exception e)
+			{ Gdx.app.log("warning", "Cannot read metadata! Ogg file?"); }
 
 		String title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
 		String artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
 
 		songInfo = artist + " - " + title;
-
 	}
 
 	@Override

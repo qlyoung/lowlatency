@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
-public class EffectMaker implements IDrawableGameObject {
+public class EffectsManager implements IDrawableGameObject {
 
 	private OrthographicCamera camera = new OrthographicCamera(10, 6);
 	
@@ -26,7 +26,7 @@ public class EffectMaker implements IDrawableGameObject {
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
 	
-	public EffectMaker(){
+	public EffectsManager(){
 	}
 	
 	@Override
@@ -37,7 +37,7 @@ public class EffectMaker implements IDrawableGameObject {
 		 * instead of calling the combined update/draw method (an overload
 		 * of draw()) seems to create undefined behavior; in this case
 		 * a white box renders for a split second. As a workaround the update
-		 * code has been moved to this class's draw(), with the delta time 
+		 * code has been moved to this class's draw(), with delta time 
 		 * supplied by Gdx.graphics.getDeltaTime().
 		 */
 		
