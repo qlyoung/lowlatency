@@ -52,16 +52,7 @@ public class Visualizer {
 			int nb = (samples.length / bars) / 2;
 			float avg = avg(histoX, nb);
 			
-			if (avg > 40)
-				color = Color.RED;
-			else if (avg > 30)
-				color = Color.ORANGE;
-			else if (avg > 20)
-				color = Color.YELLOW;
-			else if (avg > 10)
-				color = Color.GREEN;
-			else
-				color = Color.BLUE;
+			color = Color.WHITE;
 			
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();

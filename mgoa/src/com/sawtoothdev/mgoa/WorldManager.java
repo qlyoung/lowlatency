@@ -38,7 +38,7 @@ public class WorldManager implements IDrawableGameObject {
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		visualizer.renderFrame(engine.getMusic().getLatestSamples(), 61, Color.ORANGE, batch);
+		visualizer.renderFrame(engine.getMusic().getLatestSamples(), 15, Color.ORANGE, batch);
 		fx.draw(batch);
 		coreManager.draw(batch);
 		hud.draw(batch);

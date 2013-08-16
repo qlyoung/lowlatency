@@ -23,7 +23,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 
 	// gfx
 	private final Sprite ring, core;
-	private Color c, originalColor;
+	private Color c, intensityColor;
 	private float alpha = 1;
 
 	// mechanical
@@ -55,25 +55,21 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 	public void setBeat(Beat beat) {
 		this.beat = beat;
 
-		Color coreColor;
-
 		if (beat.energy > .75)
-			coreColor = Color.RED;
+			intensityColor = Color.RED;
 		else if (beat.energy > .6)
-			coreColor = Color.ORANGE;
+			intensityColor = Color.ORANGE;
 		else if (beat.energy > .45)
-			coreColor = Color.YELLOW;
+			intensityColor = Color.YELLOW;
 		else if (beat.energy > .3)
-			coreColor = Color.GREEN;
+			intensityColor = Color.GREEN;
 		else if (beat.energy > .15)
-			coreColor = Color.BLUE;
+			intensityColor = Color.BLUE;
 		else
-			coreColor = Color.MAGENTA;
+			intensityColor = Color.MAGENTA;
 
-		originalColor = coreColor.cpy();
-		
-		this.core.setColor(coreColor);
-		this.ring.setColor(coreColor);
+		this.core.setColor(Color.WHITE);
+		this.ring.setColor(Color.WHITE);
 	}
 
 	@Override
@@ -89,7 +85,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 
 			
 			
-			{// colors and fading
+			{// colors, rotation and fading
 
 				c = ring.getColor();
 				
@@ -114,11 +110,13 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 					} else if (c.a <= .05f)
 						dead = true;
 				}
+				
 			}
 
 		}
 	}
 	public void draw(SpriteBatch batch){
+		
 		core.draw(batch);
 		ring.draw(batch);
 	}
@@ -149,7 +147,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 				worldPos.y - ring.getHeight() / 2f);
 		core.setPosition(worldPos.x - core.getWidth() / 2f,
 				worldPos.y - core.getHeight() / 2f);
-
+		
 	}
 
 	public Accuracy onHit(long songTimeMs) {
@@ -200,6 +198,6 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		return beenHit;
 	}
 	public Color getColor() {
-		return originalColor;
+		return intensityColor;
 	}
 }
