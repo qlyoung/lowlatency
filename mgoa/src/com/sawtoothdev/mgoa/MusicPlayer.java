@@ -1,5 +1,7 @@
 package com.sawtoothdev.mgoa;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.io.Decoder;
@@ -7,129 +9,64 @@ import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.audio.io.VorbisDecoder;
 import com.badlogic.gdx.files.FileHandle;
 
-public class MusicPlayer {
+public class MusicPlayer implements IGameObject {
 
-	public enum PlayerState {
-		PLAYING, PAUSED, STOPPED, FINISHED
-	};
+	AudioDevice device;
+	Decoder decoder;
+
+	ArrayList<short[]> frames = new ArrayList<short[]>();
+	int index = 0;
 	
-	class PlayerThread extends Thread {
-		
-		private Decoder decoder;
-		private AudioDevice device;
-		private FileHandle audioHandle;
-		
-		private boolean virgin = true;
-		
-		private short[] samples = new short[2048];
-		int sampleCount = 0;
-		
-		public PlayerThread(FileHandle audioHandle) {
-			this.audioHandle = audioHandle;
-			
-			String ext = audioHandle.extension().toLowerCase();
+	short[] buffer = new short[2048];
 
-			if (ext.contains("mp3"))
-				decoder = new Mpg123Decoder(audioHandle);
-			else if (ext.contains("ogg"))
-				decoder = new VorbisDecoder(audioHandle);
-			else
-				return;
+	boolean playing = false;
 
-			// initialize device
-			device = Gdx.audio.newAudioDevice(decoder.getRate(),
-					decoder.getChannels() == 1);
-		}
-		
-		@Override
-		public void run() {
-			int readSamples = 0;
-			
-			while (true){
-				
-				// allow other threads to execute
-				Thread.yield();
-				
-				// don't let the other side modify the state in the middle of state checking!
-				synchronized (state) {
-					
-					if (state == PlayerState.PLAYING){
-						
-						if (virgin)
-							virgin = false;
-						
-						readSamples = decoder.readSamples(samples, 0, samples.length);
-						
-						if (readSamples > 0) {
-							device.writeSamples(samples, 0, readSamples);
-							sampleCount += readSamples;
-						}
-						else {
-							state = PlayerState.FINISHED;
-							reinitialize();
-						}
-					}
-					else if (state == PlayerState.FINISHED) {
-						if (looping && !virgin)
-							state = PlayerState.PLAYING;
-					}
-				}
+	public MusicPlayer(FileHandle audiofile) {
 
-			}
-		}
+		if (audiofile.extension().contains("mp3"))
+			decoder = new Mpg123Decoder(audiofile);
+		else if (audiofile.extension().contains("ogg"))
+			decoder = new VorbisDecoder(audiofile);
+
+		device = Gdx.audio.newAudioDevice(decoder.getRate(),
+				decoder.getChannels() == 1);
+
+		// this needs to be done in chunks on the fly, it results in the smoothest audio yet.
 		
-		private void reinitialize(){
-			if (decoder instanceof Mpg123Decoder)
-				decoder = new Mpg123Decoder(audioHandle);
-			else if (decoder instanceof VorbisDecoder)
-				decoder = new VorbisDecoder(audioHandle);
-			
-			device = Gdx.audio.newAudioDevice(decoder.getRate(),
-					decoder.getChannels() == 1);
-				
+		for (int i = 0; i < 500; i++){
+			decoder.readSamples(buffer, 0, buffer.length);
+			frames.add(buffer.clone());
 		}
 		
 	}
 
-	private boolean looping;
-	
-	private PlayerState state;
-	private PlayerThread playerThread;
+	@Override
+	public void update(float delta) {
 
-	public MusicPlayer(FileHandle songHandle) {
+		
+		
+		if (playing)
+		{
+			device.writeSamples(frames.get(index), 0, frames.get(index).length);
+			index++;
+		}
 
-		// set the player to stopped
-		state = PlayerState.STOPPED;
-
-		playerThread = new PlayerThread(songHandle);
-		playerThread.setDaemon(true);
-	
 	}
 
 	public void play() {
-		if (!playerThread.isAlive())
-			playerThread.start();
-		
-		state = PlayerState.PLAYING;
-	}
-
-	public void pause() {
-		state = PlayerState.PAUSED;
+		playing = true;
 	}
 
 	public void stop() {
-		state = PlayerState.STOPPED;
+		playing = false;
+	}
+
+	public short[] getLatestFrame() {
+		return buffer;
 	}
 
 	public boolean isPlaying() {
-		return state == PlayerState.PLAYING;
-	}
-	
-	public short[] getLatestSamples() {
-		return playerThread.samples;
+		return playing;
 	}
 
-	public void setLooping(boolean looping){
-		this.looping = looping;
-	}
 }

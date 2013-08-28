@@ -20,7 +20,6 @@ public class MenuScreen implements Screen {
 	private Stage stage = new Stage();
 	private Visualizer visualizer;
 
-	
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
 		visualizer = new Visualizer(2048);
@@ -65,7 +64,10 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		visualizer.renderFrame(Resources.menuMusic.getLatestSamples(), 61, Color.GREEN, Resources.defaultSpriteBatch);
+		Resources.menuMusic.update(delta);
+		visualizer.renderFrame(Resources.menuMusic.getLatestFrame(), 61, Color.GREEN, Resources.defaultSpriteBatch);
+		
+		Gdx.app.log("FPS: ", String.valueOf(Gdx.graphics.getFramesPerSecond()));
 		
 		stage.act();
 		stage.draw();
@@ -79,7 +81,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.play();
 		System.gc();
 	}
