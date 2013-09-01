@@ -1,6 +1,5 @@
 package com.sawtoothdev.mgoa;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 
