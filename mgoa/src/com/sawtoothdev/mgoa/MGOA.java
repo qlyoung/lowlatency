@@ -32,7 +32,7 @@ public class MGOA extends Game {
 			Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external("tmp/title.mp3"));
 			
 			// initialize necessary resources
-			Resources.menuMusic = new MusicPlayer(Gdx.files.external("tmp/title.mp3"));
+			Resources.menuMusic = new OneShotMusicPlayer(Gdx.files.external("tmp/title.mp3"));
 		
 		
 		this.setScreen(new MenuScreen());

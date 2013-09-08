@@ -3,30 +3,43 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WorldManager implements IDrawableGameObject {
 
+	public final OneShotMusicPlayer music;
 	private final HUD hud;
-	public final SongEngine engine;
-	private final EffectsManager fx;
+	private final FxBox fxBox;
 	private final CoreManager coreManager;
+	private final VisualsManager visuals;
+	
+	private final OrthographicCamera worldCamera;
+	private final OrthographicCamera screenCamera;
+	
+	public enum WorldState { INITIALIZED, ACTIVE, PAUSED, FINISHED };
+	private WorldState state;
 	
 	public WorldManager(BeatMap map, FileHandle audioFile){
+		worldCamera = new OrthographicCamera(10, 6);
+		screenCamera = new OrthographicCamera();
+		screenCamera.setToOrtho(false);
 		
-		engine = new SongEngine(map, audioFile);
-		hud = new HUD(audioFile);
-		fx = new EffectsManager();
-		coreManager = new CoreManager(engine, fx, hud, map.NORMAL);
+		music = new OneShotMusicPlayer(audioFile);
+		hud = new HUD(audioFile, screenCamera);
+		fxBox = new FxBox(worldCamera);
+		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL, worldCamera);
+		visuals = new VisualsManager(map.ORIGINAL, music);
+		
+		state = WorldState.INITIALIZED;
 	}
 	
 	@Override
 	public void update(float delta) {
 		
-		engine.update(delta);
-		
+		visuals.update(delta);
 		coreManager.update(delta);
-		fx.update(delta);
+		fxBox.update(delta);
 		hud.update(delta);
 	}
 
@@ -35,18 +48,23 @@ public class WorldManager implements IDrawableGameObject {
 		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		fx.draw(batch);
+		worldCamera.update();
+		screenCamera.update();
+		
+		visuals.draw(batch);
+		fxBox.draw(batch);
 		coreManager.draw(batch);
 		hud.draw(batch);
 	}
 	
 	public void start(){
-		engine.start();
+		music.setLooping(false);
+		music.play();
+		state = WorldState.ACTIVE;
 	}
-	public void pause(){
-		
+	
+	public WorldState getState(){
+		return state;
 	}
-	public void end(){
-		
-	}
+
 }

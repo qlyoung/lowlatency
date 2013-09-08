@@ -87,7 +87,6 @@ public class LoadScreen implements Screen {
 		if (!loadThread.isAlive()) {
 			
 			if (loadThread.map != null) {
-				Resources.menuMusic.stop();
 				PreviewScreen previewScreen = new PreviewScreen(loadThread.map, loadThread.audioFile);
 				Resources.game.setScreen(previewScreen);
 			} else

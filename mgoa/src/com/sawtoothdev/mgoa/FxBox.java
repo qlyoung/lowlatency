@@ -10,23 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
-public class EffectsManager implements IDrawableGameObject {
+public class FxBox implements IDrawableGameObject {
 
-	private OrthographicCamera camera = new OrthographicCamera(10, 6);
-	
-	private class EffectsPool extends Pool<ParticleEffect> {
-
-		@Override
-		protected ParticleEffect newObject() {
-			return new ParticleEffect();
-		}
-		
-	}
-	
+	private OrthographicCamera camera;
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
 	
-	public EffectsManager(){
+	public FxBox(OrthographicCamera camera){
+		this.camera = camera;
 	}
 	
 	@Override
@@ -91,4 +82,12 @@ public class EffectsManager implements IDrawableGameObject {
 		effect.start();
 		
 	}
+	
+	private class EffectsPool extends Pool<ParticleEffect> {
+		@Override
+		protected ParticleEffect newObject() {
+			return new ParticleEffect();
+		}
+	}
+	
 }

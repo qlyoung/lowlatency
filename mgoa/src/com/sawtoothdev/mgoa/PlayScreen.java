@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
-import com.sawtoothdev.mgoa.SongEngine.EngineState;
+import com.sawtoothdev.mgoa.WorldManager.WorldState;
 
 /**
  * Heart of the game, controls gameplay itself.
@@ -33,10 +33,8 @@ public class PlayScreen implements Screen {
 	public void render(float delta) {
 
 		//state update
-		if (worldManager.engine.getState() == EngineState.DONE){ 
-			System.out.println("DERP DONE");
+		if (worldManager.getState() == WorldState.FINISHED)
 			this.state = GameScreenState.DONE;
-		}
 		
 		
 		switch (state) {

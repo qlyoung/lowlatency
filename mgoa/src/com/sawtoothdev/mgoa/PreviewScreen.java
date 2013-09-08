@@ -30,6 +30,8 @@ public class PreviewScreen implements Screen {
 	SelectBox difficultySelector;
 	TextButton playButton;
 	
+	private boolean LOCKED_ON = false;
+	
 	private int totalBeats = 0;
 	
 	
@@ -94,8 +96,16 @@ public class PreviewScreen implements Screen {
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Resources.game.setScreen(new PlayScreen(map, fileHandle));
-				super.clicked(event, x, y);
+				// this locked_on deal is to avoid multiple playscreens getting created
+				// since this clicked event can be triggered while the playscreen is loading
+				
+				if (!LOCKED_ON){
+					LOCKED_ON = true;
+					Resources.menuMusic.stop();
+					Resources.game.setScreen(new PlayScreen(map, fileHandle));
+				}
+				else
+					super.clicked(event, x, y);
 			}
 		});
 		

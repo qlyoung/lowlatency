@@ -23,7 +23,7 @@ class HUD implements IDrawableGameObject {
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
 	// guts
-	OrthographicCamera camera = new OrthographicCamera();
+	final OrthographicCamera camera;
 	
 	// game values
 	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo;
@@ -32,9 +32,8 @@ class HUD implements IDrawableGameObject {
 	// music information
 	private final String songInfo;
 
-	public HUD(FileHandle audioFile) {
-		
-		camera.setToOrtho(false);
+	public HUD(FileHandle audioFile, OrthographicCamera camera) {
+		this.camera = camera;
 		
 		MusicMetadata metadata = null;
 

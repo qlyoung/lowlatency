@@ -25,7 +25,7 @@ public class Resources {
 	public static SpriteBatch defaultSpriteBatch = new SpriteBatch();
 	
 	// audio
-	public static MusicPlayer menuMusic;
+	public static OneShotMusicPlayer menuMusic;
 	
 	// settings
 	public static Preferences settings;

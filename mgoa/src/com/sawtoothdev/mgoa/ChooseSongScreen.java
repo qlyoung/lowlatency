@@ -71,6 +71,10 @@ public class ChooseSongScreen implements Screen {
 		stage.act();
 		stage.draw();
 		
+		Resources.defaultSpriteBatch.begin();
+		Resources.defaultSpriteBatch.end();
+		
+		
 	}
 	
 	public void updateTable(FileHandle directory){

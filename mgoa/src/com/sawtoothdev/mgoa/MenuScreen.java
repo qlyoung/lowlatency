@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +19,7 @@ public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private BitmapFont debugFont = new BitmapFont();
+	private PrettyLights visualizer = new PrettyLights(new OrthographicCamera(10, 6));
 
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
@@ -63,6 +65,8 @@ public class MenuScreen implements Screen {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		visualizer.update(delta);
+		visualizer.draw(null);
 		stage.act();
 		stage.draw();
 		
@@ -79,6 +83,8 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
+		Resources.menuMusic.setLooping(true);
+		Resources.menuMusic.setVolume(.1f);
 		Resources.menuMusic.play();
 		System.gc();
 	}

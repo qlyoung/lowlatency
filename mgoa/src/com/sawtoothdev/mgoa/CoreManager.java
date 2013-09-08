@@ -17,9 +17,9 @@ public class CoreManager implements IDrawableGameObject {
 	private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 
 	// guts
-	private OrthographicCamera camera = new OrthographicCamera(10, 6);
+	private OrthographicCamera camera;
 	
-	// EVENT LIST
+	// event list
 	private LinkedList<Beat> events = new LinkedList<Beat>();
 
 	// vars
@@ -28,17 +28,18 @@ public class CoreManager implements IDrawableGameObject {
 	public int totalBeatsHit = 0;
 	public int score = 0;
 	
-	private SongEngine engine;
-	private EffectsManager fx;
+	private OneShotMusicPlayer music;
+	private FxBox fx;
 	private HUD hud;
 
 	
-	public CoreManager(SongEngine engine, EffectsManager fx, HUD hud, ArrayList<Beat> events){
+	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events, OrthographicCamera camera){
 		
 		for (Beat b : events)
 			this.events.add(b);
 		
-		this.engine = engine;
+		this.camera = camera;
+		this.music = music;
 		this.fx = fx;
 		this.hud = hud;
 	}
@@ -56,7 +57,7 @@ public class CoreManager implements IDrawableGameObject {
 					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
 						
 						// register a hit event with the beat and note the accuracy
-						Accuracy accuracy = core.onHit(engine.getSongTime());
+						Accuracy accuracy = core.onHit(music.currentTime());
 						
 						// calculate the score value based on accuracy
 						int divisor = accuracy.ordinal() + 1;
@@ -78,13 +79,13 @@ public class CoreManager implements IDrawableGameObject {
 			}
 			
 			// song events
-			while (engine.getSongTime() >= events.peekFirst().timeMs - Playthrough.difficulty.ringTimeMs)
+			while (music.currentTime() >= events.peek().timeMs - Playthrough.difficulty.ringTimeMs)
 				onBeatWarning(events.poll());
 			
 			// hud
 			hud.updateDisplay(totalBeatsShown, totalBeatsHit, combo, score);
 			
-			// cores
+			// cull cores
 			for (int i = 0; i < activeCores.size(); i++) {
 
 				BeatCore c = activeCores.get(i);
@@ -103,10 +104,9 @@ public class CoreManager implements IDrawableGameObject {
 				}					
 			}
 			
+			// update cores
 			for (BeatCore core : activeCores)
 				core.update(delta);
-			
-
 			
 		}
 
