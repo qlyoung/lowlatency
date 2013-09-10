@@ -79,7 +79,7 @@ public class CoreManager implements IDrawableGameObject {
 			}
 			
 			// song events
-			while (music.currentTime() >= events.peek().timeMs - Playthrough.difficulty.ringTimeMs)
+			while (events.peek() != null && music.currentTime() >= events.peek().timeMs - Playthrough.difficulty.ringTimeMs)
 				onBeatWarning(events.poll());
 			
 			// hud

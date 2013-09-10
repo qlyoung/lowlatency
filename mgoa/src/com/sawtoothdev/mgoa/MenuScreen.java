@@ -19,7 +19,7 @@ public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private BitmapFont debugFont = new BitmapFont();
-	private PrettyLights visualizer = new PrettyLights(new OrthographicCamera(10, 6));
+	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
 
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
@@ -65,8 +65,8 @@ public class MenuScreen implements Screen {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		visualizer.update(delta);
-		visualizer.draw(null);
+		prettyLights.update(delta);
+		prettyLights.draw(null);
 		stage.act();
 		stage.draw();
 		
@@ -84,7 +84,7 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		Resources.menuMusic.setLooping(true);
-		Resources.menuMusic.setVolume(.1f);
+		Resources.menuMusic.setVolume(.4f);
 		Resources.menuMusic.play();
 		System.gc();
 	}
