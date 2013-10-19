@@ -16,22 +16,26 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class VisualsManager implements IDrawableGameObject {
 
-	private final LinkedList<Beat> beatEvents = new LinkedList<Beat>();
-	private final OneShotMusicPlayer music;
+	private final OrthographicCamera CAMERA = new OrthographicCamera(10, 6);
+	
+	private final LinkedList<Beat> BEATEVENTS = new LinkedList<Beat>();
+	private final OneShotMusicPlayer MUSIC;
 
-	private PrettyLights lv = new PrettyLights(new OrthographicCamera(10, 6));
+	private PrettyLights lv = new PrettyLights(CAMERA);
+	
 
-	public VisualsManager(ArrayList<Beat> beatEvents, OneShotMusicPlayer music) {
-		for (Beat b : beatEvents)
-			this.beatEvents.add(b);
+	public VisualsManager(ArrayList<Beat> BEATEVENTS, OneShotMusicPlayer MUSIC) {
+		for (Beat b : BEATEVENTS)
+			this.BEATEVENTS.add(b);
 
-		this.music = music;
+		this.MUSIC = MUSIC;
+		
 	}
 
 	@Override
 	public void update(float delta) {
-			while (beatEvents.peek() != null && music.currentTime() >= beatEvents.peek().timeMs)
-				react(beatEvents.poll());
+			while (BEATEVENTS.peek() != null && MUSIC.currentTime() >= BEATEVENTS.peek().timeMs)
+				react(BEATEVENTS.poll());
 
 		lv.update(delta);
 	}

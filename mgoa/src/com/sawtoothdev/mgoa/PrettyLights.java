@@ -22,7 +22,7 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class PrettyLights implements IDrawableGameObject {
 
-	private World world = new World(new Vector2(), false);
+	private World world = new World(new Vector2(0, 0), false);
 	private OrthographicCamera camera;
 	
 	private RayHandler rayHandler;
@@ -41,9 +41,9 @@ public class PrettyLights implements IDrawableGameObject {
 		rayHandler.setCombinedMatrix(this.camera.combined);
 		
 		for(int i = 0; i < 6; i++)
-			makeOrb(Color.BLUE, Resources.random.nextFloat() + .5f);
-		for(int i = 0; i < 5; i++)
 			makeOrb(Color.CYAN, Resources.random.nextFloat() + .5f);
+		for(int i = 0; i < 5; i++)
+			makeOrb(Color.BLUE, Resources.random.nextFloat() + .5f);
 		
 	}
 	
@@ -60,7 +60,6 @@ public class PrettyLights implements IDrawableGameObject {
 	@Override
 	public void draw(SpriteBatch batch) {
 		rayHandler.updateAndRender();
-		//debugRenderer.render(world, camera.combined);
 
 	}
 
@@ -106,7 +105,7 @@ public class PrettyLights implements IDrawableGameObject {
 		FixtureDef circfix = new FixtureDef();
 		circfix.shape = circle;
 		circfix.friction = 0f;
-		circfix.restitution = 1f;
+		//circfix.restitution = 1f;
 		circfix.density = 0f;
 		
 		orbBody.createFixture(circfix);

@@ -42,7 +42,7 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
-			float sensitivity = FastBeatDetector.SENSITIVITY_STANDARD;
+			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
 			
 			ArrayList<Beat> beats = null;
 			
@@ -55,14 +55,14 @@ public class LoadScreen implements Screen {
 			
 			Gdx.app.log("load screen", "load complete, adjusting difficulty...");
 			
-			ArrayList<Beat> easy, medium, hard, original;
+			ArrayList<Beat> easy, normal, hard, original;
 			
-			easy = BeatsProcessor.removeCloseBeats(beats, 250);
-			medium = BeatsProcessor.removeCloseBeats(beats, 150);
-			hard = BeatsProcessor.removeCloseBeats(beats, 100);
+			easy = BeatsProcessor.removeCloseBeats(beats, Difficulty.EASY.minBeatSpace);
+			normal = BeatsProcessor.removeCloseBeats(beats, Difficulty.NORMAL.minBeatSpace);
+			hard = BeatsProcessor.removeCloseBeats(beats, Difficulty.HARD.minBeatSpace);
 			original = beats;
 			
-			map = new BeatMap(easy, medium, hard, original);
+			map = new BeatMap(easy, normal, hard, original);
 			
 			Gdx.app.log("Load thread", "garbage collecting...");
 			System.gc();
@@ -74,7 +74,7 @@ public class LoadScreen implements Screen {
 	
 	private LoadingThread loadThread;
 	private BitmapFont font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
-	
+	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
 	
 	public LoadScreen(){
 		camera.setToOrtho(false);
@@ -92,14 +92,18 @@ public class LoadScreen implements Screen {
 			} else
 				Resources.game.setScreen(new ChooseSongScreen());
 		}
+
+		prettyLights.update(delta);
 		
 		// draw
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		prettyLights.draw(null);
+		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		{
-			font.draw(Resources.defaultSpriteBatch, "Loading...", 20, Gdx.graphics.getHeight() - 50f);
+			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 		}
 		batch.end();
 		

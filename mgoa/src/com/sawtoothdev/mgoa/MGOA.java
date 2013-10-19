@@ -21,18 +21,17 @@ public class MGOA extends Game {
 		
 			//	settings
 			Resources.settings = Gdx.app.getPreferences("settings");
-		
-			// check for first run
-			if (!Resources.settings.contains("firstrun"))
-				Resources.settings.putBoolean("firstrun", true);
-			else if (Resources.settings.getBoolean("firstrun"))
+			
+			if (Resources.settings.contains("firstrun"))
 				Resources.settings.putBoolean("firstrun", false);
+			else
+				Resources.settings.putBoolean("firstrun", true);
 			
 			// copy necessary data to external storage
-			Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external("tmp/title.mp3"));
+			Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external(".tmp/title.mp3"));
 			
 			// initialize necessary resources
-			Resources.menuMusic = new OneShotMusicPlayer(Gdx.files.external("tmp/title.mp3"));
+			Resources.menuMusic = new OneShotMusicPlayer(Gdx.files.external(".tmp/title.mp3"));
 		
 		
 		this.setScreen(new MenuScreen());

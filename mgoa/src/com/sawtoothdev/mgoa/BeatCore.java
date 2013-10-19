@@ -47,7 +47,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		Texture y = new Texture("data/textures/core.png");
 		y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		core = new Sprite(y);
-
+		
 		reset();
 	}
 

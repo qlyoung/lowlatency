@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class PreviewScreen implements Screen {
 
 	private Stage stage = new Stage();
-	Label difficulty, txtTotalBeats, beatCount, length;
+	Label difficulty, txtTotalBeats, beatCount, length, title;
 	SelectBox difficultySelector;
 	TextButton playButton;
 	
@@ -58,8 +58,8 @@ public class PreviewScreen implements Screen {
 		// actors
 		txtTotalBeats = new Label("Total beats - ", lStyle);
 		beatCount = new Label(String.valueOf(map.NORMAL.size()), lStyle);
-		
 		difficulty = new Label("Difficulty:", lStyle);
+		title = new Label("Stage Ready", lStyle);
 		
 		difficultySelector = new SelectBox(new String[] {"Easy", "Normal", "Hard", "Insane"}, sbStyle);
 		difficultySelector.setSelection(1);
@@ -111,6 +111,8 @@ public class PreviewScreen implements Screen {
 		
 		// setup
 		Table container = new Table();
+		container.add(title);
+		container.row();
 		container.add(difficulty);
 		container.add(difficultySelector);
 		container.add(new Image(downArrow));
