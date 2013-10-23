@@ -40,7 +40,7 @@ class HUD implements IDrawableGameObject {
 		try 
 			{ metadata = new MyID3().read(audioFile.file()).merged; }
 		catch (Exception e)
-			{ Gdx.app.log("warning", "Cannot read metadata! Ogg file?"); }
+			{ Gdx.app.log("hud warning", "Cannot read metadata! Ogg file?"); }
 
 		String title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
 		String artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
@@ -86,7 +86,7 @@ class HUD implements IDrawableGameObject {
 			hudFont.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60f, Gdx.graphics.getHeight() - 8f);
 
 			// hit percentage
-			hudFont.draw(batch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
+			//hudFont.draw(batch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
 
 			// messages
 			if (message != null){
@@ -95,10 +95,10 @@ class HUD implements IDrawableGameObject {
 			}
 			
 			// combo
-			hudFont.draw(batch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
+			//hudFont.draw(batch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
 			
 			// fps counter
-			hudFont.draw(batch, "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), Gdx.graphics.getWidth() - 100, 20);
+			//hudFont.draw(batch, "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), Gdx.graphics.getWidth() - 100, 20);
 			
 		}
 		batch.end();

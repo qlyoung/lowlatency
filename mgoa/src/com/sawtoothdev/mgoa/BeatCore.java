@@ -51,27 +51,6 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		reset();
 	}
 
-	// lifecycle
-	public void setBeat(Beat beat) {
-		this.beat = beat;
-
-		if (beat.energy > .75)
-			intensityColor = Color.RED;
-		else if (beat.energy > .6)
-			intensityColor = Color.ORANGE;
-		else if (beat.energy > .45)
-			intensityColor = Color.YELLOW;
-		else if (beat.energy > .3)
-			intensityColor = Color.GREEN;
-		else if (beat.energy > .15)
-			intensityColor = Color.BLUE;
-		else
-			intensityColor = Color.MAGENTA;
-
-		this.core.setColor(Color.WHITE);
-		this.ring.setColor(Color.WHITE);
-	}
-
 	@Override
 	public void update(float delta) {
 
@@ -82,7 +61,6 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 				ring.scale(delta * shrinkRate);
 			else if (!dying)
 				dying = true;
-
 			
 			
 			{// colors, rotation and fading
@@ -111,6 +89,8 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 						dead = true;
 				}
 				
+				core.rotate(delta * 30);
+				
 			}
 
 		}
@@ -121,35 +101,16 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		ring.draw(batch);
 	}
 
-	@Override
-	public void reset() {
-
-		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
-		ring.setScale(1);
-		
-		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
-
-		ring.setColor(1, 1, 1, 0f);
-		beat = null;
-		dead = false;
-		beenHit = false;
-		dying = false;
-		alpha = 1;
-
-	}
-
 	// modifiers
 	public void setPosition(Vector2 worldPos) {
 
 		this.position = worldPos;
 
-		ring.setPosition(worldPos.x - ring.getWidth() / 2f,
-				worldPos.y - ring.getHeight() / 2f);
-		core.setPosition(worldPos.x - core.getWidth() / 2f,
-				worldPos.y - core.getHeight() / 2f);
+		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
+		ring.setPosition(worldPos.x - ring.getWidth() / 2f, worldPos.y - ring.getHeight() / 2f);
+		core.setPosition(worldPos.x - core.getWidth() / 2f, worldPos.y - core.getHeight() / 2f);
 		
 	}
-
 	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
 
@@ -175,25 +136,60 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		else
 			return Accuracy.ALMOST;
 	}
-		
+	public void setBeat(Beat beat) {
+		this.beat = beat;
 
+		if (beat.energy > .75)
+			intensityColor = Color.RED;
+		else if (beat.energy > .6)
+			intensityColor = Color.ORANGE;
+		else if (beat.energy > .45)
+			intensityColor = Color.YELLOW;
+		else if (beat.energy > .3)
+			intensityColor = Color.GREEN;
+		else if (beat.energy > .15)
+			intensityColor = Color.BLUE;
+		else
+			intensityColor = Color.MAGENTA;
+
+		this.core.setColor(Color.WHITE);
+		this.ring.setColor(Color.WHITE);
+	}
+	@Override
+	public void reset() {
+
+		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
+		ring.setScale(1);
+		
+		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
+		core.setRotation(0f);
+		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
+
+		ring.setColor(1, 1, 1, 0f);
+		beat = null;
+		dead = false;
+		beenHit = false;
+		dying = false;
+		alpha = 1;
+
+	}
+	
 	// readers
 	public boolean isDead() {
 		return dead;
 	}
-
+	public boolean isDying() {
+		return dying;
+	}
 	public Rectangle getHitbox() {
 		return new Rectangle(position.x - .5f, position.y - .5f, 1f, 1f);
 	}
-
 	public int getScoreValue() {
 		return (int) (beat.energy * 1000);
 	}
-
 	public Vector2 getPosition() {
 		return position;
 	}
-
 	public boolean beenHit() {
 		return beenHit;
 	}

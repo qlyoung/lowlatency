@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
-	private BitmapFont debugFont = new BitmapFont();
 	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
 
 	public MenuScreen() {
@@ -69,10 +68,6 @@ public class MenuScreen implements Screen {
 		prettyLights.draw(null);
 		stage.act();
 		stage.draw();
-		
-		Resources.defaultSpriteBatch.begin();
-		debugFont.draw(Resources.defaultSpriteBatch, "0.1 pre-alpha", 10, Gdx.graphics.getHeight());
-		Resources.defaultSpriteBatch.end();
 		
 	}
 

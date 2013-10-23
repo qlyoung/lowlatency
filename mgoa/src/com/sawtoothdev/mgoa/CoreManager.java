@@ -53,8 +53,14 @@ public class CoreManager implements IDrawableGameObject {
 				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), camera);
 
 				for (BeatCore core : activeCores) {
-
-					if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
+					
+					if (Resources.DEBUG){
+						if (core.isDying() && !core.beenHit()){
+							core.onHit(music.currentTime());
+							fx.makeExplosion(core.getPosition(), core.getColor());
+						}
+					}
+					else if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
 						
 						// register a hit event with the beat and note the accuracy
 						Accuracy accuracy = core.onHit(music.currentTime());

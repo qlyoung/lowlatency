@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,126 +19,170 @@ public class ChooseSongScreen implements Screen {
 
 	private final Stage stage;
 	private final Table container;
-	private final Table directoryTable;
+		private final Table directoryTable;
+		private final TextButton backButton, homeButton;
+		
+	TextButtonStyle elementStyle = new TextButtonStyle();
+	TextButtonStyle controlStyle = new TextButtonStyle();
 	
 	private ClickListener elementClickListener = new ClickListener() {
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
-			
+
+			// get the TextButton that was clicked
 			Actor actor = event.getListenerActor();
-			FileHandle newPath = Gdx.files.external(actor.getName());
 			
+			// construct a FileHandle pointing at the path that the
+			// TextButton represents
+			FileHandle newPath = Gdx.files.external(actor.getName());
+
 			if (newPath.isDirectory()) {
 				updateTable(newPath);
-			}
-			else {
+			} else {
 				Playthrough.songHandle = Gdx.files.external(actor.getName());
 				Gdx.input.setInputProcessor(null);
 				Resources.game.setScreen(new LoadScreen());
 			}
 			event.cancel();
+
+			super.clicked(event, x, y);
+		}
+	};
+	private ClickListener backClickListener = new ClickListener() {
+		public void clicked(InputEvent event, float x, float y) {
+			FileHandle parentDirectory = Gdx.files.external(backButton.getName());
+			updateTable(parentDirectory);
 			
 			super.clicked(event, x, y);
 		}
 	};
+	private ClickListener homeListener = new ClickListener(){
+		public void clicked(InputEvent event, float x, float y) {
+			Resources.game.setScreen(new MenuScreen());
+		}
+	};
 	
 	public ChooseSongScreen() {
+
+		// stage setup
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
 		
-		{// stage setup
-			stage = new Stage();
-			Gdx.input.setInputProcessor(stage);
-			
-			//root element
-			container = new Table();
-			container.setFillParent(true);
-			stage.addActor(container);
-			
-			//directory and file list
-			directoryTable = new Table();
-			directoryTable.center().defaults().width(Gdx.graphics.getWidth());
-		}
+		// root element
+		container = new Table();
+		container.setFillParent(true);
+		stage.addActor(container);
+
+		// directory and file list
+		directoryTable = new Table();
+		directoryTable.center();
+		directoryTable.defaults().width(Gdx.graphics.getWidth());
+
+		// styles
+		elementStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+		elementStyle.fontColor = Color.WHITE;
+		controlStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
+		controlStyle.fontColor = Color.WHITE;
 		
-		FileHandle external = Gdx.files.external("");
-		updateTable(external);
+		// controls
+		backButton = new TextButton("", controlStyle);
+		backButton.addListener(backClickListener);
+		homeButton = new TextButton("Main Menu", controlStyle);
+		homeButton.addListener(homeListener);
+
+		// container setup
+		container.add(homeButton).expandX().left();
+		container.row();
+		container.add(new ScrollPane(directoryTable)).expand();
+		container.row();
+		container.add(backButton);
 		
-		container.add(new ScrollPane(directoryTable));
+		// load root of external file system
+		updateTable(Gdx.files.external(""));
 	}
-	
-	@Override
-	public void render(float delta) {
-		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		stage.act();
-		stage.draw();
-		
-		Resources.defaultSpriteBatch.begin();
-		Resources.defaultSpriteBatch.end();
-		
-		
-	}
-	
-	public void updateTable(FileHandle directory){
-		
-		TextButtonStyle style = new TextButtonStyle();
-		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+
+	public void updateTable(FileHandle directory) {
+
 		directoryTable.clear();
-		
-		for (FileHandle fh : directory.list()){
+
+		for (FileHandle fh : directory.list()) {
+
+			String extension = fh.extension().toLowerCase();
 			
-			if (fh.isDirectory() || fh.extension().toLowerCase().contains("mp3") || fh.extension().toLowerCase().contains("ogg")) {
-			
-				TextButton lol = new TextButton(fh.name(), style);
-				lol.setName(fh.path());
-				lol.addListener(elementClickListener);
-			
-				directoryTable.add(lol);
+			if (fh.isDirectory() || extension.contains("mp3") || extension.contains("ogg")) {
+
+				TextButton element = new TextButton(fh.name(), elementStyle);
+				element.setName(fh.path());
+				element.addListener(elementClickListener);
+				
+				if (!fh.isDirectory())
+					element.getLabel().setColor(Color.GREEN);
+
+				directoryTable.add(element);
 				directoryTable.row();
 			}
 		}
 		
-		TextButton up = new TextButton("UP", style);
-		up.setName(directory.parent().path());
-		up.addListener(elementClickListener);
-		directoryTable.add(up);
-		directoryTable.row();
+		backButton.setName(directory.parent().path());
+		
+		if (directory.path() == ""){
+			backButton.setText("ROOT");
+			backButton.setColor(Color.GRAY);
+		}
+		else {
+			backButton.setText("^ PREVIOUS DIRECTORY ^");
+			backButton.setColor(Color.WHITE);
+		}
+			
+
 	}
 	
 	@Override
+	public void render(float delta) {
+
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		stage.act();
+		stage.draw();
+
+		Resources.defaultSpriteBatch.begin();
+		Resources.defaultSpriteBatch.end();
+
+	}
+
+	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void show() {
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
 
 }

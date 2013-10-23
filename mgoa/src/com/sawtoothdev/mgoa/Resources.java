@@ -32,6 +32,8 @@ public class Resources {
 	
 	// miscellaneous
 	public static Random random = new Random();
+	public static boolean DEBUG = true;
+	public static String version = "0.1.1 pre-alpha";
 	
 	
 	// projection/unprojection convenience methods
