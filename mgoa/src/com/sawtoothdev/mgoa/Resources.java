@@ -3,14 +3,17 @@ package com.sawtoothdev.mgoa;
 import java.util.Random;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Heavyweights and things we only need one of
+ * Heavyweights and misfits
  * 
  * @author albatross
  *
@@ -18,23 +21,29 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Resources {
 
+	// info
+	public static String VERSION = "pre-alpha";
+	public static boolean DEBUG = true;
+	
+	
 	// flow control
 	public static Game game;
 	
 	// gfx
 	public static SpriteBatch defaultSpriteBatch = new SpriteBatch();
 	
+	// ui
+	public static BitmapFont uiFnt = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+	
 	// audio
-	public static OneShotMusicPlayer menuMusic;
+	public static Music menuMusic;
 	
 	// settings
 	public static Preferences settings;
 	
 	// miscellaneous
 	public static Random random = new Random();
-	public static boolean DEBUG = true;
-	public static String version = "0.1.1 pre-alpha";
-	
+
 	
 	// projection/unprojection convenience methods
 	public static Vector2 projectToScreen(Vector2 worldCoords, Camera worldCamera){

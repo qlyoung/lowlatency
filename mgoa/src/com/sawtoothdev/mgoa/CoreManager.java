@@ -16,7 +16,7 @@ public class CoreManager implements IDrawableGameObject {
 	private CorePool corePool = new CorePool();
 	private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 
-	// guts
+	// gfx
 	private OrthographicCamera camera;
 	
 	// event list
@@ -123,7 +123,7 @@ public class CoreManager implements IDrawableGameObject {
 		batch.begin();
 		{
 			for (BeatCore core : activeCores)
-				core.draw(Resources.defaultSpriteBatch);
+				core.draw(batch);
 		}
 		batch.end();
 

@@ -79,7 +79,7 @@ public class ChooseSongScreen implements Screen {
 		directoryTable.defaults().width(Gdx.graphics.getWidth());
 
 		// styles
-		elementStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+		elementStyle.font = Resources.uiFnt;
 		elementStyle.fontColor = Color.WHITE;
 		controlStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
 		controlStyle.fontColor = Color.WHITE;
@@ -144,9 +144,6 @@ public class ChooseSongScreen implements Screen {
 
 		stage.act();
 		stage.draw();
-
-		Resources.defaultSpriteBatch.begin();
-		Resources.defaultSpriteBatch.end();
 
 	}
 

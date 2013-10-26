@@ -20,6 +20,7 @@ public class WorldManager implements IDrawableGameObject {
 	public enum WorldState { INITIALIZED, ACTIVE, PAUSED, FINISHED };
 	private WorldState state;
 	
+	
 	public WorldManager(BeatMap map, FileHandle audioFile){
 		worldCamera = new OrthographicCamera(10, 6);
 		screenCamera = new OrthographicCamera();
@@ -29,7 +30,7 @@ public class WorldManager implements IDrawableGameObject {
 		hud = new HUD(audioFile, screenCamera);
 		fxBox = new FxBox(worldCamera);
 		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL, worldCamera);
-		visuals = new VisualsManager(map.ORIGINAL, music);
+		visuals = new VisualsManager(map.ORIGINAL, music, worldCamera);
 		
 		state = WorldState.INITIALIZED;
 	}
@@ -41,6 +42,10 @@ public class WorldManager implements IDrawableGameObject {
 		coreManager.update(delta);
 		fxBox.update(delta);
 		hud.update(delta);
+		
+		if (state == WorldState.ACTIVE)
+			if (!music.isPlaying())
+				state = WorldState.FINISHED;
 	}
 
 	@Override
@@ -50,7 +55,7 @@ public class WorldManager implements IDrawableGameObject {
 		
 		worldCamera.update();
 		screenCamera.update();
-		
+
 		visuals.draw(batch);
 		fxBox.draw(batch);
 		coreManager.draw(batch);
@@ -58,7 +63,6 @@ public class WorldManager implements IDrawableGameObject {
 	}
 	
 	public void start(){
-		music.setLooping(false);
 		music.play();
 		state = WorldState.ACTIVE;
 	}

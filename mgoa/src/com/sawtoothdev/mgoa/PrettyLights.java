@@ -64,7 +64,6 @@ public class PrettyLights implements IDrawableGameObject {
 	}
 
 	public void react(Beat b){
-		//makeOrb(Color.RED, 1);
 		
 		for (Light l : lights) {
 			if ((l.getDistance() + b.energy * 4) > 3)
@@ -117,7 +116,7 @@ public class PrettyLights implements IDrawableGameObject {
 		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0, 0);
 		plight.attachToBody(orbBody, 0, 0);
 		plight.setSoft(true);
-		plight.setSoftnessLenght(2);
+		plight.setSoftnessLenght(0);
 		plight.setXray(true);
 		lights.add(plight);
 	}

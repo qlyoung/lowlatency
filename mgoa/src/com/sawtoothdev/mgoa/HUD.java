@@ -19,15 +19,14 @@ class HUD implements IDrawableGameObject {
 	private BitmapFont hudFont = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
 
 	// gfx
-	private TextureRegion underline = new TextureRegion(new Texture("data/textures/underline.png"));
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
 	// guts
 	final OrthographicCamera camera;
 	
 	// game values
-	private int score, displayScore, totalBeatsShown, totalBeatsHit, combo;
-	private String message = null, percentage = "0";
+	private int score, displayScore;
+	private String message = null;
 
 	// music information
 	private final String songInfo;
@@ -64,10 +63,6 @@ class HUD implements IDrawableGameObject {
 			messageFont.setColor(c.r, c.g, c.b, alpha);
 		}
 
-		// calculate the hit percentage
-		if (totalBeatsShown != 0)
-			percentage = String.valueOf((int) (((float) totalBeatsHit / totalBeatsShown) * 100)) + "%";
-
 	}
 	@Override
 	public void draw(SpriteBatch batch){
@@ -77,16 +72,12 @@ class HUD implements IDrawableGameObject {
 		{
 			// gfx
 			batch.draw(bottomFadeBar, 0, 0);
-			batch.draw(underline, Gdx.graphics.getWidth() / 2f - underline.getRegionWidth() / 2f, Gdx.graphics.getHeight() - 40f);
 			
 			// song data
 			hudFont.draw(batch, songInfo, 10, 23);
 
-			// score and score underline
-			hudFont.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() / 2f - 60f, Gdx.graphics.getHeight() - 8f);
-
-			// hit percentage
-			//hudFont.draw(batch, percentage, 10f, Gdx.graphics.getHeight() - 10f);
+			// score
+			hudFont.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);
 
 			// messages
 			if (message != null){
@@ -94,11 +85,6 @@ class HUD implements IDrawableGameObject {
 				messageFont.draw(batch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
 			}
 			
-			// combo
-			//hudFont.draw(batch, String.valueOf("Combo: " + String.format("%03d", combo)), Gdx.graphics.getWidth() - 130, Gdx.graphics.getHeight() - 10f);
-			
-			// fps counter
-			//hudFont.draw(batch, "FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()), Gdx.graphics.getWidth() - 100, 20);
 			
 		}
 		batch.end();
@@ -110,9 +96,6 @@ class HUD implements IDrawableGameObject {
 	}
 	
 	public void updateDisplay(int totalBeatsShown, int totalBeatsHit, int combo, int score){
-		this.totalBeatsShown = totalBeatsShown;
-		this.totalBeatsHit = totalBeatsHit;
-		this.combo = combo;
 		this.score = score;
 	}
 

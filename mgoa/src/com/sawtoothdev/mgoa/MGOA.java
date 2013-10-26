@@ -22,19 +22,24 @@ public class MGOA extends Game {
 		// init
 		Resources.game = this;
 		
-		//	settings
+		// load settings
 		Resources.settings = Gdx.app.getPreferences("settings");
-		if (Resources.settings.contains("firstrun"))
-			Resources.settings.putBoolean("firstrun", false);
-		else
-			Resources.settings.putBoolean("firstrun", true);
 		
 		// copy necessary data to external storage
 		Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external(".tmp/title.mp3"));
 		
 		// initialize necessary resources
-		Resources.menuMusic = new OneShotMusicPlayer(Gdx.files.external(".tmp/title.mp3"));
+		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
 		debugFont = new BitmapFont();
+		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
+		
+		
+		// ~~begin~~
+		
+		if (Resources.settings.contains("firstrun"))
+			Resources.settings.putBoolean("firstrun", false);
+		else
+			Resources.settings.putBoolean("firstrun", true);
 		
 		this.setScreen(new MenuScreen());
 
@@ -46,7 +51,14 @@ public class MGOA extends Game {
 		
 		if (Resources.DEBUG){
 			Resources.defaultSpriteBatch.begin();
-			debugFont.draw(Resources.defaultSpriteBatch, Resources.version, 10, Gdx.graphics.getHeight());
+			debugFont.draw(
+					Resources.defaultSpriteBatch, Resources.VERSION,
+					Gdx.graphics.getWidth() - 120,
+					Gdx.graphics.getHeight());
+			debugFont.draw(
+					Resources.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
+					Gdx.graphics.getWidth() - 120,
+					Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
 			Resources.defaultSpriteBatch.end();
 		}
 	}

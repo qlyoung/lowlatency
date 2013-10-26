@@ -103,7 +103,7 @@ public class LoadScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		{
-			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f - 20f, Gdx.graphics.getHeight() / 2f);
 		}
 		batch.end();
 		

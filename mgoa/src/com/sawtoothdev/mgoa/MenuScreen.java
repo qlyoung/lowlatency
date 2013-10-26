@@ -28,7 +28,6 @@ public class MenuScreen implements Screen {
 		style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/ui/menubutton.png")));
 		
 		
-		
 		TextButton
 			playButton = new TextButton("Play", style),
 			optionsButton = new TextButton("Options", style),
@@ -42,7 +41,15 @@ public class MenuScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
+		optionsButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Resources.game.setScreen(new OptionsScreen());
+				super.clicked(event, x, y);
+			}
+		});
 
+		
 		Table table = new Table();
 		table.setFillParent(true);
 		table.defaults().uniform().padBottom(10);

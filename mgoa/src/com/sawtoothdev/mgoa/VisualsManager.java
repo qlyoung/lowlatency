@@ -16,19 +16,23 @@ import com.sawtoothdev.audioanalysis.Beat;
 
 public class VisualsManager implements IDrawableGameObject {
 
-	private final OrthographicCamera CAMERA = new OrthographicCamera(10, 6);
+	private final OrthographicCamera CAMERA;
 	
 	private final LinkedList<Beat> BEATEVENTS = new LinkedList<Beat>();
 	private final OneShotMusicPlayer MUSIC;
 
-	private PrettyLights lv = new PrettyLights(CAMERA);
+	private PrettyLights lv;
 	
 
-	public VisualsManager(ArrayList<Beat> BEATEVENTS, OneShotMusicPlayer MUSIC) {
+	public VisualsManager(ArrayList<Beat> BEATEVENTS, OneShotMusicPlayer MUSIC, OrthographicCamera camera) {
+		
 		for (Beat b : BEATEVENTS)
 			this.BEATEVENTS.add(b);
 
 		this.MUSIC = MUSIC;
+		this.CAMERA = camera;
+		
+		lv = new PrettyLights(CAMERA);
 		
 	}
 

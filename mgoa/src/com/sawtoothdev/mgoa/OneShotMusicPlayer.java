@@ -33,10 +33,10 @@ public class OneShotMusicPlayer implements IPausable {
 	
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		mark = System.currentTimeMillis();
 		music.pause();
+		mark = System.currentTimeMillis();
 	}
+	
 	/**
 	 * call play() instead
 	 */
@@ -50,10 +50,6 @@ public class OneShotMusicPlayer implements IPausable {
 		return music.isPlaying();
 	}
 	
-	public void setLooping(boolean looping){
-		music.setLooping(looping);
-	}
-	
 	public void setVolume(float volume){
 		music.setVolume(volume);
 	}
@@ -64,7 +60,6 @@ public class OneShotMusicPlayer implements IPausable {
 				return System.currentTimeMillis() - start;
 			else
 				return mark - start;
-				
 		else
 			return 0;
 	}
