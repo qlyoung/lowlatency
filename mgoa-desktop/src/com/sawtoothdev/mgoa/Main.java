@@ -8,8 +8,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "mgoa";
 		cfg.useGL20 = false;
-		cfg.width = 1280;
-		cfg.height = 768;
+		cfg.width = 800;
+		cfg.height = 480;
 		
 		new LwjglApplication(new MGOA(), cfg);
 	}

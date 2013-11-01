@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
@@ -75,6 +76,7 @@ public class LoadScreen implements Screen {
 	private LoadingThread loadThread;
 	private BitmapFont font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
 	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
+	private ProgressBar progressBar = new ProgressBar(new Vector2(20, 20), Gdx.graphics.getWidth() - 40, .05f);
 	
 	public LoadScreen(){
 		camera.setToOrtho(false);
@@ -106,6 +108,8 @@ public class LoadScreen implements Screen {
 			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f - 20f, Gdx.graphics.getHeight() / 2f);
 		}
 		batch.end();
+		
+		progressBar.draw(batch);
 		
 	}
 

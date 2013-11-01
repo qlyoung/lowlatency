@@ -1,9 +1,15 @@
 package com.sawtoothdev.mgoa;
 
+import java.io.IOException;
+
 import org.cmc.music.metadata.MusicMetadata;
 import org.cmc.music.myid3.MyID3;
 
+import adamb.vorbis.VorbisCommentHeader;
+import adamb.vorbis.VorbisIO;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.io.VorbisDecoder;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,15 +40,28 @@ class HUD implements IDrawableGameObject {
 	public HUD(FileHandle audioFile, OrthographicCamera camera) {
 		this.camera = camera;
 		
-		MusicMetadata metadata = null;
+		String title = null, artist = null;
+		
+		if (audioFile.extension().toLowerCase().contains("mp3")){
+			MusicMetadata metadata = null;
+			
+			try { metadata = new MyID3().read(audioFile.file()).merged; }
+			catch (IOException e) { Gdx.app.log("hud", "mp3 metadata read failed"); }
+			
+			title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
+			artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
+		}
+		else if (audioFile.extension().toLowerCase().contains("ogg")) {
+			VorbisCommentHeader comments = null;
+			
+			try {comments = VorbisIO.readComments(audioFile.file());}
+			catch (IOException e) { Gdx.app.log("hud", "ogg metadata read failed"); }
+			
+			title = comments == null ? "Unknown" : comments.fields.get(0).value;
+			artist = comments == null ? "Unknown" : comments.fields.get(1).value;
+		}
 
-		try 
-			{ metadata = new MyID3().read(audioFile.file()).merged; }
-		catch (Exception e)
-			{ Gdx.app.log("hud warning", "Cannot read metadata! Ogg file?"); }
 
-		String title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
-		String artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
 
 		songInfo = artist + " - " + title;
 	}

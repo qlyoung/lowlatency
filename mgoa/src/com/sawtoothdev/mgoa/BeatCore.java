@@ -89,7 +89,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 						dead = true;
 				}
 				
-				core.rotate(delta * 30);
+				core.rotate(delta * 360);
 				
 			}
 

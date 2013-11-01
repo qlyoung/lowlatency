@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="libs/gdx-audio-natives.jar"/>
 	<classpathentry kind="lib" path="libs/box2dlights.jar"/>
 	<classpathentry kind="lib" path="libs/MyID3_for_Android.jar"/>
+	<classpathentry kind="lib" path="libs/jvorbiscomment-1.0.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
