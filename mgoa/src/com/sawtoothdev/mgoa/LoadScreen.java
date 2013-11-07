@@ -47,14 +47,13 @@ public class LoadScreen implements Screen {
 			
 			ArrayList<Beat> beats = null;
 			
-			try {
-				beats = FastBeatDetector.detectBeats(sensitivity, audioFile);
-			} catch (IOException e) {
+			try { beats = FastBeatDetector.detectBeats(audioFile, sensitivity); }
+			catch (IOException e) {
 				Gdx.app.log("Load Screen", e.getMessage());
-				//return;
+				return;
 			}
 			
-			Gdx.app.log("load screen", "load complete, adjusting difficulty...");
+			Gdx.app.log("[Load thread]", "load complete, adjusting difficulty...");
 			
 			ArrayList<Beat> easy, normal, hard, original;
 			
@@ -65,9 +64,9 @@ public class LoadScreen implements Screen {
 			
 			map = new BeatMap(easy, normal, hard, original);
 			
-			Gdx.app.log("Load thread", "garbage collecting...");
+			Gdx.app.log("[Load thread]", "garbage collecting");
 			System.gc();
-			Gdx.app.log("load thread", "processing complete");
+			Gdx.app.log("[Load thread]", "processing complete");
 			
 		}
 		
@@ -104,9 +103,7 @@ public class LoadScreen implements Screen {
 		
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		{
 			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f - 20f, Gdx.graphics.getHeight() / 2f);
-		}
 		batch.end();
 		
 		progressBar.draw(batch);

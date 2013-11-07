@@ -11,12 +11,10 @@ import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.audio.io.VorbisDecoder;
 import com.badlogic.gdx.files.FileHandle;
 
-
-
 /**
- * A lightweight beat detector integrated with LibGDX. Relies on LibGDX
- * decoder classes. Uses mpg123 for decoding and reworked pieces of
- * Minim for Fast Fourier transformations.
+ * A lightweight beat detector integrated with LibGDX.
+ * Relies on LibGDX decoder classes. Uses mpg123 for decoding
+ * and reworked pieces of Minim for Fast Fourier transformations.
  * 
  * This class can handle mp3 and Ogg Vorbis files sampled at 44.1khz.
  * 
@@ -26,9 +24,7 @@ import com.badlogic.gdx.files.FileHandle;
  * 
  */
 
-
 public class FastBeatDetector {
-
 
 	public static class AudioFunctions {
 
@@ -226,9 +222,7 @@ public class FastBeatDetector {
 	
 	}
 
-
 	private static PrintStream debugStream;
-
 
 	public static final float SENSITIVITY_AGGRESSIVE = 1.0f;
 	public static final float SENSITIVITY_STANDARD = 1.4f;
@@ -240,7 +234,7 @@ public class FastBeatDetector {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ArrayList<Beat> detectBeats(float sensitivity, FileHandle audioFile) throws IOException {
+	public static ArrayList<Beat> detectBeats(FileHandle audioFile, float sensitivity) throws IOException {
 
 		long start_time = System.currentTimeMillis();
 
@@ -323,7 +317,6 @@ public class FastBeatDetector {
 		return beats;
 	}
 
-
 	/**
 	 * Set the PrintStream to print debug information to
 	 * 
@@ -333,7 +326,6 @@ public class FastBeatDetector {
 	public static void setDebugStream(PrintStream stream) {
 		debugStream = stream;
 	}
-
 
 	private static void writeDebug(String message) {
 		if (debugStream != null) {

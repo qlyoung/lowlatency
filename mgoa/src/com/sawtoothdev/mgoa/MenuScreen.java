@@ -87,7 +87,8 @@ public class MenuScreen implements Screen {
 	public void show() {
 		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.setVolume(.4f);
-		Resources.menuMusic.play();
+		if (Resources.settings.getBoolean("bgmusic"))
+			Resources.menuMusic.play();
 		System.gc();
 	}
 

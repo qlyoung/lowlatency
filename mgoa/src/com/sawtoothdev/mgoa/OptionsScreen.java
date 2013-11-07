@@ -31,9 +31,7 @@ public class OptionsScreen implements Screen {
 		lblStyle.font = Resources.uiFnt;
 		tbStyle.font = Resources.uiFnt;
 		bgMusicOnLbl = new Label("Background music: ", lblStyle);
-		bgMusicSwitch = new TextButton(
-				Resources.settings.getBoolean("bgmusic") ? "ON" : "OFF",
-				tbStyle);
+		bgMusicSwitch = new TextButton(Resources.settings.getBoolean("bgmusic") ? "ON" : "OFF", tbStyle);
 		bgMusicSwitch.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -74,46 +72,32 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

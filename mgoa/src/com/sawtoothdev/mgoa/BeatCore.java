@@ -43,11 +43,11 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		ring = new Sprite(t, 174, 179);
 		ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
-		
+
 		Texture y = new Texture("data/textures/core.png");
 		y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		core = new Sprite(y);
-		
+
 		reset();
 	}
 
@@ -61,12 +61,11 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 				ring.scale(delta * shrinkRate);
 			else if (!dying)
 				dying = true;
-			
-			
+
 			{// colors, rotation and fading
 
 				c = ring.getColor();
-				
+
 				// approach circle fade-in
 				if (c.a < .95f && !dying) {
 					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
@@ -88,15 +87,13 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 					} else if (c.a <= .05f)
 						dead = true;
 				}
-				
+
 				core.rotate(delta * 360);
-				
 			}
 
 		}
 	}
 	public void draw(SpriteBatch batch){
-		
 		core.draw(batch);
 		ring.draw(batch);
 	}
@@ -109,7 +106,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
 		ring.setPosition(worldPos.x - ring.getWidth() / 2f, worldPos.y - ring.getHeight() / 2f);
 		core.setPosition(worldPos.x - core.getWidth() / 2f, worldPos.y - core.getHeight() / 2f);
-		
+
 	}
 	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
@@ -160,7 +157,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 
 		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
 		ring.setScale(1);
-		
+
 		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
 		core.setRotation(0f);
 		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
@@ -173,7 +170,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		alpha = 1;
 
 	}
-	
+
 	// readers
 	public boolean isDead() {
 		return dead;

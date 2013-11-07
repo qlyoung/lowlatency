@@ -9,7 +9,6 @@ import adamb.vorbis.VorbisCommentHeader;
 import adamb.vorbis.VorbisIO;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.io.VorbisDecoder;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
