@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

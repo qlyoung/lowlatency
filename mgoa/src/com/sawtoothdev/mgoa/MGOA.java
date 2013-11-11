@@ -2,7 +2,9 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.sawtoothdev.mgoa.ui.MenuScreen;
 
 /**
  * Main game class, top level.
@@ -19,7 +21,8 @@ public class MGOA extends Game {
 	@Override
 	public void create() {
 		
-		// init
+		// ~~initialize~~
+		
 		Resources.game = this;
 		
 		// load settings
@@ -32,6 +35,7 @@ public class MGOA extends Game {
 		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
 		debugFont = new BitmapFont();
 		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
+		debugFont.setColor(Color.GREEN);
 		
 		
 		// ~~begin~~
@@ -40,6 +44,8 @@ public class MGOA extends Game {
 			Resources.settings.putBoolean("firstrun", false);
 		else
 			Resources.settings.putBoolean("firstrun", true);
+		
+		//Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
 		
 		this.setScreen(new MenuScreen());
 

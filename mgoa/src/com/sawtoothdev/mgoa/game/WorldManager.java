@@ -1,12 +1,15 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sawtoothdev.mgoa.BeatMap;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 
-public class WorldManager implements IDrawableGameObject {
+public class WorldManager implements IDrawable {
 
 	public final OneShotMusicPlayer music;
 	private final HUD hud;

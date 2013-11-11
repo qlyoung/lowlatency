@@ -1,30 +1,33 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
-import com.sawtoothdev.mgoa.WorldManager.WorldState;
+import com.sawtoothdev.mgoa.BeatMap;
+import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.game.WorldManager.WorldState;
+import com.sawtoothdev.mgoa.ui.MenuScreen;
 
 /**
- * Heart of the game, controls gameplay itself.
+ * THE CORE
  * 
  * @author albatross
- * 
  */
 
-public class PlayScreen implements Screen {
+public class GameScreen implements Screen {
 
-	
 	private final WorldManager worldManager;
-	
-	//state
-	private enum GameScreenState {INITIALIZED, RUNNING, DONE, PAUSED};
+
+	// state
+	private enum GameScreenState {
+		INITIALIZED, RUNNING, DONE, PAUSED
+	};
+
 	private GameScreenState state;
 
-	
-	public PlayScreen(BeatMap map, FileHandle audioFile) {
+	public GameScreen(BeatMap map, FileHandle audioFile) {
 
 		worldManager = new WorldManager(map, audioFile);
-		
+
 		// IT BEGINS
 		state = GameScreenState.INITIALIZED;
 	}
@@ -32,27 +35,29 @@ public class PlayScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		//state update
+		// state update
 		if (worldManager.getState() == WorldState.FINISHED)
 			this.state = GameScreenState.DONE;
-		
-		
+
 		switch (state) {
-		
+
 		case INITIALIZED:
+			// do nothing
 			break;
-			
+
 		case RUNNING:
-			
+			// tick
 			worldManager.update(delta);
 			worldManager.draw(Resources.defaultSpriteBatch);
 			break;
-			
+
 		case DONE:
+			// return to menu
 			Resources.game.setScreen(new MenuScreen());
 			break;
-			
+
 		case PAUSED:
+			// do nothing
 			break;
 		}
 	}
@@ -87,5 +92,5 @@ public class PlayScreen implements Screen {
 	public void dispose() {
 
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.sawtoothdev.mgoa.Resources;
 
 public class OptionsScreen implements Screen {
 

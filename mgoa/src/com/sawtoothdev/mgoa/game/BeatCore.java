@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.IDrawable;
 
-public class BeatCore implements IDrawableGameObject, Poolable {
+public class BeatCore implements IDrawable, Poolable {
 
 	// accuracy feedback
 	public static enum Accuracy {
@@ -149,7 +150,7 @@ public class BeatCore implements IDrawableGameObject, Poolable {
 		else
 			intensityColor = Color.MAGENTA;
 
-		this.core.setColor(Color.WHITE);
+		this.core.setColor(intensityColor);
 		this.ring.setColor(Color.WHITE);
 	}
 	@Override

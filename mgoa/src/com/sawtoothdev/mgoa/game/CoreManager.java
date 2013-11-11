@@ -1,17 +1,19 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.BeatCore.Accuracy;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.OneShotMusicPlayer;
+import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.game.BeatCore.Accuracy;
 
-public class CoreManager implements IDrawableGameObject {
+public class CoreManager implements IDrawable {
 
 	// pools and cores
 	private CorePool corePool = new CorePool();
@@ -55,32 +57,29 @@ public class CoreManager implements IDrawableGameObject {
 
 				for (BeatCore core : activeCores) {
 					
-					if (Resources.DEBUG && Gdx.input.isKeyPressed(Keys.SPACE)){
-						if (core.isDying() && !core.beenHit()){
-							core.onHit(music.currentTime());
+					if (!core.beenHit()){
+						
+						if (core.getHitbox().contains(touchPos.x, touchPos.y) ||
+							Resources.DEBUG && core.isDying()) {
+						
+							// register a hit event with the beat and note the accuracy
+							Accuracy accuracy = core.onHit(music.currentTime());
+							
+							// calculate the score value based on accuracy
+							int divisor = accuracy.ordinal() + 1;
+							int scoreValue = (int) core.getScoreValue() / divisor;
+							
+							// statistics & scoring
+							combo++;
+							totalBeatsHit++;
+							score += scoreValue;
+							
+							// 	pretty lights
 							fx.makeExplosion(core.getPosition(), core.getColor());
-						}
-					}
-					else if (core.getHitbox().contains(touchPos.x, touchPos.y) && !core.beenHit()) {
-						
-						// register a hit event with the beat and note the accuracy
-						Accuracy accuracy = core.onHit(music.currentTime());
-						
-						// calculate the score value based on accuracy
-						int divisor = accuracy.ordinal() + 1;
-						int scoreValue = (int) core.getScoreValue() / divisor;
-						
-						// statistics & scoring
-						combo++;
-						totalBeatsHit++;
-						score += scoreValue;
-						
-						// pretty lights
-						fx.makeExplosion(core.getPosition(), core.getColor());
-						
-						// user feedback
-						hud.showMessage(accuracy.toString() + "!");
-						
+							
+							// user feedback
+							hud.showMessage(accuracy.toString() + "!");
+						}	
 					}
 				}
 			}

@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -22,6 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sawtoothdev.mgoa.BeatMap;
+import com.sawtoothdev.mgoa.Difficulty;
+import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.game.GameScreen;
+import com.sawtoothdev.mgoa.game.Playthrough;
 
 public class PreviewScreen implements Screen {
 
@@ -102,7 +107,7 @@ public class PreviewScreen implements Screen {
 				if (!LOCKED_ON){
 					LOCKED_ON = true;
 					Resources.menuMusic.stop();
-					Resources.game.setScreen(new PlayScreen(map, fileHandle));
+					Resources.game.setScreen(new GameScreen(map, fileHandle));
 				}
 				else
 					super.clicked(event, x, y);

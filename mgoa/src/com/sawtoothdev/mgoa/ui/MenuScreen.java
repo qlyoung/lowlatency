@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -14,26 +14,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sawtoothdev.mgoa.PrettyLights;
+import com.sawtoothdev.mgoa.Resources;
 
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
-	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
+	private PrettyLights prettyLights = new PrettyLights(
+			new OrthographicCamera(10, 6));
+	AudioControl audioControl = new AudioControl();
 
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
-		
+
 		TextButtonStyle style = new TextButtonStyle();
-		style.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
-		style.up = new TextureRegionDrawable(new TextureRegion(new Texture("data/textures/ui/menubutton.png")));
-		
-		
-		TextButton
-			playButton = new TextButton("Play", style),
-			optionsButton = new TextButton("Options", style),
-			statsButton = new TextButton("Leaderboards", style),
-			creditsButton = new TextButton("Credits", style);
-		
+		style.font = new BitmapFont(
+				Gdx.files.internal("data/fonts/naipol.fnt"), false);
+		style.up = new TextureRegionDrawable(new TextureRegion(new Texture(
+				"data/textures/ui/menubutton.png")));
+
+		TextButton playButton = new TextButton("Play", style), optionsButton = new TextButton(
+				"Options", style), statsButton = new TextButton("Leaderboards",
+				style), creditsButton = new TextButton("Credits", style);
+
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -41,7 +44,7 @@ public class MenuScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
-		optionsButton.addListener(new ClickListener(){
+		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Resources.game.setScreen(new OptionsScreen());
@@ -49,11 +52,10 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		
 		Table table = new Table();
 		table.setFillParent(true);
 		table.defaults().uniform().padBottom(10);
-		
+
 		table.add(playButton);
 		table.row();
 		table.add(optionsButton);
@@ -62,25 +64,25 @@ public class MenuScreen implements Screen {
 		table.row();
 		table.add(creditsButton);
 		table.row();
-		
+
 		stage.addActor(table);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		prettyLights.update(delta);
 		prettyLights.draw(null);
 		stage.act();
 		stage.draw();
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		
+
 	}
 
 	@Override
@@ -94,22 +96,22 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
 	public void dispose() {
-		
+
 	}
 
 }

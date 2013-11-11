@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +14,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
+import com.sawtoothdev.mgoa.BeatMap;
+import com.sawtoothdev.mgoa.Difficulty;
+import com.sawtoothdev.mgoa.PrettyLights;
+import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.game.Playthrough;
 
 /**
  * Responsible for loading all resources before gameplay begins.
@@ -43,7 +48,7 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
-			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
+			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE + 1;
 			
 			ArrayList<Beat> beats = null;
 			

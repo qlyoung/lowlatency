@@ -1,6 +1,6 @@
 package com.sawtoothdev.mgoa;
 
-public interface IGameObject {
+public interface IUpdateable {
 	
 	/**
 	 * Updates this object's logic

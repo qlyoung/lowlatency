@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import java.util.LinkedList;
 
@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
+import com.sawtoothdev.mgoa.IDrawable;
 
-public class FxBox implements IDrawableGameObject {
+public class FxBox implements IDrawable {
 
 	private OrthographicCamera camera;
 	private EffectsPool pool = new EffectsPool();
@@ -62,18 +63,22 @@ public class FxBox implements IDrawableGameObject {
 		
 		ParticleEffect effect = pool.obtain();
 		
+		String path = "data/effects/white-explosion.p";
+		
 		if (color.toIntBits() == Color.MAGENTA.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/purple-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/purple.p";
 		else if (color.toIntBits() == Color.BLUE.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/blue-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/blue.p";
 		else if (color.toIntBits() == Color.GREEN.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/green-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/green.p";
 		else if (color.toIntBits() == Color.YELLOW.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/yellow-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/yellow.p";
 		else if (color.toIntBits() == Color.ORANGE.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/orange-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/orange.p";
 		else if (color.toIntBits() == Color.RED.toIntBits())
-			effect.load(Gdx.files.internal("data/effects/red-explosion.p"), Gdx.files.internal("data/effects/"));
+			path = "data/effects/red.p";
+		
+		effect.load(Gdx.files.internal(path), Gdx.files.internal("data/effects/"));
 		
 		effect.setPosition(position.x, position.y);
 		effect.allowCompletion();

@@ -1,6 +1,7 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.sawtoothdev.mgoa.Difficulty;
 
 public class Playthrough {
 	
