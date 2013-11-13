@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
+import com.sawtoothdev.mgoa.Resources;
 
 public class WorldManager implements IDrawable {
 
@@ -18,7 +19,6 @@ public class WorldManager implements IDrawable {
 	private final VisualsManager visuals;
 	
 	private final OrthographicCamera worldCamera;
-	private final OrthographicCamera screenCamera;
 	
 	public enum WorldState { INITIALIZED, ACTIVE, PAUSED, FINISHED };
 	private WorldState state;
@@ -26,11 +26,11 @@ public class WorldManager implements IDrawable {
 	
 	public WorldManager(BeatMap map, FileHandle audioFile){
 		worldCamera = new OrthographicCamera(10, 6);
-		screenCamera = new OrthographicCamera();
-		screenCamera.setToOrtho(false);
+		Resources.screenCam = new OrthographicCamera();
+		Resources.screenCam.setToOrtho(false);
 		
 		music = new OneShotMusicPlayer(audioFile);
-		hud = new HUD(audioFile, screenCamera);
+		hud = new HUD(audioFile, Resources.screenCam);
 		fxBox = new FxBox(worldCamera);
 		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL, worldCamera);
 		visuals = new VisualsManager(map.ORIGINAL, music, worldCamera);
@@ -57,7 +57,7 @@ public class WorldManager implements IDrawable {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		worldCamera.update();
-		screenCamera.update();
+		Resources.screenCam.update();
 
 		visuals.draw(batch);
 		fxBox.draw(batch);

@@ -27,7 +27,7 @@ public class PrettyLights implements IDrawable {
 	private RayHandler rayHandler;
 	private ArrayList<Light> lights = new ArrayList<Light>();
 
-	public PrettyLights(OrthographicCamera camera) {
+	public PrettyLights(OrthographicCamera camera, int numLights) {
 
 		makeWall(5, 0, .25f, 6);
 		makeWall(-5, 0, .25f, 6);
@@ -37,10 +37,8 @@ public class PrettyLights implements IDrawable {
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(camera.combined);
 
-		for (int i = 0; i < 3; i++)
-			makeOrb(Color.WHITE, Resources.random.nextFloat() + .5f);
-		for (int i = 0; i < 3; i++)
-			makeOrb(Color.WHITE, Resources.random.nextFloat() + .5f);
+		for (int i = 0; i < numLights; i++)
+			makeOrb(Color.BLUE, Resources.random.nextFloat() + .5f);
 
 	}
 
@@ -71,8 +69,6 @@ public class PrettyLights implements IDrawable {
 			else
 				l.setDistance(lightDistance);
 
-			// l.setColor(Color.RED.r * b.energy, Color.RED.g * b.energy,
-			// Color.RED.b * b.energy, l.getColor().a);
 		}
 
 		Iterator<Body> bodies = world.getBodies();
@@ -104,7 +100,7 @@ public class PrettyLights implements IDrawable {
 		Body orbBody = world.createBody(orbDef);
 
 		CircleShape circle = new CircleShape();
-		circle.setRadius(1f);
+		circle.setRadius(.5f);
 		FixtureDef circfix = new FixtureDef();
 		circfix.shape = circle;
 		circfix.friction = 0f;

@@ -21,29 +21,29 @@ public class VisualsManager implements IDrawable {
 
 	private final OrthographicCamera CAMERA;
 
-	private final LinkedList<Beat> BEATEVENTS = new LinkedList<Beat>();
+	private final LinkedList<Beat> BEAT_EVENTS = new LinkedList<Beat>();
 	private final OneShotMusicPlayer MUSIC;
 
 	private PrettyLights lv;
 
-	public VisualsManager(ArrayList<Beat> BEATEVENTS, OneShotMusicPlayer MUSIC,
+	public VisualsManager(ArrayList<Beat> beatEvents, OneShotMusicPlayer music,
 			OrthographicCamera camera) {
 
-		for (Beat b : BEATEVENTS)
-			this.BEATEVENTS.add(b);
+		for (Beat b : beatEvents)
+			this.BEAT_EVENTS.add(b);
 
-		this.MUSIC = MUSIC;
+		this.MUSIC = music;
 		this.CAMERA = camera;
 
-		lv = new PrettyLights(CAMERA);
+		lv = new PrettyLights(CAMERA, 7);
 
 	}
 
 	@Override
 	public void update(float delta) {
-		while (BEATEVENTS.peek() != null
-				&& MUSIC.currentTime() >= BEATEVENTS.peek().timeMs)
-			react(BEATEVENTS.poll());
+		while (BEAT_EVENTS.peek() != null
+				&& MUSIC.currentTime() >= BEAT_EVENTS.peek().timeMs)
+			react(BEAT_EVENTS.poll());
 
 		lv.update(delta);
 	}

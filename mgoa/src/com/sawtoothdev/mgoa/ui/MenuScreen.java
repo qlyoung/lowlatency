@@ -21,7 +21,7 @@ public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private PrettyLights prettyLights = new PrettyLights(
-			new OrthographicCamera(10, 6));
+			new OrthographicCamera(10, 6), 15);
 	AudioControl audioControl = new AudioControl();
 
 	public MenuScreen() {
@@ -66,6 +66,8 @@ public class MenuScreen implements Screen {
 		table.row();
 
 		stage.addActor(table);
+		
+		audioControl.setPosition(20, 20);
 	}
 
 	@Override
@@ -74,10 +76,12 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		prettyLights.update(delta);
+		stage.act(delta);
+		audioControl.update(delta);
+		
 		prettyLights.draw(null);
-		stage.act();
 		stage.draw();
-
+		audioControl.draw(Resources.defaultSpriteBatch);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -31,6 +32,7 @@ public class Resources {
 	
 	// gfx
 	public static SpriteBatch defaultSpriteBatch = new SpriteBatch();
+	public static OrthographicCamera screenCam = new OrthographicCamera();
 	
 	// ui
 	public static BitmapFont uiFnt = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);

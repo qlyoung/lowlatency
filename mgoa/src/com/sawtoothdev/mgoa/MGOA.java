@@ -37,6 +37,8 @@ public class MGOA extends Game {
 		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
 		debugFont.setColor(Color.GREEN);
 		
+		Resources.screenCam.setToOrtho(false);
+		
 		
 		// ~~begin~~
 		
@@ -56,6 +58,7 @@ public class MGOA extends Game {
 		super.render();
 		
 		if (Resources.DEBUG){
+			Resources.defaultSpriteBatch.setProjectionMatrix(Resources.screenCam.combined);
 			Resources.defaultSpriteBatch.begin();
 			debugFont.draw(
 					Resources.defaultSpriteBatch, Resources.VERSION,

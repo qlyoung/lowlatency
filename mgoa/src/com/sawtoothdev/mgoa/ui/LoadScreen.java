@@ -33,7 +33,6 @@ import com.sawtoothdev.mgoa.game.Playthrough;
 
 public class LoadScreen implements Screen {
 	
-	private OrthographicCamera camera = new OrthographicCamera();
 	private SpriteBatch batch = Resources.defaultSpriteBatch;
 	
 	public class LoadingThread extends Thread{
@@ -48,7 +47,7 @@ public class LoadScreen implements Screen {
 		@Override
 		public void run() {
 			
-			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE + 1;
+			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE - .5f;
 			
 			ArrayList<Beat> beats = null;
 			
@@ -79,11 +78,11 @@ public class LoadScreen implements Screen {
 	
 	private LoadingThread loadThread;
 	private BitmapFont font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
-	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6));
+	private PrettyLights prettyLights = new PrettyLights(new OrthographicCamera(10, 6), 15);
 	private ProgressBar progressBar = new ProgressBar(new Vector2(20, 20), Gdx.graphics.getWidth() - 40, .05f);
 	
 	public LoadScreen(){
-		camera.setToOrtho(false);
+		
 	}
 	
 	@Override
@@ -106,7 +105,7 @@ public class LoadScreen implements Screen {
 		
 		prettyLights.draw(null);
 		
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(Resources.screenCam.combined);
 		batch.begin();
 			font.draw(Resources.defaultSpriteBatch, "Loading...", Gdx.graphics.getWidth() / 2f - 20f, Gdx.graphics.getHeight() / 2f);
 		batch.end();
