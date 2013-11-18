@@ -7,6 +7,6 @@ public class Playthrough {
 	
 	public static Difficulty difficulty = Difficulty.NORMAL;
 	public static FileHandle songHandle;
-	public static long finalScore;
+	public static Stats stats;
 
 }

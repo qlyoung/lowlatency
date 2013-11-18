@@ -2,8 +2,6 @@ package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,8 +18,7 @@ import com.sawtoothdev.mgoa.Resources;
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
-	private PrettyLights prettyLights = new PrettyLights(
-			new OrthographicCamera(10, 6), 15);
+	private PrettyLights prettyLights = new PrettyLights(15);
 	AudioControl audioControl = new AudioControl();
 
 	public MenuScreen() {
@@ -66,22 +63,25 @@ public class MenuScreen implements Screen {
 		table.row();
 
 		stage.addActor(table);
-		
-		audioControl.setPosition(20, 20);
+
+		audioControl.setPosition(10, 10);
 	}
 
 	@Override
 	public void render(float delta) {
 
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		{// update
+			prettyLights.update(delta);
+			stage.act(delta);
+			audioControl.update(delta);
+		}
 
-		prettyLights.update(delta);
-		stage.act(delta);
-		audioControl.update(delta);
-		
-		prettyLights.draw(null);
-		stage.draw();
-		audioControl.draw(Resources.defaultSpriteBatch);
+		{// draw
+			prettyLights.draw(null);
+			stage.draw();
+			audioControl.draw(Resources.defaultSpriteBatch);
+		}
+
 	}
 
 	@Override
@@ -93,7 +93,8 @@ public class MenuScreen implements Screen {
 	public void show() {
 		Resources.menuMusic.setLooping(true);
 		Resources.menuMusic.setVolume(.4f);
-		if (Resources.settings.getBoolean("bgmusic"))
+		if (!Resources.settings.contains("bgmusic")
+				|| Resources.settings.getBoolean("bgmusic"))
 			Resources.menuMusic.play();
 		System.gc();
 	}

@@ -8,7 +8,6 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -20,6 +19,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
 
+/**
+ * Eye candy for a more...synchronized age.
+ * @author snowdrift
+ *
+ */
+
 public class PrettyLights implements IDrawable {
 
 	private World world = new World(new Vector2(0, 0), false);
@@ -27,7 +32,7 @@ public class PrettyLights implements IDrawable {
 	private RayHandler rayHandler;
 	private ArrayList<Light> lights = new ArrayList<Light>();
 
-	public PrettyLights(OrthographicCamera camera, int numLights) {
+	public PrettyLights(int numLights) {
 
 		makeWall(5, 0, .25f, 6);
 		makeWall(-5, 0, .25f, 6);
@@ -35,7 +40,7 @@ public class PrettyLights implements IDrawable {
 		makeWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
-		rayHandler.setCombinedMatrix(camera.combined);
+		rayHandler.setCombinedMatrix(Resources.worldCam.combined);
 
 		for (int i = 0; i < numLights; i++)
 			makeOrb(Color.BLUE, Resources.random.nextFloat() + .5f);
@@ -100,7 +105,7 @@ public class PrettyLights implements IDrawable {
 		Body orbBody = world.createBody(orbDef);
 
 		CircleShape circle = new CircleShape();
-		circle.setRadius(.5f);
+		circle.setRadius(.75f);
 		FixtureDef circfix = new FixtureDef();
 		circfix.shape = circle;
 		circfix.friction = 0f;

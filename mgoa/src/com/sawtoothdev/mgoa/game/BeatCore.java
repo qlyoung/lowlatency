@@ -183,7 +183,7 @@ public class BeatCore implements IDrawable, Poolable {
 		return new Rectangle(position.x - .5f, position.y - .5f, 1f, 1f);
 	}
 	public int getScoreValue() {
-		return (int) (beat.energy * 1000);
+		return (int) (beat.energy * 100);
 	}
 	public Vector2 getPosition() {
 		return position;

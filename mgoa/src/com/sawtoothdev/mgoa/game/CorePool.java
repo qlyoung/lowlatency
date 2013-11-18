@@ -4,8 +4,8 @@ import com.badlogic.gdx.utils.Pool;
 
 public class CorePool extends Pool<BeatCore> {
 
-	
 	public CorePool(){
+		
 	}
 	
 	@Override

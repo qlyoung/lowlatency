@@ -4,22 +4,17 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.Resources;
 
 public class FxBox implements IDrawable {
 
-	private OrthographicCamera camera;
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
-	
-	public FxBox(OrthographicCamera camera){
-		this.camera = camera;
-	}
 	
 	@Override
 	public void update(float delta) {
@@ -49,7 +44,7 @@ public class FxBox implements IDrawable {
 		}
 		
 		// draw
-        batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(Resources.worldCam.combined);
         batch.begin();
         {
         	for (ParticleEffect effect : effects)

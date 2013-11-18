@@ -11,25 +11,21 @@ import adamb.vorbis.VorbisIO;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.Resources;
 
 class HUD implements IDrawable {
 
 	// fonts
 	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
-	private BitmapFont hudFont = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
 
 	// gfx
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
-	// guts
-	final OrthographicCamera camera;
-	
 	// game values
 	private int score, displayScore;
 	private String message = null;
@@ -37,8 +33,7 @@ class HUD implements IDrawable {
 	// music information
 	private final String songInfo;
 
-	public HUD(FileHandle audioFile, OrthographicCamera camera) {
-		this.camera = camera;
+	public HUD(FileHandle audioFile) {
 		
 		String title = null, artist = null;
 		
@@ -75,7 +70,7 @@ class HUD implements IDrawable {
 		else if (displayScore > score)
 			displayScore = score;
 
-		// update the message fade
+		// fade messages
 		Color c = messageFont.getColor();
 		if (c.a > 0f) {
 			float alpha = (c.a - delta) < 0 ? 0 : c.a - delta;
@@ -86,17 +81,17 @@ class HUD implements IDrawable {
 	@Override
 	public void draw(SpriteBatch batch){
 		
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(Resources.screenCam.combined);
 		batch.begin();
 		{
 			// gfx
 			batch.draw(bottomFadeBar, 0, 0);
 			
 			// song data
-			hudFont.draw(batch, songInfo, 10, 23);
-
+			Resources.uiFnt.draw(batch, songInfo, 10, 23);
+			
 			// score
-			hudFont.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);
+			Resources.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);
 
 			// messages
 			if (message != null){

@@ -8,7 +8,7 @@ import com.sawtoothdev.mgoa.game.WorldManager.WorldState;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
 
 /**
- * THE CORE
+ * What are we here for, anyway?
  * 
  * @author albatross
  */
@@ -35,29 +35,21 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		// state update
-		if (worldManager.getState() == WorldState.FINISHED)
-			this.state = GameScreenState.DONE;
-
 		switch (state) {
 
 		case INITIALIZED:
-			// do nothing
 			break;
-
 		case RUNNING:
-			// tick
 			worldManager.update(delta);
 			worldManager.draw(Resources.defaultSpriteBatch);
+			if (worldManager.getState() == WorldState.FINISHED)
+				this.state = GameScreenState.DONE;
 			break;
-
 		case DONE:
-			// return to menu
 			Resources.game.setScreen(new MenuScreen());
 			break;
-
 		case PAUSED:
-			// do nothing
+		default:
 			break;
 		}
 	}

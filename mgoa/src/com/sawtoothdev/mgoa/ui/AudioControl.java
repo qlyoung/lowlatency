@@ -11,20 +11,32 @@ import com.sawtoothdev.mgoa.Resources;
 
 public class AudioControl extends Sprite implements IDrawable {
 	
-	private Sprite audioBtn = new Sprite(new Texture("data/textures/audio.png"));
+	Texture on = new Texture("data/textures/ui/audio-on.png"),
+			off = new Texture("data/textures/ui/audio-off.png");
+	
+	private Sprite audioBtn = new Sprite(on);
 
+	
 	@Override
 	public void update(float delta) {
 		
-		Vector2 lastTouch = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-		Rectangle spriteBox = audioBtn.getBoundingRectangle();
-		
-		if (spriteBox.contains(lastTouch.x, lastTouch.y)){
+		if (Gdx.input.justTouched()) {
+			Vector2 lastTouch = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			Rectangle spriteBox = audioBtn.getBoundingRectangle();
 			
-			if (Resources.menuMusic.isPlaying())
-				Resources.menuMusic.pause();
-			else
-				Resources.menuMusic.play();
+			if (spriteBox.contains(lastTouch.x, lastTouch.y)){
+				
+				if (Resources.menuMusic.isPlaying()){
+					Resources.menuMusic.pause();
+					audioBtn.setTexture(off);
+				}
+				else {
+					Resources.menuMusic.play();
+					audioBtn.setTexture(on);
+				}
+				
+			}
+			
 		}
 			
 	}

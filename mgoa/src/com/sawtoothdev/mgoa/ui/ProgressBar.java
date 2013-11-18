@@ -13,17 +13,18 @@ public class ProgressBar {
 
 	private BitmapFont progressFont = new BitmapFont();
 
-	public ProgressBar(Vector2 position, int width, float initialValue){
+	public ProgressBar(Vector2 position, int width, float max, float value) {
 		this.width = width;
-		this.setValue(initialValue);
+		this.setValue(value);
 		this.position = position;
 
 		progressFont.setFixedWidthGlyphs("abcdefghijklmnopqrstuvwxyz=][<>.");
 	}
 
-	public void setValue(float value){
+	public void setValue(float value) {
 		float barWidth = value * width;
-		int segments = Math.round((barWidth / progressFont.getSpaceWidth()) / 2f);
+		int segments =
+				Math.round((barWidth / progressFont.getSpaceWidth()) / 2f);
 
 		bar = new String();
 		for (int i = 0; i < segments; i++)
@@ -31,14 +32,16 @@ public class ProgressBar {
 
 		bar += ">";
 	}
-	public void setPosition(Vector2 position){
+
+	public void setPosition(Vector2 position) {
 		this.position = position;
 	}
 
-	public void draw(SpriteBatch batch){
+	public void draw(SpriteBatch batch) {
 		batch.begin();
 		progressFont.draw(batch, "[", position.x, position.y);
-		progressFont.draw(batch, bar, position.x + progressFont.getSpaceWidth(), position.y);
+		progressFont.draw(batch, bar,
+				position.x + progressFont.getSpaceWidth(), position.y);
 		progressFont.draw(batch, "]", position.x + width, position.y);
 		batch.end();
 	}

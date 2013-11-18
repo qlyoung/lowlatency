@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,7 +19,7 @@ import com.sawtoothdev.mgoa.game.Playthrough;
 public class ChooseSongScreen implements Screen {
 
 	private final Stage stage;
-	private final Table container;
+	private final Table root;
 		private final Table directoryTable;
 		private final TextButton backButton, homeButton;
 		
@@ -71,9 +70,9 @@ public class ChooseSongScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		
 		// root element
-		container = new Table();
-		container.setFillParent(true);
-		stage.addActor(container);
+		root = new Table();
+		root.setFillParent(true);
+		stage.addActor(root);
 
 		// directory and file list
 		directoryTable = new Table();
@@ -93,11 +92,11 @@ public class ChooseSongScreen implements Screen {
 		homeButton.addListener(homeListener);
 
 		// container setup
-		container.add(homeButton).expandX().left();
-		container.row();
-		container.add(new ScrollPane(directoryTable)).expand();
-		container.row();
-		container.add(backButton);
+		root.add(homeButton).expandX().left();
+		root.row();
+		root.add(new ScrollPane(directoryTable)).expand();
+		root.row();
+		root.add(backButton);
 		
 		// load root of external file system
 		updateTable(Gdx.files.external(""));
@@ -141,8 +140,6 @@ public class ChooseSongScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
-
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		stage.act();
 		stage.draw();

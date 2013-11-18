@@ -1,9 +1,8 @@
 package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -62,13 +61,16 @@ public class OptionsScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		stage.act();
-
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		stage.draw();
+		{// update
+			if (Gdx.input.isKeyPressed(Keys.ESCAPE))
+				Resources.game.setScreen(new MenuScreen());
+			stage.act();
+		}
 		
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-			Resources.game.setScreen(new MenuScreen());
+		{// draw
+			stage.draw();
+		}
+
 	}
 
 	@Override

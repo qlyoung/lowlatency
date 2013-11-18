@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -19,9 +18,6 @@ public class CoreManager implements IDrawable {
 	private CorePool corePool = new CorePool();
 	private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 
-	// gfx
-	private OrthographicCamera camera;
-	
 	// event list
 	private LinkedList<Beat> events = new LinkedList<Beat>();
 
@@ -36,12 +32,11 @@ public class CoreManager implements IDrawable {
 	private HUD hud;
 
 	
-	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events, OrthographicCamera camera){
+	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events){
 		
 		for (Beat b : events)
 			this.events.add(b);
 		
-		this.camera = camera;
 		this.music = music;
 		this.fx = fx;
 		this.hud = hud;
@@ -53,7 +48,7 @@ public class CoreManager implements IDrawable {
 			// input
 			if (Gdx.input.isTouched()) {
 
-				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), camera);
+				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 				for (BeatCore core : activeCores) {
 					
@@ -119,7 +114,7 @@ public class CoreManager implements IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 
-		batch.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(Resources.worldCam.combined);
 		batch.begin();
 		{
 			for (BeatCore core : activeCores)

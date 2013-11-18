@@ -3,7 +3,7 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.GL10;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
 
 /**
@@ -15,8 +15,6 @@ import com.sawtoothdev.mgoa.ui.MenuScreen;
  */
 
 public class MGOA extends Game {
-	
-	private BitmapFont debugFont;
 	
 	@Override
 	public void create() {
@@ -33,9 +31,8 @@ public class MGOA extends Game {
 		
 		// initialize necessary resources
 		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
-		debugFont = new BitmapFont();
-		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
-		debugFont.setColor(Color.GREEN);
+		Resources.debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
+		Resources.debugFont.setColor(Color.GREEN);
 		
 		Resources.screenCam.setToOrtho(false);
 		
@@ -46,28 +43,28 @@ public class MGOA extends Game {
 			Resources.settings.putBoolean("firstrun", false);
 		else
 			Resources.settings.putBoolean("firstrun", true);
-		
-		//Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
-		
+				
 		this.setScreen(new MenuScreen());
 
 	}
 
 	@Override
 	public void render() {
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		super.render();
 		
 		if (Resources.DEBUG){
 			Resources.defaultSpriteBatch.setProjectionMatrix(Resources.screenCam.combined);
 			Resources.defaultSpriteBatch.begin();
-			debugFont.draw(
+			Resources.debugFont.draw(
 					Resources.defaultSpriteBatch, Resources.VERSION,
 					Gdx.graphics.getWidth() - 120,
 					Gdx.graphics.getHeight());
-			debugFont.draw(
+			Resources.debugFont.draw(
 					Resources.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
 					Gdx.graphics.getWidth() - 120,
-					Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
+					Gdx.graphics.getHeight() - Resources.debugFont.getCapHeight() - 10);
 			Resources.defaultSpriteBatch.end();
 		}
 	}

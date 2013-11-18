@@ -1,14 +1,10 @@
 package com.sawtoothdev.mgoa.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
-import com.sawtoothdev.mgoa.Resources;
 
 public class WorldManager implements IDrawable {
 
@@ -16,61 +12,71 @@ public class WorldManager implements IDrawable {
 	private final HUD hud;
 	private final FxBox fxBox;
 	private final CoreManager coreManager;
-	private final VisualsManager visuals;
-	
-	private final OrthographicCamera worldCamera;
-	
-	public enum WorldState { INITIALIZED, ACTIVE, PAUSED, FINISHED };
+	private final Countdown countdown;
+	private final EyeCandy eyecandy;
+
+	public enum WorldState {
+		INITIALIZED, COUNTDOWN, ACTIVE, PAUSED, FINISHED
+	};
+
 	private WorldState state;
-	
-	
-	public WorldManager(BeatMap map, FileHandle audioFile){
-		worldCamera = new OrthographicCamera(10, 6);
-		Resources.screenCam = new OrthographicCamera();
-		Resources.screenCam.setToOrtho(false);
-		
+
+	public WorldManager(BeatMap map, FileHandle audioFile) {
+
 		music = new OneShotMusicPlayer(audioFile);
-		hud = new HUD(audioFile, Resources.screenCam);
-		fxBox = new FxBox(worldCamera);
-		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL, worldCamera);
-		visuals = new VisualsManager(map.ORIGINAL, music, worldCamera);
-		
+		hud = new HUD(audioFile);
+		fxBox = new FxBox();
+		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL);
+		eyecandy = new EyeCandy(map.ORIGINAL, music);
+		countdown = new Countdown(hud, 4);
+
 		state = WorldState.INITIALIZED;
 	}
-	
+
 	@Override
 	public void update(float delta) {
-		
-		visuals.update(delta);
-		coreManager.update(delta);
-		fxBox.update(delta);
-		hud.update(delta);
-		
-		if (state == WorldState.ACTIVE)
+
+		switch (state) {
+		case INITIALIZED:
+			break;
+		case COUNTDOWN:
+			countdown.update(delta);
+			hud.update(delta);
+			if (countdown.isFinished()){
+				state = WorldState.ACTIVE;
+				music.play();
+			}
+			break;
+		case ACTIVE:
+			eyecandy.update(delta);
+			coreManager.update(delta);
+			fxBox.update(delta);
+			hud.update(delta);
 			if (!music.isPlaying())
 				state = WorldState.FINISHED;
+			break;
+		case PAUSED:
+		case FINISHED:
+		default:
+			break;
+		}
+
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		worldCamera.update();
-		Resources.screenCam.update();
 
-		visuals.draw(batch);
+		eyecandy.draw(batch);
 		fxBox.draw(batch);
 		coreManager.draw(batch);
 		hud.draw(batch);
 	}
-	
-	public void start(){
-		music.play();
-		state = WorldState.ACTIVE;
+
+	public void start() {
+		state = WorldState.COUNTDOWN;
 	}
-	
-	public WorldState getState(){
+
+	public WorldState getState() {
 		return state;
 	}
 
