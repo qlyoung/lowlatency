@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.Song;
 import com.sawtoothdev.mgoa.game.Playthrough;
 
 public class ChooseSongScreen implements Screen {
@@ -40,7 +41,7 @@ public class ChooseSongScreen implements Screen {
 			if (newPath.isDirectory()) {
 				updateTable(newPath);
 			} else {
-				Playthrough.songHandle = Gdx.files.external(actor.getName());
+				Playthrough.song = new Song(Gdx.files.external(actor.getName()));
 				Gdx.input.setInputProcessor(null);
 				Resources.game.setScreen(new LoadScreen());
 			}

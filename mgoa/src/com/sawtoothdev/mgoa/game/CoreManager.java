@@ -8,11 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.game.BeatCore.Accuracy;
 
-public class CoreManager implements IDrawable {
+public class CoreManager implements IUpdateable, IDrawable {
 
 	// pools and cores
 	private CorePool corePool = new CorePool();

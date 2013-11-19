@@ -4,9 +4,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 
-public class WorldManager implements IDrawable {
+public class WorldManager implements IUpdateable, IDrawable {
 
 	public final OneShotMusicPlayer music;
 	private final HUD hud;
@@ -24,7 +25,7 @@ public class WorldManager implements IDrawable {
 	public WorldManager(BeatMap map, FileHandle audioFile) {
 
 		music = new OneShotMusicPlayer(audioFile);
-		hud = new HUD(audioFile);
+		hud = new HUD();
 		fxBox = new FxBox();
 		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL);
 		eyecandy = new EyeCandy(map.ORIGINAL, music);

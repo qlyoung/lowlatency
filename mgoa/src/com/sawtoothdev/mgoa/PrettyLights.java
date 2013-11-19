@@ -25,7 +25,7 @@ import com.sawtoothdev.audioanalysis.Beat;
  *
  */
 
-public class PrettyLights implements IDrawable {
+public class PrettyLights implements IUpdateable, IDrawable {
 
 	private World world = new World(new Vector2(0, 0), false);
 
@@ -67,7 +67,7 @@ public class PrettyLights implements IDrawable {
 	public void react(Beat b) {
 
 		for (Light l : lights) {
-			float lightDistance = l.getDistance() + b.energy * 3;
+			float lightDistance = l.getDistance() + b.energy * 4;
 
 			if (lightDistance > 3)
 				l.setDistance(3);
@@ -81,7 +81,7 @@ public class PrettyLights implements IDrawable {
 		while (bodies.hasNext()) {
 			float min = .03f;
 			float max = 1.0f;
-			float multiplier = 10 * b.energy;
+			float multiplier = 30 * b.energy;
 
 			float xImpulse = ((max - min) * Resources.random.nextFloat() + min)
 					* multiplier;

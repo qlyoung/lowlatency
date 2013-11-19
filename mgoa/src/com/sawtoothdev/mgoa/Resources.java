@@ -23,6 +23,7 @@ public class Resources {
 	// info
 	public static final String VERSION = "pre-alpha";
 	public static final boolean DEBUG = true;
+	public static final DebugInfo debugInfo = new DebugInfo();
 
 	// flow control
 	public static Game game;
@@ -44,7 +45,6 @@ public class Resources {
 
 	// miscellaneous
 	public static final Random random = new Random();
-	public static final BitmapFont debugFont = new BitmapFont();
 	public static final BitmapFont defaultFont = new BitmapFont();
 
 	// projection/unprojection convenience methods

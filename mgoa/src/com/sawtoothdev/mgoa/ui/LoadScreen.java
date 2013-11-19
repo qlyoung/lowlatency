@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
@@ -43,7 +42,7 @@ public class LoadScreen implements Screen {
 
 		@Override
 		public void run() {
-
+			
 			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE - .5f;
 
 			ArrayList<Beat> beats = null;
@@ -55,6 +54,11 @@ public class LoadScreen implements Screen {
 				return;
 			}
 
+			
+			//maybe process the beats somehow so they
+			//have a minimum energy level?
+			
+			
 			ArrayList<Beat> easy, normal, hard, original;
 
 			easy = BeatsProcessor.removeCloseBeats(beats,
@@ -74,8 +78,6 @@ public class LoadScreen implements Screen {
 
 	private LoadingThread loadThread;
 	private PrettyLights prettyLights = new PrettyLights(15);
-	private ProgressBar progressBar = new ProgressBar(new Vector2(20, 20),
-			Gdx.graphics.getWidth() - 40, 1, .05f);
 
 	public LoadScreen() {
 
@@ -108,14 +110,13 @@ public class LoadScreen implements Screen {
 						Gdx.graphics.getHeight() / 2f);
 			batch.end();
 
-			progressBar.draw(batch);
 		}
 
 	}
 
 	@Override
 	public void show() {
-		loadThread = new LoadingThread(Playthrough.songHandle);
+		loadThread = new LoadingThread(Playthrough.song.getHandle());
 		loadThread.start();
 	}
 

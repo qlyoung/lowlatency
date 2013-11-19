@@ -33,46 +33,48 @@ public class PreviewScreen implements Screen {
 	Label difficulty, txtTotalBeats, beatCount, length, title;
 	SelectBox difficultySelector;
 	TextButton playButton;
-	
-	private boolean LOCKED_ON = false;
-	
+
 	private int totalBeats = 0;
-	
-	
+
 	public PreviewScreen(final BeatMap map, final FileHandle fileHandle) {
-		
+
 		Gdx.input.setInputProcessor(this.stage);
-		
+
 		// styles
 		LabelStyle lStyle = new LabelStyle();
-		lStyle.font = new BitmapFont(Gdx.files.internal("data/fonts/naipol.fnt"), false);
+		lStyle.font = new BitmapFont(
+				Gdx.files.internal("data/fonts/naipol.fnt"), false);
 		TextButtonStyle tStyle = new TextButtonStyle();
 		tStyle.font = lStyle.font;
-		
-		TextureRegionDrawable downArrow = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/downarrow.png"))));
-		TextureRegionDrawable graybg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/dropdown-bg.png"))));
-		TextureRegionDrawable clearbg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/clear-bg.png"))));
-		SelectBoxStyle sbStyle = new SelectBoxStyle(lStyle.font, 
-				Color.WHITE, 
-				clearbg,
-				graybg,
-				graybg);
+
+		TextureRegionDrawable downArrow = new TextureRegionDrawable(
+				new TextureRegion(new Texture(
+						Gdx.files.internal("data/textures/ui/downarrow.png"))));
+		TextureRegionDrawable graybg = new TextureRegionDrawable(
+				new TextureRegion(new Texture(Gdx.files
+						.internal("data/textures/ui/dropdown-bg.png"))));
+		TextureRegionDrawable clearbg = new TextureRegionDrawable(
+				new TextureRegion(new Texture(
+						Gdx.files.internal("data/textures/ui/clear-bg.png"))));
+		SelectBoxStyle sbStyle = new SelectBoxStyle(lStyle.font, Color.WHITE,
+				clearbg, graybg, graybg);
 		sbStyle.font = lStyle.font;
-		
+
 		// actors
-		txtTotalBeats = new Label("Total beats - ", lStyle);
+		txtTotalBeats = new Label("Beats - ", lStyle);
 		beatCount = new Label(String.valueOf(map.NORMAL.size()), lStyle);
 		difficulty = new Label("Difficulty:", lStyle);
 		title = new Label("Stage Ready", lStyle);
-		
-		difficultySelector = new SelectBox(new String[] {"Easy", "Normal", "Hard", "Insane"}, sbStyle);
+
+		difficultySelector = new SelectBox(new String[] { "Easy", "Normal",
+				"Hard", "Insane" }, sbStyle);
 		difficultySelector.setSelection(1);
 		difficultySelector.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				SelectBox sb = (SelectBox) actor;
-				
-				switch (sb.getSelectionIndex()){
+
+				switch (sb.getSelectionIndex()) {
 				case 0:
 					Playthrough.difficulty = Difficulty.EASY;
 					totalBeats = map.EASY.size();
@@ -90,29 +92,23 @@ public class PreviewScreen implements Screen {
 					totalBeats = map.ORIGINAL.size();
 					break;
 				}
-				
+
 				beatCount.setText(String.valueOf(totalBeats));
-				
+
 			}
 		});
-		
+
 		playButton = new TextButton("Play", tStyle);
-		playButton.addListener(new ClickListener(){
+		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				// this locked_on deal is to avoid multiple playscreens getting created
-				// since this clicked event can be triggered while the playscreen is loading
 				
-				if (!LOCKED_ON){
-					LOCKED_ON = true;
-					Resources.menuMusic.stop();
-					Resources.game.setScreen(new GameScreen(map, fileHandle));
-				}
-				else
-					super.clicked(event, x, y);
+				Gdx.input.setInputProcessor(null);
+				Resources.menuMusic.stop();
+				Resources.game.setScreen(new GameScreen(map, fileHandle));
 			}
 		});
-		
+
 		// setup
 		Table container = new Table();
 		container.add(title);
@@ -126,54 +122,54 @@ public class PreviewScreen implements Screen {
 		container.row().fill();
 		container.add(playButton);
 		container.row();
-		
+
 		container.setFillParent(true);
-		
+
 		stage.addActor(container);
 	}
-	
+
 	@Override
 	public void render(float delta) {
-		
+
 		stage.act();
 		stage.draw();
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

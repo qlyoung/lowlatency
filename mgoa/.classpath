@@ -9,6 +9,5 @@
 	<classpathentry kind="lib" path="libs/jvorbiscomment-1.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/gdx-audio.jar"/>
 	<classpathentry kind="lib" path="libs/gdx-sources.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/gdx-audio-analysis"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

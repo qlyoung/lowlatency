@@ -10,8 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 
-public class BeatCore implements IDrawable, Poolable {
+public class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 	// accuracy feedback
 	public static enum Accuracy {
@@ -151,7 +152,7 @@ public class BeatCore implements IDrawable, Poolable {
 			intensityColor = Color.MAGENTA;
 
 		this.core.setColor(intensityColor);
-		this.ring.setColor(Color.WHITE);
+		this.ring.setColor(intensityColor);
 	}
 	@Override
 	public void reset() {

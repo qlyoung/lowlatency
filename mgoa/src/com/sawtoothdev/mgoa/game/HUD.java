@@ -1,24 +1,16 @@
 package com.sawtoothdev.mgoa.game;
 
-import java.io.IOException;
-
-import org.cmc.music.metadata.MusicMetadata;
-import org.cmc.music.myid3.MyID3;
-
-import adamb.vorbis.VorbisCommentHeader;
-import adamb.vorbis.VorbisIO;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Resources;
 
-class HUD implements IDrawable {
+class HUD implements IUpdateable, IDrawable {
 
 	// fonts
 	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
@@ -29,37 +21,6 @@ class HUD implements IDrawable {
 	// game values
 	private int score, displayScore;
 	private String message = null;
-
-	// music information
-	private final String songInfo;
-
-	public HUD(FileHandle audioFile) {
-		
-		String title = null, artist = null;
-		
-		if (audioFile.extension().toLowerCase().contains("mp3")){
-			MusicMetadata metadata = null;
-			
-			try { metadata = new MyID3().read(audioFile.file()).merged; }
-			catch (IOException e) { Gdx.app.log("hud", "mp3 metadata read failed"); }
-			
-			title = metadata == null || metadata.getSongTitle() == null ? "Unknown" : metadata.getSongTitle();
-			artist = metadata == null || metadata.getArtist() == null ? "Unknown" : metadata.getArtist();
-		}
-		else if (audioFile.extension().toLowerCase().contains("ogg")) {
-			VorbisCommentHeader comments = null;
-			
-			try {comments = VorbisIO.readComments(audioFile.file());}
-			catch (IOException e) { Gdx.app.log("hud", "ogg metadata read failed"); }
-			
-			title = comments == null ? "Unknown" : comments.fields.get(0).value;
-			artist = comments == null ? "Unknown" : comments.fields.get(1).value;
-		}
-
-
-
-		songInfo = artist + " - " + title;
-	}
 
 	@Override
 	public void update(float delta) {
@@ -88,7 +49,8 @@ class HUD implements IDrawable {
 			batch.draw(bottomFadeBar, 0, 0);
 			
 			// song data
-			Resources.uiFnt.draw(batch, songInfo, 10, 23);
+			Resources.uiFnt.draw(batch, Playthrough.song.getArtist() + " - " + 
+					Playthrough.song.getTitle(), 10, 23);
 			
 			// score
 			Resources.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);

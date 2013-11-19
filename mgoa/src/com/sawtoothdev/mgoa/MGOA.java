@@ -2,7 +2,6 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
 
@@ -20,25 +19,18 @@ public class MGOA extends Game {
 	public void create() {
 		
 		// ~~initialize~~
-		
 		Resources.game = this;
-		
 		// load settings
 		Resources.settings = Gdx.app.getPreferences("settings");
-		
 		// copy necessary data to external storage
 		Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external(".tmp/title.mp3"));
-		
 		// initialize necessary resources
 		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
-		Resources.debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
-		Resources.debugFont.setColor(Color.GREEN);
-		
+		// miscellaneous setup
 		Resources.screenCam.setToOrtho(false);
 		
 		
 		// ~~begin~~
-		
 		if (Resources.settings.contains("firstrun"))
 			Resources.settings.putBoolean("firstrun", false);
 		else
@@ -54,18 +46,7 @@ public class MGOA extends Game {
 		
 		super.render();
 		
-		if (Resources.DEBUG){
-			Resources.defaultSpriteBatch.setProjectionMatrix(Resources.screenCam.combined);
-			Resources.defaultSpriteBatch.begin();
-			Resources.debugFont.draw(
-					Resources.defaultSpriteBatch, Resources.VERSION,
-					Gdx.graphics.getWidth() - 120,
-					Gdx.graphics.getHeight());
-			Resources.debugFont.draw(
-					Resources.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
-					Gdx.graphics.getWidth() - 120,
-					Gdx.graphics.getHeight() - Resources.debugFont.getCapHeight() - 10);
-			Resources.defaultSpriteBatch.end();
-		}
+		if (Resources.DEBUG)
+			Resources.debugInfo.draw(Resources.defaultSpriteBatch);
 	}
 }

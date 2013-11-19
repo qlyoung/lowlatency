@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.PrettyLights;
 
@@ -16,7 +17,7 @@ import com.sawtoothdev.mgoa.PrettyLights;
  * 
  */
 
-public class EyeCandy implements IDrawable {
+public class EyeCandy implements IUpdateable, IDrawable {
 
 	private final LinkedList<Beat> BEAT_EVENTS = new LinkedList<Beat>();
 	private final OneShotMusicPlayer MUSIC;
