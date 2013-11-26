@@ -31,7 +31,7 @@ public class EyeCandy implements IUpdateable, IDrawable {
 
 		this.MUSIC = music;
 
-		lv = new PrettyLights(7);
+		lv = new PrettyLights(4);
 
 	}
 

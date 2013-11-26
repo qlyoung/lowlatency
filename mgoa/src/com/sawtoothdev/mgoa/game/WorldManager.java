@@ -4,10 +4,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 
-public class WorldManager implements IUpdateable, IDrawable {
+public class WorldManager implements IUpdateable, IDrawable, IPausable {
 
 	public final OneShotMusicPlayer music;
 	private final HUD hud;
@@ -79,6 +80,16 @@ public class WorldManager implements IUpdateable, IDrawable {
 
 	public WorldState getState() {
 		return state;
+	}
+
+	@Override
+	public void pause() {
+		music.pause();
+	}
+
+	@Override
+	public void unpause() {
+		music.play();
 	}
 
 }

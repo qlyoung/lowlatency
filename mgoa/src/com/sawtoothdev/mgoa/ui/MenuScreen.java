@@ -19,16 +19,20 @@ public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private PrettyLights prettyLights = new PrettyLights(15);
-	AudioControl audioControl = new AudioControl();
+	AudioCtlButton audioControl = new AudioCtlButton();
 
 	public MenuScreen() {
 		Gdx.input.setInputProcessor(stage);
+		
+		stage.setCamera(Resources.screenCam);
 
 		TextButtonStyle style = new TextButtonStyle();
 		style.font = new BitmapFont(
 				Gdx.files.internal("data/fonts/naipol.fnt"), false);
 		style.up = new TextureRegionDrawable(new TextureRegion(new Texture(
-				"data/textures/ui/menubutton.png")));
+				"data/textures/ui/menubtn-up.png")));
+		style.down = new TextureRegionDrawable(new TextureRegion(new Texture(
+				"data/textures/ui/menubtn-down.png")));
 
 		TextButton playButton = new TextButton("Play", style), optionsButton = new TextButton(
 				"Options", style), statsButton = new TextButton("Leaderboards",

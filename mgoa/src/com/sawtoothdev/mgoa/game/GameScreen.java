@@ -6,6 +6,7 @@ import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.game.WorldManager.WorldState;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
+import com.sawtoothdev.mgoa.ui.PausedScreen;
 
 /**
  * What are we here for, anyway?
@@ -21,9 +22,8 @@ public class GameScreen implements Screen {
 	private enum GameScreenState {
 		INITIALIZED, RUNNING, DONE, PAUSED
 	};
-
 	private GameScreenState state;
-
+	
 	public GameScreen(BeatMap map, FileHandle audioFile) {
 
 		worldManager = new WorldManager(map, audioFile);
@@ -61,8 +61,12 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		worldManager.start();
-		state = GameScreenState.RUNNING;
+		if (state == GameScreenState.INITIALIZED) {
+			worldManager.start();
+			state = GameScreenState.RUNNING;
+		}
+		else if (state == GameScreenState.PAUSED)
+			resume();
 	}
 
 	@Override
@@ -72,12 +76,15 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-
+		worldManager.pause();
+		this.state = GameScreenState.PAUSED;
+		Resources.game.setScreen(new PausedScreen());
 	}
 
 	@Override
 	public void resume() {
-
+		worldManager.unpause();
+		this.state = GameScreenState.RUNNING;
 	}
 
 	@Override

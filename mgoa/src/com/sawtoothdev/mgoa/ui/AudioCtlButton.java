@@ -10,7 +10,7 @@ import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Resources;
 
-public class AudioControl extends Sprite implements IUpdateable, IDrawable {
+public class AudioCtlButton extends Sprite implements IUpdateable, IDrawable {
 
 	Texture on = new Texture("data/textures/ui/audio-on.png"),
 			off = new Texture("data/textures/ui/audio-off.png");

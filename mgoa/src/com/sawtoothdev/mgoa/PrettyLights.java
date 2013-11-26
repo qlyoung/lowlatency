@@ -43,7 +43,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		rayHandler.setCombinedMatrix(Resources.worldCam.combined);
 
 		for (int i = 0; i < numLights; i++)
-			makeOrb(Color.BLUE, Resources.random.nextFloat() + .5f);
+			makeOrb(Color.WHITE, Resources.random.nextFloat() + .5f);
 
 	}
 

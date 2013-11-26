@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Resources;
@@ -22,9 +25,26 @@ class HUD implements IUpdateable, IDrawable {
 	private int score, displayScore;
 	private String message = null;
 
+	// controls
+	private Sprite pauseButton = new Sprite(new Texture("data/textures/ui/pause.png"));
+	
+	public HUD(){
+		pauseButton.setPosition(pauseButton.getX() + 5, Gdx.graphics.getHeight() - pauseButton.getHeight() - 5);
+	}
+	
 	@Override
 	public void update(float delta) {
 
+		// check pause
+		if (Gdx.input.justTouched()) {
+			Vector2 lastTouch =
+					new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			Rectangle spriteBox = pauseButton.getBoundingRectangle();
+
+			if (spriteBox.contains(lastTouch.x, lastTouch.y))
+				Resources.game.getScreen().pause();
+		}
+		
 		// update the score spinner
 		if (displayScore < score)
 			displayScore += 17;
@@ -61,6 +81,8 @@ class HUD implements IUpdateable, IDrawable {
 				messageFont.draw(batch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
 			}
 			
+			// controls
+			pauseButton.draw(batch);
 			
 		}
 		batch.end();

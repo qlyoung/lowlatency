@@ -26,6 +26,7 @@ public class MGOA extends Game {
 		Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external(".tmp/title.mp3"));
 		// initialize necessary resources
 		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
+		UIStyles.initializeStyles();
 		// miscellaneous setup
 		Resources.screenCam.setToOrtho(false);
 		

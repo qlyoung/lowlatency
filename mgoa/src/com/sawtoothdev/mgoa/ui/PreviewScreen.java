@@ -5,14 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -24,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sawtoothdev.mgoa.BeatMap;
 import com.sawtoothdev.mgoa.Difficulty;
 import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.UIStyles;
 import com.sawtoothdev.mgoa.game.GameScreen;
 import com.sawtoothdev.mgoa.game.Playthrough;
 
@@ -40,12 +39,8 @@ public class PreviewScreen implements Screen {
 
 		Gdx.input.setInputProcessor(this.stage);
 
-		// styles
-		LabelStyle lStyle = new LabelStyle();
-		lStyle.font = new BitmapFont(
-				Gdx.files.internal("data/fonts/naipol.fnt"), false);
 		TextButtonStyle tStyle = new TextButtonStyle();
-		tStyle.font = lStyle.font;
+		tStyle.font = UIStyles.uiLabelStyle.font;
 
 		TextureRegionDrawable downArrow = new TextureRegionDrawable(
 				new TextureRegion(new Texture(
@@ -56,18 +51,18 @@ public class PreviewScreen implements Screen {
 		TextureRegionDrawable clearbg = new TextureRegionDrawable(
 				new TextureRegion(new Texture(
 						Gdx.files.internal("data/textures/ui/clear-bg.png"))));
-		SelectBoxStyle sbStyle = new SelectBoxStyle(lStyle.font, Color.WHITE,
+		SelectBoxStyle sbStyle = new SelectBoxStyle(UIStyles.uiLabelStyle.font, Color.WHITE,
 				clearbg, graybg, graybg);
-		sbStyle.font = lStyle.font;
+		sbStyle.font = UIStyles.uiLabelStyle.font;
 
 		// actors
-		txtTotalBeats = new Label("Beats - ", lStyle);
-		beatCount = new Label(String.valueOf(map.NORMAL.size()), lStyle);
-		difficulty = new Label("Difficulty:", lStyle);
-		title = new Label("Stage Ready", lStyle);
+		txtTotalBeats = new Label("Beats - ", UIStyles.uiLabelStyle);
+		beatCount = new Label(String.valueOf(map.NORMAL.size()), UIStyles.uiLabelStyle);
+		difficulty = new Label("Difficulty:", UIStyles.uiLabelStyle);
+		title = new Label("Stage Ready", UIStyles.uiLabelStyle);
 
-		difficultySelector = new SelectBox(new String[] { "Easy", "Normal",
-				"Hard", "Insane" }, sbStyle);
+		difficultySelector = new SelectBox(new String[] { "Relaxed", "Regular",
+				"Energetic", "Altered" }, sbStyle);
 		difficultySelector.setSelection(1);
 		difficultySelector.addListener(new ChangeListener() {
 			@Override
