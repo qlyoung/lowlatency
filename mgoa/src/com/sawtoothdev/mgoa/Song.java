@@ -20,6 +20,7 @@ public class Song {
 		
 		this.file = file;
 		
+		
 		if (file.extension().toLowerCase().contains("mp3")){
 			MusicMetadata metadata = null;
 			

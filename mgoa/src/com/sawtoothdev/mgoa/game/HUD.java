@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.Song;
 
 class HUD implements IUpdateable, IDrawable {
 
@@ -24,12 +25,14 @@ class HUD implements IUpdateable, IDrawable {
 	// game values
 	private int score, displayScore;
 	private String message = null;
+	private Song song;
 
 	// controls
 	private Sprite pauseButton = new Sprite(new Texture("data/textures/ui/pause.png"));
 	
-	public HUD(){
+	public HUD(Song song){
 		pauseButton.setPosition(pauseButton.getX() + 5, Gdx.graphics.getHeight() - pauseButton.getHeight() - 5);
+		this.song = song;
 	}
 	
 	@Override
@@ -69,8 +72,7 @@ class HUD implements IUpdateable, IDrawable {
 			batch.draw(bottomFadeBar, 0, 0);
 			
 			// song data
-			Resources.uiFnt.draw(batch, Playthrough.song.getArtist() + " - " + 
-					Playthrough.song.getTitle(), 10, 23);
+			Resources.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
 			
 			// score
 			Resources.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);

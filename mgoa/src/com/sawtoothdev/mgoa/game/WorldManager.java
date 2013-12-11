@@ -1,8 +1,7 @@
 package com.sawtoothdev.mgoa.game;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sawtoothdev.mgoa.BeatMap;
+import com.sawtoothdev.mgoa.GameConfiguration;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
@@ -23,13 +22,13 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 
 	private WorldState state;
 
-	public WorldManager(BeatMap map, FileHandle audioFile) {
+	public WorldManager() {
 
-		music = new OneShotMusicPlayer(audioFile);
-		hud = new HUD();
+		music = new OneShotMusicPlayer(GameConfiguration.song.getHandle());
+		hud = new HUD(GameConfiguration.song);
 		fxBox = new FxBox();
-		coreManager = new CoreManager(music, fxBox, hud, map.NORMAL);
-		eyecandy = new EyeCandy(map.ORIGINAL, music);
+		coreManager = new CoreManager(music, fxBox, hud, GameConfiguration.beatmap, GameConfiguration.difficulty);
+		eyecandy = new EyeCandy(GameConfiguration.rawmap, music);
 		countdown = new Countdown(hud, 4);
 
 		state = WorldState.INITIALIZED;
@@ -54,7 +53,12 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 			coreManager.update(delta);
 			fxBox.update(delta);
 			hud.update(delta);
-			if (!music.isPlaying())
+			// weird behavior here, when pause() gets called libgdx
+			// calls it from another thread and so it is possible that
+			// the music will pause in the middle of an update tick
+			// and be interpreted as a game over, thus we check if
+			// the game is paused before setting game over
+			if (!music.isPlaying() && state != WorldState.PAUSED)
 				state = WorldState.FINISHED;
 			break;
 		case PAUSED:
@@ -84,12 +88,14 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 
 	@Override
 	public void pause() {
+		this.state = WorldState.PAUSED;
 		music.pause();
 	}
 
 	@Override
 	public void unpause() {
 		music.play();
+		this.state = WorldState.ACTIVE;
 	}
 
 }

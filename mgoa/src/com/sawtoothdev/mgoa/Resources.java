@@ -22,7 +22,7 @@ public class Resources {
 
 	// info
 	public static final String VERSION = "pre-alpha";
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static final DebugInfo debugInfo = new DebugInfo();
 
 	// flow control
@@ -46,6 +46,7 @@ public class Resources {
 	// miscellaneous
 	public static final Random random = new Random();
 	public static final BitmapFont defaultFont = new BitmapFont();
+	public static Difficulty difficulties[];
 
 	// projection/unprojection convenience methods
 	public static Vector2 projectToScreen(Vector2 worldCoords) {

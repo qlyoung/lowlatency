@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.Difficulty;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 
@@ -37,9 +38,9 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 	private boolean beenHit = false;
 	private boolean dying = false;
 
-	public BeatCore() {
+	public BeatCore(Difficulty difficulty) {
 		// delta size / delta time
-		shrinkRate = (1 - SYNCH_SIZE) / (0 - (Playthrough.difficulty.ringTimeMs / 1000f));
+		shrinkRate = (1 - SYNCH_SIZE) / (0 - (difficulty.ringTimeMs / 1000f));
 
 		Texture t = new Texture("data/textures/ring.png");
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);

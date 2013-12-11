@@ -2,42 +2,38 @@ package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sawtoothdev.mgoa.PrettyLights;
 import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.UIResources;
+import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
+	Table root = new Table();
+	
 	private PrettyLights prettyLights = new PrettyLights(15);
+	
 	AudioCtlButton audioControl = new AudioCtlButton();
-
+	
 	public MenuScreen() {
-		Gdx.input.setInputProcessor(stage);
 		
-		stage.setCamera(Resources.screenCam);
+		// stage setup
+		Gdx.input.setInputProcessor(stage);
 
-		TextButtonStyle style = new TextButtonStyle();
-		style.font = new BitmapFont(
-				Gdx.files.internal("data/fonts/naipol.fnt"), false);
-		style.up = new TextureRegionDrawable(new TextureRegion(new Texture(
-				"data/textures/ui/menubtn-up.png")));
-		style.down = new TextureRegionDrawable(new TextureRegion(new Texture(
-				"data/textures/ui/menubtn-down.png")));
+		// actors
+		TextButton
+			playButton = new TextButton("Play", UIResources.uiTextButtonStyle),
+			optionsButton = new TextButton("Options", UIResources.uiTextButtonStyle),
+			statsButton = new TextButton("Leaderboards", UIResources.uiTextButtonStyle),
+			creditsButton = new TextButton("Credits", UIResources.uiTextButtonStyle);
 
-		TextButton playButton = new TextButton("Play", style), optionsButton = new TextButton(
-				"Options", style), statsButton = new TextButton("Leaderboards",
-				style), creditsButton = new TextButton("Credits", style);
-
+		// actors setup
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -53,22 +49,22 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		Table table = new Table();
-		table.setFillParent(true);
-		table.defaults().uniform().padBottom(10);
+		// scene layout
+		root.setFillParent(true);
+		root.defaults().uniform().padBottom(10);
 
-		table.add(playButton);
-		table.row();
-		table.add(optionsButton);
-		table.row();
-		table.add(statsButton);
-		table.row();
-		table.add(creditsButton);
-		table.row();
+		root.add(playButton);
+		root.row();
+		root.add(optionsButton);
+		root.row();
+		root.add(statsButton);
+		root.row();
+		root.add(creditsButton);
+		root.row();
 
-		stage.addActor(table);
+		stage.addActor(root);
 
-		audioControl.setPosition(10, 10);
+		audioControl.setPosition(10, Gdx.graphics.getHeight() - 30);
 	}
 
 	@Override
@@ -96,10 +92,11 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		Resources.menuMusic.setLooping(true);
-		Resources.menuMusic.setVolume(.4f);
+		Resources.menuMusic.setVolume(1f);
 		if (!Resources.settings.contains("bgmusic")
 				|| Resources.settings.getBoolean("bgmusic"))
 			Resources.menuMusic.play();
+		
 		System.gc();
 	}
 

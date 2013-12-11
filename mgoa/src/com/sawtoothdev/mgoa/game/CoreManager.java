@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.Difficulty;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
@@ -16,7 +17,7 @@ import com.sawtoothdev.mgoa.game.BeatCore.Accuracy;
 public class CoreManager implements IUpdateable, IDrawable {
 
 	// pools and cores
-	private CorePool corePool = new CorePool();
+	private CorePool corePool;
 	private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
 
 	// event list
@@ -32,12 +33,16 @@ public class CoreManager implements IUpdateable, IDrawable {
 	private FxBox fx;
 	private HUD hud;
 
+	private Difficulty difficulty;
 	
-	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events){
+	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events, Difficulty difficulty){
 		
 		for (Beat b : events)
 			this.events.add(b);
 		
+		this.difficulty = difficulty;
+		System.out.print(difficulty.ringTimeMs);
+		this.corePool = new CorePool(difficulty);
 		this.music = music;
 		this.fx = fx;
 		this.hud = hud;
@@ -55,8 +60,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 					
 					if (!core.beenHit()){
 						
-						if (core.getHitbox().contains(touchPos.x, touchPos.y) ||
-							Resources.DEBUG && core.isDying()) {
+						if ((core.getHitbox().contains(touchPos.x, touchPos.y)) ||
+							(Resources.DEBUG && core.isDying())) {
 						
 							// register a hit event with the beat and note the accuracy
 							Accuracy accuracy = core.onHit(music.currentTime());
@@ -81,7 +86,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 			}
 			
 			// song events
-			while (events.peek() != null && music.currentTime() >= events.peek().timeMs - Playthrough.difficulty.ringTimeMs)
+			while (events.peek() != null && music.currentTime() >= events.peek().timeMs - difficulty.ringTimeMs)
 				onBeatWarning(events.poll());
 			
 			// hud

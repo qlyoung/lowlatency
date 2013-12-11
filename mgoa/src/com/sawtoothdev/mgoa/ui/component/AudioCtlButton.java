@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.ui;
+package com.sawtoothdev.mgoa.ui.component;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
