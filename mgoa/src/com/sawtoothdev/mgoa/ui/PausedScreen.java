@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.Resources;
-import com.sawtoothdev.mgoa.UIResources;
 import com.sawtoothdev.mgoa.game.GameScreen;
 
 public class PausedScreen implements Screen {

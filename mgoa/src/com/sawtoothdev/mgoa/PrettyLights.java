@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.game.BeatCore;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -73,15 +74,12 @@ public class PrettyLights implements IUpdateable, IDrawable {
 				l.setDistance(3);
 			else
 				l.setDistance(lightDistance);
-
 		}
 
 		Iterator<Body> bodies = world.getBodies();
 
 		while (bodies.hasNext()) {
-			float min = .03f;
-			float max = 1.0f;
-			float multiplier = 30 * b.energy;
+			float min = .03f, max = 1f, multiplier = 30 * b.energy;
 
 			float xImpulse = ((max - min) * Resources.random.nextFloat() + min)
 					* multiplier;
@@ -93,6 +91,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
+		
+		changeAllColors(BeatCore.getEnergyColor(b.energy));
 	}
 
 	public void makeOrb(Color color, float distance) {
@@ -142,5 +142,10 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		wallFixture.restitution = 0f;
 
 		wall.createFixture(wallFixture);
+	}
+
+	public void changeAllColors(Color color){
+		for (Light l : lights)
+			l.setColor(color);
 	}
 }

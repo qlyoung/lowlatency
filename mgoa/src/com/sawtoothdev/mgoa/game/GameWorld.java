@@ -1,34 +1,34 @@
 package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sawtoothdev.mgoa.GameConfiguration;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 
-public class WorldManager implements IUpdateable, IDrawable, IPausable {
+public class GameWorld implements IUpdateable, IDrawable, IPausable {
 
+	
 	public final OneShotMusicPlayer music;
-	private final HUD hud;
-	private final FxBox fxBox;
-	private final CoreManager coreManager;
+	
+	public final CoreManager coreManager;
+	public final Visuals visuals;
+	public final HUD hud;
+	
 	private final Countdown countdown;
-	private final EyeCandy eyecandy;
-
-	public enum WorldState {
-		INITIALIZED, COUNTDOWN, ACTIVE, PAUSED, FINISHED
-	};
-
+	
+	public enum WorldState { INITIALIZED, COUNTDOWN, ACTIVE, PAUSED, FINISHED };
 	private WorldState state;
 
-	public WorldManager() {
+	
+	public GameWorld() {
 
 		music = new OneShotMusicPlayer(GameConfiguration.song.getHandle());
+		
 		hud = new HUD(GameConfiguration.song);
-		fxBox = new FxBox();
-		coreManager = new CoreManager(music, fxBox, hud, GameConfiguration.beatmap, GameConfiguration.difficulty);
-		eyecandy = new EyeCandy(GameConfiguration.rawmap, music);
+		coreManager = new CoreManager(this);
+		visuals = new Visuals(this);
+		
 		countdown = new Countdown(hud, 4);
 
 		state = WorldState.INITIALIZED;
@@ -49,9 +49,8 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 			}
 			break;
 		case ACTIVE:
-			eyecandy.update(delta);
+			visuals.update(delta);
 			coreManager.update(delta);
-			fxBox.update(delta);
 			hud.update(delta);
 			// weird behavior here, when pause() gets called libgdx
 			// calls it from another thread and so it is possible that
@@ -72,18 +71,13 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 	@Override
 	public void draw(SpriteBatch batch) {
 
-		eyecandy.draw(batch);
-		fxBox.draw(batch);
+		visuals.draw(batch);
 		coreManager.draw(batch);
 		hud.draw(batch);
 	}
 
 	public void start() {
 		state = WorldState.COUNTDOWN;
-	}
-
-	public WorldState getState() {
-		return state;
 	}
 
 	@Override
@@ -98,4 +92,7 @@ public class WorldManager implements IUpdateable, IDrawable, IPausable {
 		this.state = WorldState.ACTIVE;
 	}
 
+	public WorldState getState() {
+		return state;
+	}
 }

@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.GameConfiguration;
 import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.Song;
+import com.sawtoothdev.mgoa.game.GameConfiguration;
 import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 import com.sawtoothdev.mgoa.ui.component.FileBrowser;
 

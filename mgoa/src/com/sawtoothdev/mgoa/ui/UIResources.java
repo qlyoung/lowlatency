@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,17 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sawtoothdev.mgoa.Resources;
 
 public class UIResources {
 	
 	public static LabelStyle uiLabelStyle;
 	public static TextButtonStyle uiTextButtonStyle;
 	public static SelectBoxStyle uiSelectBoxStyle;
-	
-	public static TextureRegionDrawable up = new TextureRegionDrawable(new TextureRegion(new Texture(
-			"data/textures/ui/menubtn-up.png")));
-	public static TextureRegionDrawable down = new TextureRegionDrawable(new TextureRegion(new Texture(
-			"data/textures/ui/menubtn-down.png")));
 	
 	public static void initializeStyles(){
 		uiLabelStyle = new LabelStyle();
@@ -27,8 +23,10 @@ public class UIResources {
 		uiTextButtonStyle = new TextButtonStyle();
 		uiTextButtonStyle.font = Resources.uiFnt;
 		uiTextButtonStyle.fontColor = Color.WHITE;
-		uiTextButtonStyle.up = up;
-		uiTextButtonStyle.down = down;
+		uiTextButtonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(
+				"data/textures/ui/menubtn-up.png"), 2, 0, 253, 64));
+		uiTextButtonStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(
+				"data/textures/ui/menubtn-down.png"), 2, 0, 253, 64));
 		
 		TextButtonStyle tStyle = new TextButtonStyle();
 		tStyle.font = UIResources.uiLabelStyle.font;

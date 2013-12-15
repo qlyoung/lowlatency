@@ -3,7 +3,7 @@ package com.sawtoothdev.mgoa.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.Resources;
-import com.sawtoothdev.mgoa.game.WorldManager.WorldState;
+import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
 import com.sawtoothdev.mgoa.ui.PausedScreen;
 
@@ -15,7 +15,7 @@ import com.sawtoothdev.mgoa.ui.PausedScreen;
 
 public class GameScreen implements Screen {
 
-	private final WorldManager worldManager;
+	private final GameWorld worldManager;
 
 	// state
 	private enum GameScreenState {
@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 	
 	public GameScreen() {
 
-		worldManager = new WorldManager();
+		worldManager = new GameWorld();
 
 		// IT BEGINS
 		state = GameScreenState.INITIALIZED;

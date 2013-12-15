@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.PrettyLights;
 import com.sawtoothdev.mgoa.Resources;
-import com.sawtoothdev.mgoa.UIResources;
 import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 
 public class MenuScreen implements Screen {

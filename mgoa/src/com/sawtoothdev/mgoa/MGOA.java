@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
+import com.sawtoothdev.mgoa.ui.UIResources;
 
 /**
  * Main game class, top level.

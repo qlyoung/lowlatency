@@ -9,9 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.GameConfiguration;
 import com.sawtoothdev.mgoa.Resources;
-import com.sawtoothdev.mgoa.UIResources;
+import com.sawtoothdev.mgoa.game.GameConfiguration;
 
 public class ConfigScreen implements Screen {
 	

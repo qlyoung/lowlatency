@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
+import com.sawtoothdev.mgoa.game.GameConfiguration;
 
 public class LoadingThread extends Thread {
 

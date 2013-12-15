@@ -13,6 +13,7 @@ import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.game.BeatCore.Accuracy;
+import com.sawtoothdev.mgoa.game.BeatCore.CoreState;
 
 public class CoreManager implements IUpdateable, IDrawable {
 
@@ -29,23 +30,19 @@ public class CoreManager implements IUpdateable, IDrawable {
 	public int totalBeatsHit = 0;
 	public int score = 0;
 	
-	private OneShotMusicPlayer music;
-	private FxBox fx;
-	private HUD hud;
-
 	private Difficulty difficulty;
 	
-	public CoreManager(OneShotMusicPlayer music, FxBox fx, HUD hud, ArrayList<Beat> events, Difficulty difficulty){
+	private GameWorld GW;
+	
+	public CoreManager(GameWorld gw){
 		
-		for (Beat b : events)
+		this.GW = gw;
+		
+		for (Beat b : GameConfiguration.beatmap)
 			this.events.add(b);
 		
-		this.difficulty = difficulty;
-		System.out.print(difficulty.ringTimeMs);
-		this.corePool = new CorePool(difficulty);
-		this.music = music;
-		this.fx = fx;
-		this.hud = hud;
+		this.difficulty = GameConfiguration.difficulty;
+		this.corePool = new CorePool();
 	}
 	
 	@Override
@@ -57,40 +54,18 @@ public class CoreManager implements IUpdateable, IDrawable {
 				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 				for (BeatCore core : activeCores) {
-					
-					if (!core.beenHit()){
-						
-						if ((core.getHitbox().contains(touchPos.x, touchPos.y)) ||
-							(Resources.DEBUG && core.isDying())) {
-						
-							// register a hit event with the beat and note the accuracy
-							Accuracy accuracy = core.onHit(music.currentTime());
-							
-							// calculate the score value based on accuracy
-							int divisor = accuracy.ordinal() + 1;
-							int scoreValue = (int) core.getScoreValue() / divisor;
-							
-							// statistics & scoring
-							combo++;
-							totalBeatsHit++;
-							score += scoreValue;
-							
-							// 	pretty lights
-							fx.makeExplosion(core.getPosition(), core.getColor());
-							
-							// user feedback
-							hud.showMessage(accuracy.toString() + "!");
-						}	
-					}
+					if (!core.beenHit())						
+						if (core.checkCollision(touchPos) || (Resources.DEBUG && core.getState() == CoreState.dying)) 
+							onCoreHit(core);
 				}
 			}
 			
 			// song events
-			while (events.peek() != null && music.currentTime() >= events.peek().timeMs - difficulty.ringTimeMs)
+			while (events.peek() != null && GW.music.currentTime() >= events.peek().timeMs - difficulty.ringTimeMs)
 				onBeatWarning(events.poll());
 			
 			// hud
-			hud.updateDisplay(totalBeatsShown, totalBeatsHit, combo, score);
+			GW.hud.updateDisplay(totalBeatsShown, totalBeatsHit, combo, score);
 			
 			// cull cores
 			for (int i = 0; i < activeCores.size(); i++) {
@@ -98,7 +73,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 				BeatCore c = activeCores.get(i);
 				
 				// free the dead ones
-				if (c.isDead()) {
+				if (c.getState() == BeatCore.CoreState.dead) {
 					
 					// check if the current combo has been broken
 					if (!c.beenHit())
@@ -130,7 +105,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 	}
 
-	public void onBeatWarning(Beat beat) {
+	private void onBeatWarning(Beat beat) {
 
 		if (beat.energy > 0f) {
 
@@ -165,4 +140,25 @@ public class CoreManager implements IUpdateable, IDrawable {
 		}
 
 	}
+	
+	private void onCoreHit(BeatCore core){
+		// register a hit event with the beat and note the accuracy
+		Accuracy accuracy = core.onHit(GW.music.currentTime());
+		
+		// calculate the score value based on accuracy
+		int divisor = accuracy.ordinal() + 1;
+		int scoreValue = (int) core.getScoreValue() / divisor;
+		
+		// statistics & scoring
+		combo++;
+		totalBeatsHit++;
+		score += scoreValue;
+		
+		// 	pretty lights
+		GW.visuals.box.makeExplosion(core.getPosition(), core.getColor());
+		
+		// user feedback
+		GW.hud.showMessage(accuracy.toString() + "!");
+	}
+
 }

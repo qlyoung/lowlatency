@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.Difficulty;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 
@@ -26,7 +25,7 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 	// gfx
 	private final Sprite ring, core;
-	private Color c, intensityColor;
+	private Color intensityColor;
 	private float alpha = 1;
 
 	// mechanical
@@ -34,13 +33,13 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 	private Beat beat;
 
 	// state
-	private boolean dead = false;
-	private boolean beenHit = false;
-	private boolean dying = false;
+	public enum CoreState { alive, dying, dead };
+	private CoreState state;
+	private boolean hit = false;
 
-	public BeatCore(Difficulty difficulty) {
+	public BeatCore() {
 		// delta size / delta time
-		shrinkRate = (1 - SYNCH_SIZE) / (0 - (difficulty.ringTimeMs / 1000f));
+		shrinkRate = (1 - SYNCH_SIZE) / (0 - (GameConfiguration.difficulty.ringTimeMs / 1000f));
 
 		Texture t = new Texture("data/textures/ring.png");
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -51,57 +50,86 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 		y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		core = new Sprite(y);
 
+		state = CoreState.alive;
+		
 		reset();
 	}
 
 	@Override
 	public void update(float delta) {
 
-		{// update
-
-			// approach circle
-			if (ring.getScaleX() > SYNCH_SIZE && !beenHit && !dying)
-				ring.scale(delta * shrinkRate);
-			else if (!dying)
-				dying = true;
-
-			{// colors, rotation and fading
-
-				c = ring.getColor();
-
-				// approach circle fade-in
-				if (c.a < .95f && !dying) {
-					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
-					ring.setColor(c.r, c.g, c.b, alpha);
-				}
-
-				// fade-out
-				if (dying) {
-					if (alpha > .05) {
-						alpha -= (delta * 2);
-
-						// make sure the alpha isn't set below 0
-						alpha = alpha < 0 ? 0 : alpha;
-
-						c = core.getColor();
-						core.setColor(c.r, c.g, c.b, alpha);
-						c = ring.getColor();
-						ring.setColor(c.r, c.g, c.b, alpha);
-					} else if (c.a <= .05f)
-						dead = true;
-				}
-
-				core.rotate(delta * 360);
+		Color c = new Color();
+		
+		switch (state){
+		case alive:
+			// fade in
+			c = ring.getColor();
+			if (c.a < .95f){
+				float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
+				ring.setColor(c.r, c.g, c.b, alpha);
 			}
-
+			// life logic
+			if (ring.getScaleX() > SYNCH_SIZE)
+				ring.scale(delta * shrinkRate);
+			else
+				state = CoreState.dying;
+			break;
+		case dying:
+			// fade out
+			if (alpha > .05) {
+				alpha -= (delta * 2);
+				// make sure the alpha isn't set below 0
+				alpha = alpha < 0 ? 0 : alpha;
+				
+				c = core.getColor();
+				core.setColor(c.r, c.g, c.b, alpha);
+				c = ring.getColor();
+				ring.setColor(c.r, c.g, c.b, alpha);
+			}
+			else {
+				c = ring.getColor();
+				if (c.a <= .05f)
+					state = CoreState.dead;
+			}
+			break;
+		case dead:
+		default:
 		}
+
+		core.rotate(delta * 360);
+
 	}
+	
 	public void draw(SpriteBatch batch){
 		core.draw(batch);
 		ring.draw(batch);
 	}
 
 	// modifiers
+	@Override
+	public void reset() {
+
+		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
+		ring.setScale(1);
+
+		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
+		core.setRotation(0f);
+		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
+
+		ring.setColor(1, 1, 1, 0f);
+		beat = null;
+		alpha = 1;
+		hit = false;
+		state = CoreState.alive;
+	}
+	public void setBeat(Beat beat) {
+		this.beat = beat;
+		
+		this.intensityColor = getEnergyColor(beat.energy);
+		
+		this.core.setColor(intensityColor);
+		this.ring.setColor(intensityColor);
+	}
 	public void setPosition(Vector2 worldPos) {
 
 		this.position = worldPos;
@@ -111,11 +139,17 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 		core.setPosition(worldPos.x - core.getWidth() / 2f, worldPos.y - core.getHeight() / 2f);
 
 	}
+	public boolean checkCollision(Vector2 point){
+		if (this.getHitbox().contains(point.x, point.y))
+			return true;
+		else
+			return false;
+	}
 	public Accuracy onHit(long songTimeMs) {
 		long diff = songTimeMs - beat.timeMs;
 
-		beenHit = true;
-		dying = true;
+		state = CoreState.dying;
+		hit = true;
 
 		if (diff < -210)
 			return Accuracy.ALMOST;
@@ -136,50 +170,31 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 		else
 			return Accuracy.ALMOST;
 	}
-	public void setBeat(Beat beat) {
-		this.beat = beat;
-
-		if (beat.energy > .75)
-			intensityColor = Color.RED;
-		else if (beat.energy > .6)
-			intensityColor = Color.ORANGE;
-		else if (beat.energy > .45)
-			intensityColor = Color.YELLOW;
-		else if (beat.energy > .3)
-			intensityColor = Color.GREEN;
-		else if (beat.energy > .15)
-			intensityColor = Color.BLUE;
+	public static Color getEnergyColor(float energy){
+		Color color = new Color();
+		
+		if (energy > .75f)
+			color = Color.RED;
+		else if (energy > .6f)
+			color = Color.ORANGE;
+		else if (energy > .45f)
+			color = Color.YELLOW;
+		else if (energy > .3f)
+			color = Color.GREEN;
+		else if (energy > .15f)
+			color = Color.BLUE;
 		else
-			intensityColor = Color.MAGENTA;
-
-		this.core.setColor(intensityColor);
-		this.ring.setColor(intensityColor);
+			color = Color.MAGENTA;
+		
+		return color;
 	}
-	@Override
-	public void reset() {
-
-		ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
-		ring.setScale(1);
-
-		core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
-		core.setRotation(0f);
-		core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
-
-		ring.setColor(1, 1, 1, 0f);
-		beat = null;
-		dead = false;
-		beenHit = false;
-		dying = false;
-		alpha = 1;
-
-	}
-
+	
 	// readers
-	public boolean isDead() {
-		return dead;
+	public CoreState getState(){
+		return state;
 	}
-	public boolean isDying() {
-		return dying;
+	public boolean beenHit(){
+		return hit;
 	}
 	public Rectangle getHitbox() {
 		return new Rectangle(position.x - .5f, position.y - .5f, 1f, 1f);
@@ -189,9 +204,6 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 	}
 	public Vector2 getPosition() {
 		return position;
-	}
-	public boolean beenHit() {
-		return beenHit;
 	}
 	public Color getColor() {
 		return intensityColor;
