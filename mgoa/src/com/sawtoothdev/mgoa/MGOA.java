@@ -2,9 +2,9 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL10;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
-import com.sawtoothdev.mgoa.ui.UIResources;
 
 /**
  * Main game class, top level.
@@ -16,34 +16,33 @@ import com.sawtoothdev.mgoa.ui.UIResources;
 
 public class MGOA extends Game {
 	
+	public static Audio audio;
+	public static Gfx gfx;
+	public static Utilities util;
+	public static Preferences settings;
+	public static UI ui;
+	public static Game game;
+	
+	public static final String VERSION = "pre-alpha";
+	public static final boolean TESTING = true;
+	
 	@Override
 	public void create() {
 		
-		// ~~initialize~~
-		Resources.game = this;
+		// init
+		audio = new Audio();
+		gfx = new Gfx();
+		util = new Utilities();
+		settings = Gdx.app.getPreferences("settings");
+		ui = new UI();
+		game = this;
 		
-		// load settings
-		Resources.settings = Gdx.app.getPreferences("settings");
-		Resources.settings.putBoolean("firstrun", !Resources.settings.contains("firstrun"));
-		Resources.settings.flush();
+		// config
+		settings.putBoolean("firstrun", !settings.contains("firstrun"));
+		settings.flush();
 		
-		// copy necessary data to external storage
-		Gdx.files.internal("data/audio/title.mp3").copyTo(Gdx.files.external(".tmp/title.mp3"));
-		
-		// initialize necessary resources
-		Resources.menuMusic = Gdx.audio.newMusic(Gdx.files.external(".tmp/title.mp3"));
-		UIResources.initializeStyles();
-		Resources.difficulties = new Difficulty[3];
-		Resources.difficulties[0] = new Difficulty(800, 250, "Relaxed");
-		Resources.difficulties[1] = new Difficulty(650, 150, "Normal");
-		Resources.difficulties[2] = new Difficulty(600, 100, "Altered");
-		
-		// miscellaneous setup
-		Resources.screenCam.setToOrtho(false);
-		
-		// ~~begin~~
+		// begin
 		this.setScreen(new MenuScreen());
-
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class MGOA extends Game {
 
 		super.render();
 		
-		if (Resources.DEBUG)
-			Resources.debugInfo.draw(Resources.defaultSpriteBatch);
+		if (TESTING)
+			util.debugOverlay.draw(gfx.defaultSpriteBatch);
 	}
 }

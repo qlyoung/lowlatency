@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.Song;
 
 class HUD implements IUpdateable, IDrawable {
@@ -26,6 +26,7 @@ class HUD implements IUpdateable, IDrawable {
 	private int score, displayScore;
 	private String message = null;
 	private Song song;
+	private PointsHUD ph = new PointsHUD();
 
 	// controls
 	private Sprite pauseButton = new Sprite(new Texture("data/textures/ui/pause.png"));
@@ -45,7 +46,7 @@ class HUD implements IUpdateable, IDrawable {
 			Rectangle spriteBox = pauseButton.getBoundingRectangle();
 
 			if (spriteBox.contains(lastTouch.x, lastTouch.y))
-				Resources.game.getScreen().pause();
+				MGOA.game.getScreen().pause();
 		}
 		
 		// update the score spinner
@@ -54,6 +55,9 @@ class HUD implements IUpdateable, IDrawable {
 		else if (displayScore > score)
 			displayScore = score;
 
+		// update point messages
+		ph.update(delta);
+		
 		// fade messages
 		Color c = messageFont.getColor();
 		if (c.a > 0f) {
@@ -65,23 +69,25 @@ class HUD implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch){
 		
-		batch.setProjectionMatrix(Resources.screenCam.combined);
+		batch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
 		batch.begin();
 		{
 			// gfx
 			batch.draw(bottomFadeBar, 0, 0);
 			
 			// song data
-			Resources.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
+			MGOA.ui.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
 			
 			// score
-			Resources.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 20);
+			MGOA.ui.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 23);
 
 			// messages
 			if (message != null){
 				float length = messageFont.getBounds(message).width;
 				messageFont.draw(batch, message, Gdx.graphics.getWidth() / 2f - (length / 2f), Gdx.graphics.getHeight() / 2f);
 			}
+			
+			ph.draw(batch);
 			
 			// controls
 			pauseButton.draw(batch);
@@ -94,7 +100,10 @@ class HUD implements IUpdateable, IDrawable {
 		this.message = message;
 		messageFont.setColor(Color.WHITE);
 	}
-	
+	public void showPoints(int points, Vector2 position){
+		Vector2 screenPosition = MGOA.gfx.projectToScreen(position);
+		ph.spawnPoints(points, screenPosition, new Vector2(Gdx.graphics.getWidth() - 30, bottomFadeBar.getRegionHeight()));
+	}
 	public void updateDisplay(int totalBeatsShown, int totalBeatsHit, int combo, int score){
 		this.score = score;
 	}

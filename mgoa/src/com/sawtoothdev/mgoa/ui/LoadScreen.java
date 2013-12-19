@@ -3,8 +3,8 @@ package com.sawtoothdev.mgoa.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.LoadingThread;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.PrettyLights;
-import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.game.GameScreen;
 
 /**
@@ -36,13 +36,13 @@ public class LoadScreen implements Screen {
 
 		{// draw
 			prettyLights.draw(null);
-
-			Resources.defaultSpriteBatch.setProjectionMatrix(Resources.screenCam.combined);
-			Resources.defaultSpriteBatch.begin();
-				Resources.uiFnt.draw(Resources.defaultSpriteBatch, "Loading...",
+			
+			MGOA.gfx.defaultSpriteBatch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
+			MGOA.gfx.defaultSpriteBatch.begin();
+				MGOA.ui.uiFnt.draw(MGOA.gfx.defaultSpriteBatch, "Loading...",
 						Gdx.graphics.getWidth() / 2f - 20f,
 						Gdx.graphics.getHeight() / 2f);
-			Resources.defaultSpriteBatch.end();
+			MGOA.gfx.defaultSpriteBatch.end();
 
 		}
 
@@ -79,8 +79,8 @@ public class LoadScreen implements Screen {
 	}
 
 	private void finish(){
-		Resources.menuMusic.pause();
+		MGOA.audio.menuMusic.pause();
 		System.gc();
-		Resources.game.setScreen(new GameScreen());
+		MGOA.game.setScreen(new GameScreen());
 	}
 }

@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class DebugInfo implements IDrawable {
+public class DebugOverlay implements IDrawable {
 
 	
 	public static final BitmapFont debugFont = new BitmapFont();
 	
-	public DebugInfo(){
+	public DebugOverlay(){
 		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
 		debugFont.setColor(Color.GREEN);
 	}
@@ -18,17 +18,18 @@ public class DebugInfo implements IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.setProjectionMatrix(Resources.screenCam.combined);
-		Resources.defaultSpriteBatch.begin();
+		batch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
+		MGOA.gfx.defaultSpriteBatch.begin();
 			debugFont.draw(
-				Resources.defaultSpriteBatch, Resources.VERSION,
+				MGOA.gfx.defaultSpriteBatch,
+				MGOA.VERSION,
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight());
 			debugFont.draw(
-				Resources.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
+				MGOA.gfx.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
-		Resources.defaultSpriteBatch.end();
+		MGOA.gfx.defaultSpriteBatch.end();
 
 	}
 

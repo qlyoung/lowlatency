@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 import com.sawtoothdev.mgoa.ui.MenuScreen;
 import com.sawtoothdev.mgoa.ui.PausedScreen;
@@ -40,12 +40,12 @@ public class GameScreen implements Screen {
 			break;
 		case RUNNING:
 			worldManager.update(delta);
-			worldManager.draw(Resources.defaultSpriteBatch);
+			worldManager.draw(MGOA.gfx.defaultSpriteBatch);
 			if (worldManager.getState() == WorldState.FINISHED)
 				this.state = GameScreenState.DONE;
 			break;
 		case DONE:
-			Resources.game.setScreen(new MenuScreen());
+			MGOA.game.setScreen(new MenuScreen());
 			break;
 		case PAUSED:
 			Gdx.app.log("gamescreen", "paused update");
@@ -82,7 +82,7 @@ public class GameScreen implements Screen {
 		Gdx.app.log("game screen", "pausing");
 		worldManager.pause();
 		this.state = GameScreenState.PAUSED;
-		Resources.game.setScreen(new PausedScreen(this));
+		MGOA.game.setScreen(new PausedScreen(this));
 	}
 
 	@Override

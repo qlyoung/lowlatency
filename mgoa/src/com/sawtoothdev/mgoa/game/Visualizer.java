@@ -1,7 +1,7 @@
 package com.sawtoothdev.mgoa.game;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -23,7 +23,7 @@ public class Visualizer implements IDrawable, IUpdateable {
 	
 	private PrettyLights pl;
 	
-	public Visualizer(ArrayList<Beat> beatevents, OneShotMusicPlayer music){
+	public Visualizer(LinkedList<Beat> beatevents, OneShotMusicPlayer music){
 		pl = new PrettyLights(4);
 		this.music = music;
 		

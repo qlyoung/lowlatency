@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.PrettyLights;
-import com.sawtoothdev.mgoa.Resources;
 import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 
 public class MenuScreen implements Screen {
@@ -27,23 +27,23 @@ public class MenuScreen implements Screen {
 
 		// actors
 		TextButton
-			playButton = new TextButton("Play", UIResources.uiTextButtonStyle),
-			optionsButton = new TextButton("Options", UIResources.uiTextButtonStyle),
-			statsButton = new TextButton("Leaderboards", UIResources.uiTextButtonStyle),
-			creditsButton = new TextButton("Credits", UIResources.uiTextButtonStyle);
+			playButton = new TextButton("Play", MGOA.ui.uiTextButtonStyle),
+			optionsButton = new TextButton("Options", MGOA.ui.uiTextButtonStyle),
+			statsButton = new TextButton("Leaderboards", MGOA.ui.uiTextButtonStyle),
+			creditsButton = new TextButton("Credits", MGOA.ui.uiTextButtonStyle);
 
 		// actors setup
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Resources.game.setScreen(new ChooseSongScreen());
+				MGOA.game.setScreen(new ChooseSongScreen());
 				super.clicked(event, x, y);
 			}
 		});
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Resources.game.setScreen(new OptionsScreen());
+				MGOA.game.setScreen(new OptionsScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -78,7 +78,7 @@ public class MenuScreen implements Screen {
 		{// draw
 			prettyLights.draw(null);
 			stage.draw();
-			audioControl.draw(Resources.defaultSpriteBatch);
+			audioControl.draw(MGOA.gfx.defaultSpriteBatch);
 		}
 
 	}
@@ -90,11 +90,11 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		Resources.menuMusic.setLooping(true);
-		Resources.menuMusic.setVolume(1f);
-		if (!Resources.settings.contains("bgmusic")
-				|| Resources.settings.getBoolean("bgmusic"))
-			Resources.menuMusic.play();
+		MGOA.audio.menuMusic.setLooping(true);
+		MGOA.audio.menuMusic.setVolume(1f);
+		if (!MGOA.settings.contains("bgmusic")
+				|| MGOA.settings.getBoolean("bgmusic"))
+			MGOA.audio.menuMusic.play();
 		
 		System.gc();
 	}

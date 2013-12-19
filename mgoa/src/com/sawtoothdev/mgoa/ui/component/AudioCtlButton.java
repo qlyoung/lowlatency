@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 
 public class AudioCtlButton extends Sprite implements IUpdateable, IDrawable {
 
@@ -27,11 +27,11 @@ public class AudioCtlButton extends Sprite implements IUpdateable, IDrawable {
 
 			if (spriteBox.contains(lastTouch.x, lastTouch.y)) {
 
-				if (Resources.menuMusic.isPlaying()) {
-					Resources.menuMusic.pause();
+				if (MGOA.audio.menuMusic.isPlaying()) {
+					MGOA.audio.menuMusic.pause();
 					audioBtn.setTexture(off);
 				} else {
-					Resources.menuMusic.play();
+					MGOA.audio.menuMusic.play();
 					audioBtn.setTexture(on);
 				}
 
@@ -43,9 +43,9 @@ public class AudioCtlButton extends Sprite implements IUpdateable, IDrawable {
 
 	@Override
 	public void draw(SpriteBatch spriteBatch) {
-		spriteBatch.setProjectionMatrix(Resources.screenCam.combined);
+		spriteBatch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
 		spriteBatch.begin();
-		audioBtn.draw(spriteBatch);
+			audioBtn.draw(spriteBatch);
 		spriteBatch.end();
 
 	}

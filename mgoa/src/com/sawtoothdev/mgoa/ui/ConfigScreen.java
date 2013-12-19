@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.game.GameConfiguration;
 
 public class ConfigScreen implements Screen {
@@ -25,16 +25,16 @@ public class ConfigScreen implements Screen {
 		root = new Table();
 		root.setFillParent(true);
 		
-		Label lbl = new Label("Difficulty: ", UIResources.uiLabelStyle);
+		Label lbl = new Label("Difficulty: ", MGOA.ui.uiLabelStyle);
 		
-		String[] selections = new String[Resources.difficulties.length];
+		String[] selections = new String[MGOA.util.difficulties.length];
 		
-		for (int i = 0; i < Resources.difficulties.length; i++)
-			selections[i] = Resources.difficulties[i].name;
+		for (int i = 0; i < MGOA.util.difficulties.length; i++)
+			selections[i] = MGOA.util.difficulties[i].name;
 			
-		final SelectBox selector = new SelectBox(selections, UIResources.uiSelectBoxStyle);
+		final SelectBox selector = new SelectBox(selections, MGOA.ui.uiSelectBoxStyle);
 		
-		TextButton playButton = new TextButton("Play", UIResources.uiTextButtonStyle);
+		TextButton playButton = new TextButton("Play", MGOA.ui.uiTextButtonStyle);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -98,10 +98,10 @@ public class ConfigScreen implements Screen {
 		SelectBox selector = ((SelectBox) root.getChildren().get(1));
 		int index = selector.getSelectionIndex();
 		
-		GameConfiguration.difficulty = Resources.difficulties[index];
+		GameConfiguration.difficulty = MGOA.util.difficulties[index];
 		
 		Gdx.input.setInputProcessor(null);
-		Resources.game.setScreen(new LoadScreen());
+		MGOA.game.setScreen(new LoadScreen());
 	}
 
 }

@@ -41,10 +41,10 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		makeWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
-		rayHandler.setCombinedMatrix(Resources.worldCam.combined);
-
+		rayHandler.setCombinedMatrix(MGOA.gfx.worldCam.combined);
+		
 		for (int i = 0; i < numLights; i++)
-			makeOrb(Color.WHITE, Resources.random.nextFloat() + .5f);
+			makeOrb(Color.WHITE, MGOA.util.random.nextFloat() + .5f);
 
 	}
 
@@ -81,18 +81,19 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		while (bodies.hasNext()) {
 			float min = .03f, max = 1f, multiplier = 30 * b.energy;
 
-			float xImpulse = ((max - min) * Resources.random.nextFloat() + min)
+			float xImpulse = ((max - min) * MGOA.util.random.nextFloat() + min)
 					* multiplier;
-			float yImpulse = ((max - min) * Resources.random.nextFloat() + min)
+			float yImpulse = ((max - min) * MGOA.util.random.nextFloat() + min)
 					* multiplier;
 
-			xImpulse = Resources.random.nextBoolean() ? xImpulse : -xImpulse;
-			yImpulse = Resources.random.nextBoolean() ? -yImpulse : yImpulse;
+			xImpulse = MGOA.util.random.nextBoolean() ? xImpulse : -xImpulse;
+			yImpulse = MGOA.util.random.nextBoolean() ? -yImpulse : yImpulse;
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
 		
-		changeAllColors(BeatCore.getEnergyColor(b.energy));
+		if (BeatCore.getEnergyColor(b.energy) != Color.MAGENTA)
+			changeAllColors(BeatCore.getEnergyColor(b.energy));
 	}
 
 	public void makeOrb(Color color, float distance) {
@@ -113,8 +114,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		circfix.density = 0f;
 
 		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(Resources.random.nextFloat() - .5f,
-				Resources.random.nextFloat() - .5f);
+		orbBody.setLinearVelocity(MGOA.util.random.nextFloat() - .5f,
+				MGOA.util.random.nextFloat() - .5f);
 		//orbBody.setLinearDamping(.5f);
 
 		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,

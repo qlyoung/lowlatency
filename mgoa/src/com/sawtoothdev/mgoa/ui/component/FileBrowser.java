@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.ui.UIResources;
+import com.sawtoothdev.mgoa.MGOA;
 
 public class FileBrowser extends Table {
 
@@ -28,11 +28,9 @@ public class FileBrowser extends Table {
 			// TextButton represents
 			FileHandle newPath = Gdx.files.external(actor.getName());
 
-			System.out.println(newPath.isDirectory());
-			
-			if (newPath.isDirectory()) {
+			if (newPath.isDirectory())
 				updateViewer(newPath);
-			} else 
+			else 
 				selection = newPath;
 
 			event.cancel();
@@ -53,12 +51,12 @@ public class FileBrowser extends Table {
 		viewer = new Table();
 		viewer.defaults().padBottom(10);
 		
-		upDirectoryButton = new TextButton("Root", UIResources.uiTextButtonStyle);
+		upDirectoryButton = new TextButton("Root", MGOA.ui.uiTextButtonStyle);
 		upDirectoryButton.addListener(upDirectoryButtonListener);
 		
 		updateViewer(root);
 		
-		this.add(new Label("Select Song", UIResources.uiLabelStyle));
+		this.add(new Label("Select Song", MGOA.ui.uiLabelStyle));
 		this.row();
 		this.add(new ScrollPane(viewer)).expand().fill();
 		this.row();
@@ -77,7 +75,7 @@ public class FileBrowser extends Table {
 		// repopulate the viewer with the children of the new directory
 		for (FileHandle child : directory.list()) {
 
-			TextButton element = new TextButton(child.name(), UIResources.uiTextButtonStyle);
+			TextButton element = new TextButton(child.name(), MGOA.ui.uiTextButtonStyle);
 			element.setName(child.path());
 			element.addListener(elementListener);
 			

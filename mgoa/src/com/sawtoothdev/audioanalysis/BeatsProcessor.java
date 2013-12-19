@@ -1,7 +1,7 @@
 package com.sawtoothdev.audioanalysis;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * Post processor for use with Beat collections returned by FastBeatDetector.
@@ -24,40 +24,42 @@ public class BeatsProcessor {
 	 *            between consecutive beats.
 	 * @return a time-ordered list of beats
 	 */
-	public static ArrayList<Beat> removeCloseBeats(ArrayList<Beat> beats,
-			long minTimeBetween) {
+	public static LinkedList<Beat> removeCloseBeats(LinkedList<Beat> beats, long minTimeBetween) {
 
-		ArrayList<Beat> result = new ArrayList<Beat>();
+		LinkedList<Beat> result = new LinkedList<Beat>();
 
-		Iterator<Beat> iterator = beats.iterator();
-
-		Beat prevBeat = iterator.next();
-		Beat currBeat;
-
-		while (iterator.hasNext()) {
-			currBeat = iterator.next();
-
-			if (currBeat.timeMs - prevBeat.timeMs < minTimeBetween) {
-
-				if (currBeat.energy > prevBeat.energy) {
-					int i = result.indexOf(prevBeat);
-
-					if (i == -1)
-						result.add(currBeat);
-					else
-						result.set(i, currBeat);
-
-					prevBeat = currBeat;
-				}
-
-			} else {
+		ListIterator<Beat> iterator = beats.listIterator();
+		result.add(iterator.next());
+		
+		while(iterator.hasNext()){
+			Beat currBeat = iterator.next();
+			Beat prevBeat = result.getLast();
+		
+			if (currBeat.timeMs - prevBeat.timeMs >= minTimeBetween)
 				result.add(currBeat);
-				prevBeat = currBeat;
+			else {
+				Beat winner = currBeat.energy > prevBeat.energy ? currBeat : prevBeat;
+				int index = result.size() - 1;
+				result.set(index, winner);
 			}
-
 		}
 
 		return result;
 	}
-
+	
+	/**
+	 * Returns only the beats with energy values greater than the threshold.
+	 * @param beats
+	 * @param threshold
+	 * @return
+	 */
+	public static LinkedList<Beat> dropLowBeats(LinkedList<Beat> beats, float threshold){
+		LinkedList<Beat> result = new LinkedList<Beat>();
+		
+		for (Beat b : beats)
+			if (b.energy > threshold)
+				result.add(b);
+		
+		return result;
+	}
 }

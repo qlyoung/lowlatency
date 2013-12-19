@@ -1,7 +1,7 @@
 package com.sawtoothdev.mgoa;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -16,7 +16,7 @@ public class LoadingThread extends Thread {
 
 		float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE - .5f;
 
-		ArrayList<Beat> rawbeats = null;
+		LinkedList<Beat> rawbeats = null;
 
 		try {
 			rawbeats = FastBeatDetector.detectBeats(GameConfiguration.song.getHandle(), sensitivity);
@@ -27,9 +27,8 @@ public class LoadingThread extends Thread {
 
 		// maybe process the beats somehow so they
 		// have a minimum energy level?
-
-		ArrayList<Beat> beatmap = 
-				BeatsProcessor.removeCloseBeats(rawbeats, GameConfiguration.difficulty.minBeatSpace);
+		LinkedList<Beat> beatmap = BeatsProcessor.dropLowBeats(rawbeats, .01f);
+		beatmap = BeatsProcessor.removeCloseBeats(rawbeats, GameConfiguration.difficulty.minBeatSpace);
 		
 		GameConfiguration.rawmap = rawbeats;
 		GameConfiguration.beatmap = beatmap;

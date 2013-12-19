@@ -1,6 +1,6 @@
 package com.sawtoothdev.mgoa.game;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.Difficulty;
@@ -10,7 +10,7 @@ public class GameConfiguration {
 	
 	public static Song song;
 	public static Difficulty difficulty;
-	public static ArrayList<Beat> beatmap;
-	public static ArrayList<Beat> rawmap;
+	public static LinkedList<Beat> beatmap;
+	public static LinkedList<Beat> rawmap;
 	
 }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 
 public class FxBox implements IUpdateable, IDrawable {
 
@@ -45,7 +45,7 @@ public class FxBox implements IUpdateable, IDrawable {
 		}
 		
 		// draw
-        batch.setProjectionMatrix(Resources.worldCam.combined);
+        batch.setProjectionMatrix(MGOA.gfx.worldCam.combined);
         batch.begin();
         {
         	for (ParticleEffect effect : effects)

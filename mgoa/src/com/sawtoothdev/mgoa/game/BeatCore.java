@@ -43,7 +43,7 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 		Texture t = new Texture("data/textures/ring.png");
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		ring = new Sprite(t, 174, 179);
+		ring = new Sprite(t);
 		ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
 
 		Texture y = new Texture("data/textures/core.png");
@@ -101,8 +101,8 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 	}
 	
 	public void draw(SpriteBatch batch){
-		core.draw(batch);
 		ring.draw(batch);
+		core.draw(batch);		
 	}
 
 	// modifiers

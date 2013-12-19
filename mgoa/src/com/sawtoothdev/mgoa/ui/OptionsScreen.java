@@ -6,7 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 
 public class OptionsScreen implements Screen {
 
@@ -18,7 +18,7 @@ public class OptionsScreen implements Screen {
 		stage.addActor(root);
 		root.setFillParent(true);
 		
-		root.add(new Label("---Graphics Options---", UIResources.uiLabelStyle));
+		root.add(new Label("---Graphics Options---", MGOA.ui.uiLabelStyle));
 		root.row();
 		
 	}
@@ -28,7 +28,7 @@ public class OptionsScreen implements Screen {
 
 		{// update
 			if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-				Resources.game.setScreen(new MenuScreen());
+				MGOA.game.setScreen(new MenuScreen());
 			stage.act();
 		}
 		

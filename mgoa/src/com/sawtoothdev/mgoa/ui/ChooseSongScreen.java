@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.Song;
 import com.sawtoothdev.mgoa.game.GameConfiguration;
 import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
@@ -41,7 +41,7 @@ public class ChooseSongScreen implements Screen {
 		TextButton homeButton = new TextButton("Main Menu", controlStyle);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				Resources.game.setScreen(new MenuScreen());
+				MGOA.game.setScreen(new MenuScreen());
 			}
 		});
 		audioBtn.setPosition(10, Gdx.graphics.getHeight() - 30);
@@ -73,7 +73,7 @@ public class ChooseSongScreen implements Screen {
 
 		{// draw
 			stage.draw();
-			audioBtn.draw(Resources.defaultSpriteBatch);
+			audioBtn.draw(MGOA.gfx.defaultSpriteBatch);
 			Table.drawDebug(stage);
 		}
 
@@ -112,7 +112,7 @@ public class ChooseSongScreen implements Screen {
 	private void finish(){
 		Gdx.input.setInputProcessor(null);
 		GameConfiguration.song = new Song(browser.getSelection());
-		Resources.game.setScreen(new ConfigScreen());
+		MGOA.game.setScreen(new ConfigScreen());
 	}
 
 }

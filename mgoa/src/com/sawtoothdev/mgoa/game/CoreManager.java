@@ -10,8 +10,8 @@ import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.Difficulty;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.OneShotMusicPlayer;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.Utilities;
 import com.sawtoothdev.mgoa.game.BeatCore.Accuracy;
 import com.sawtoothdev.mgoa.game.BeatCore.CoreState;
 
@@ -51,11 +51,16 @@ public class CoreManager implements IUpdateable, IDrawable {
 			// input
 			if (Gdx.input.isTouched()) {
 
-				Vector2 touchPos = Resources.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+				Vector2 touchPos = MGOA.gfx.projectToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 				for (BeatCore core : activeCores) {
-					if (!core.beenHit())						
-						if (core.checkCollision(touchPos) || (Resources.DEBUG && core.getState() == CoreState.dying)) 
+					
+					if (!core.beenHit())
+						if (MGOA.TESTING){
+							if(core.getState() == CoreState.dying)
+								onCoreHit(core);
+						}
+						else if (core.checkCollision(touchPos))
 							onCoreHit(core);
 				}
 			}
@@ -95,7 +100,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 
-		batch.setProjectionMatrix(Resources.worldCam.combined);
+		batch.setProjectionMatrix(MGOA.gfx.worldCam.combined);
 		batch.begin();
 		{
 			for (BeatCore core : activeCores)
@@ -113,8 +118,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 			core.setBeat(beat);
 
 			Vector2 position = new Vector2();
-			position.set(Resources.random.nextInt(9) - 4,
-					Resources.random.nextInt(5) - 2);
+			position.set(MGOA.util.random.nextInt(9) - 4,
+					MGOA.util.random.nextInt(5) - 2);
 
 			if (activeCores.size() > 0) {
 
@@ -122,8 +127,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 				while (!emptySpace) {
 
-					position.set(Resources.random.nextInt(9) - 4,
-							Resources.random.nextInt(5) - 2);
+					position.set(MGOA.util.random.nextInt(9) - 4,
+							MGOA.util.random.nextInt(5) - 2);
 
 					for (BeatCore c : activeCores) {
 						emptySpace = !(c.getPosition().x == position.x && c
@@ -159,6 +164,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		
 		// user feedback
 		GW.hud.showMessage(accuracy.toString() + "!");
+		GW.hud.showPoints(core.getScoreValue(), core.getPosition());
 	}
 
 }

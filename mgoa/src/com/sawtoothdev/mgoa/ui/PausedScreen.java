@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Resources;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.game.GameScreen;
 
 public class PausedScreen implements Screen {
@@ -28,9 +28,9 @@ public class PausedScreen implements Screen {
 		
 		// actors
 		
-		TextButton resume = new TextButton("Resume", UIResources.uiTextButtonStyle);
+		TextButton resume = new TextButton("Resume", MGOA.ui.uiTextButtonStyle);
 		
-		TextButton quitToMenu = new TextButton("Quit to Main Menu", UIResources.uiTextButtonStyle);
+		TextButton quitToMenu = new TextButton("Quit to Main Menu", MGOA.ui.uiTextButtonStyle);
 		
 		// actor setup
 		resume.addListener(new ClickListener(){
@@ -44,7 +44,7 @@ public class PausedScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.input.setInputProcessor(null);
-				Resources.game.setScreen(new MenuScreen());
+				MGOA.game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -65,7 +65,7 @@ public class PausedScreen implements Screen {
 
 	public void returnToGame(){
 		Gdx.input.setInputProcessor(null);
-		Resources.game.setScreen(home);
+		MGOA.game.setScreen(home);
 	}
 	
 	@Override
