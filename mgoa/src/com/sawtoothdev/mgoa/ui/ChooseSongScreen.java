@@ -66,9 +66,8 @@ public class ChooseSongScreen implements Screen {
 			audioBtn.update(delta);
 			stage.act();
 			
-			if (browser.getSelection() != null){
+			if (browser.getSelection() != null)
 				finish();
-			}
 		}
 
 		{// draw

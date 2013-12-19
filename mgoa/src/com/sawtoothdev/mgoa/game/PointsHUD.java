@@ -4,24 +4,31 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.MGOA;
 
 public class PointsHUD implements IDrawable, IUpdateable {
 
-	ArrayList<PointMessage> points = new ArrayList<PointMessage>();
-	
-	private class PointMessage {
+	class PointMessage implements Poolable {
 		
-		public final String text;
-		public final Vector2 target;
-		public Vector2 position;
+		public String text;
+		public Vector2 target = new Vector2();
+		public Vector2 position = new Vector2();
 		
-		public PointMessage(int value, Vector2 position, Vector2 target){
+		public void set(int value, Vector2 position, Vector2 target){
 			this.text = "+" + value;
-			this.position = position;
-			this.target = target;
+			this.position.set(position);
+			this.target.set(target);
+		}
+		
+		@Override
+		public void reset() {
+			text = null;
+			target.set(0, 0);
+			position.set(0, 0);
 		}
 		
 		public float getSlopeToTarget(){
@@ -29,17 +36,30 @@ public class PointsHUD implements IDrawable, IUpdateable {
 		}
 	}
 	
+	Pool<PointMessage> pointPool = new Pool<PointMessage>(){
+
+		@Override
+		protected PointMessage newObject() {
+			return new PointMessage();
+		}
+		
+	};
+	ArrayList<PointMessage> activePoints = new ArrayList<PointsHUD.PointMessage>();
+	
 	@Override
 	public void update(float delta) {
 		
-		for (int i = 0; i < points.size(); i++){
-			PointMessage p = points.get(i);
+		for (int i = 0; i < activePoints.size(); i++){
+			PointMessage p = activePoints.get(i);
 			// if we're within five pixels of our target
 			if (Math.abs(p.position.x - p.target.x) < 5 &&
-				Math.abs(p.position.y - p.target.y) < 5)
-				points.remove(p);
+				Math.abs(p.position.y - p.target.y) < 5){
+				
+				pointPool.free(p);
+				activePoints.remove(p);				
+			}
 			else {
-				float xshift = delta * 200;
+				float xshift = delta * 400;
 				float yshift = xshift * p.getSlopeToTarget();
 				
 				p.position.x += p.position.x < p.target.x ? xshift : -xshift;
@@ -51,12 +71,14 @@ public class PointsHUD implements IDrawable, IUpdateable {
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		for (PointMessage p : points)
+		for (PointMessage p : activePoints)
 			MGOA.ui.uiFnt.draw(batch, p.text, p.position.x, p.position.y);
 	}
 	
 	public void spawnPoints(int value, Vector2 position, Vector2 target){
-		points.add(new PointMessage(value, position, target));
+		PointMessage pm = pointPool.obtain();
+		pm.set(value, position, target);
+		activePoints.add(pm);
 	}
 
 }

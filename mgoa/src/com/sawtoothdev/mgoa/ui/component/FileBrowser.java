@@ -51,14 +51,16 @@ public class FileBrowser extends Table {
 		viewer = new Table();
 		viewer.defaults().padBottom(10);
 		
+		Label ss = new Label("Select Song", MGOA.ui.uiLabelStyle);
 		upDirectoryButton = new TextButton("Root", MGOA.ui.uiTextButtonStyle);
 		upDirectoryButton.addListener(upDirectoryButtonListener);
+		ScrollPane sp = new ScrollPane(viewer);
 		
 		updateViewer(root);
 		
-		this.add(new Label("Select Song", MGOA.ui.uiLabelStyle));
+		this.add(ss);
 		this.row();
-		this.add(new ScrollPane(viewer)).expand().fill();
+		this.add(sp).expand().fill();
 		this.row();
 		this.add(upDirectoryButton).bottom();
 	}

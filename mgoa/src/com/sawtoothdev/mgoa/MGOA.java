@@ -24,10 +24,13 @@ public class MGOA extends Game {
 	public static Game game;
 	
 	public static final String VERSION = "pre-alpha";
-	public static final boolean TESTING = true;
+	public static final boolean TESTING = false;
 	
 	@Override
 	public void create() {
+		
+		// toggle fullscreen
+		//Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
 		
 		// init
 		audio = new Audio();
