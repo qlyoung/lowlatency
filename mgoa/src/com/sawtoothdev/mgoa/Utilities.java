@@ -15,9 +15,9 @@ public class Utilities {
 	public Utilities(){
 		
 		difficulties = new Difficulty[3];
-		difficulties[0] = new Difficulty(800, 250, "Relaxed");
-		difficulties[1] = new Difficulty(650, 150, "Normal");
-		difficulties[2] = new Difficulty(600, 120, "Altered");
+		difficulties[0] = new Difficulty(800, 250, "Relaxed", 1);
+		difficulties[1] = new Difficulty(650, 150, "Normal", 2);
+		difficulties[2] = new Difficulty(600, 120, "Altered", 3);
 		
 		random = new Random();
 		defaultFont = new BitmapFont();

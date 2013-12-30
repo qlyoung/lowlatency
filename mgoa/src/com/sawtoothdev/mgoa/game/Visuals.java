@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa.game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.MGOA;
 
 /**
  * background visuals manager
@@ -21,7 +22,7 @@ public class Visuals implements IUpdateable, IDrawable {
 	public Visuals(GameWorld gw) {
 		this.GW = gw;
 		
-		visualizer = new Visualizer(GameConfiguration.rawmap, GW.music);
+		visualizer = new Visualizer(MGOA.temporals.rawmap, GW.music);
 		box = new FxBox();
 
 	}

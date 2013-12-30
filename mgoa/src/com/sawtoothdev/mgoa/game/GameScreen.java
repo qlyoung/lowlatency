@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
-import com.sawtoothdev.mgoa.ui.MenuScreen;
+import com.sawtoothdev.mgoa.ui.FinishScreen;
 import com.sawtoothdev.mgoa.ui.PausedScreen;
 
 /**
@@ -15,7 +15,7 @@ import com.sawtoothdev.mgoa.ui.PausedScreen;
 
 public class GameScreen implements Screen {
 
-	private final GameWorld worldManager;
+	private final GameWorld gameWorld;
 
 	// state
 	private enum GameScreenState {
@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 	
 	public GameScreen() {
 
-		worldManager = new GameWorld();
+		gameWorld = new GameWorld();
 
 		// IT BEGINS
 		state = GameScreenState.INITIALIZED;
@@ -39,13 +39,15 @@ public class GameScreen implements Screen {
 		case INITIALIZED:
 			break;
 		case RUNNING:
-			worldManager.update(delta);
-			worldManager.draw(MGOA.gfx.defaultSpriteBatch);
-			if (worldManager.getState() == WorldState.FINISHED)
+			gameWorld.update(delta);
+			gameWorld.draw(MGOA.gfx.defaultSpriteBatch);
+
+			// end condition
+			if (gameWorld.getState() == WorldState.FINISHED)
 				this.state = GameScreenState.DONE;
 			break;
 		case DONE:
-			MGOA.game.setScreen(new MenuScreen());
+			MGOA.game.setScreen(new FinishScreen());
 			break;
 		case PAUSED:
 			Gdx.app.log("gamescreen", "paused update");
@@ -63,7 +65,7 @@ public class GameScreen implements Screen {
 	public void show() {
 		
 		if (state == GameScreenState.INITIALIZED) {
-			worldManager.start();
+			gameWorld.start();
 			state = GameScreenState.RUNNING;
 			Gdx.app.log("game screen", "starting");
 		}
@@ -80,7 +82,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void pause() {
 		Gdx.app.log("game screen", "pausing");
-		worldManager.pause();
+		gameWorld.pause();
 		this.state = GameScreenState.PAUSED;
 		MGOA.game.setScreen(new PausedScreen(this));
 	}
@@ -88,7 +90,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void resume() {
 		Gdx.app.log("game screen", "resuming");
-		worldManager.unpause();
+		gameWorld.unpause();
 		this.state = GameScreenState.RUNNING;
 	}
 

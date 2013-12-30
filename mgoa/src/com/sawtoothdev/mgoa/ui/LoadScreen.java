@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.LoadingThread;
 import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.PrettyLights;
 import com.sawtoothdev.mgoa.game.GameScreen;
 
 /**
@@ -18,7 +17,6 @@ import com.sawtoothdev.mgoa.game.GameScreen;
 public class LoadScreen implements Screen {
 
 	private LoadingThread loadThread;
-	private PrettyLights prettyLights = new PrettyLights(8);
 
 	public LoadScreen(){
 		loadThread = new LoadingThread();
@@ -28,14 +26,14 @@ public class LoadScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
-			prettyLights.update(delta);
+			MGOA.temporals.lights.update(delta);
 			
 			if (!loadThread.isAlive())
 				finish();
 		}
 
 		{// draw
-			prettyLights.draw(null);
+			MGOA.temporals.lights.draw(null);
 			
 			MGOA.gfx.defaultSpriteBatch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
 			MGOA.gfx.defaultSpriteBatch.begin();

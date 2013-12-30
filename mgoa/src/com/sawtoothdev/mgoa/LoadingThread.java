@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
-import com.sawtoothdev.mgoa.game.GameConfiguration;
 
 public class LoadingThread extends Thread {
 
@@ -19,18 +18,17 @@ public class LoadingThread extends Thread {
 		LinkedList<Beat> rawbeats = null;
 
 		try {
-			rawbeats = FastBeatDetector.detectBeats(GameConfiguration.song.getHandle(), sensitivity);
+			rawbeats = FastBeatDetector.detectBeats(MGOA.temporals.song.getHandle(), sensitivity);
 		} catch (IOException e) {
 			Gdx.app.log("Load Screen", e.getMessage());
 			return;
 		}
 
-		// maybe process the beats somehow so they
-		// have a minimum energy level?
+		// drop beats under .01 energiez
 		LinkedList<Beat> beatmap = BeatsProcessor.dropLowBeats(rawbeats, .01f);
-		beatmap = BeatsProcessor.removeCloseBeats(rawbeats, GameConfiguration.difficulty.minBeatSpace);
+		beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MGOA.temporals.difficulty.minBeatSpace);
 		
-		GameConfiguration.rawmap = rawbeats;
-		GameConfiguration.beatmap = beatmap;
+		MGOA.temporals.rawmap = rawbeats;
+		MGOA.temporals.beatmap = beatmap;
 	}
 }

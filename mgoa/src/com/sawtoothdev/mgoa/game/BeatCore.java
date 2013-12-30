@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.MGOA;
 
 public class BeatCore implements IUpdateable, IDrawable, Poolable {
 
@@ -39,7 +40,7 @@ public class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 	public BeatCore() {
 		// delta size / delta time
-		shrinkRate = (1 - SYNCH_SIZE) / (0 - (GameConfiguration.difficulty.ringTimeMs / 1000f));
+		shrinkRate = (1 - SYNCH_SIZE) / (0 - (MGOA.temporals.difficulty.ringTimeMs / 1000f));
 
 		Texture t = new Texture("data/textures/ring.png");
 		t.setFilter(TextureFilter.Linear, TextureFilter.Linear);

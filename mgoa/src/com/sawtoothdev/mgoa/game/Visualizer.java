@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.PrettyLights;
 
@@ -24,7 +25,8 @@ public class Visualizer implements IDrawable, IUpdateable {
 	private PrettyLights pl;
 	
 	public Visualizer(LinkedList<Beat> beatevents, OneShotMusicPlayer music){
-		pl = new PrettyLights(4);
+		pl = MGOA.temporals.lights;
+		pl.setMode(PrettyLights.Mode.REACT);
 		this.music = music;
 		
 		events = beatevents.iterator();

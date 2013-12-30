@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.Song;
-import com.sawtoothdev.mgoa.game.GameConfiguration;
 import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 import com.sawtoothdev.mgoa.ui.component.FileBrowser;
 
@@ -63,6 +62,7 @@ public class ChooseSongScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
+			MGOA.temporals.lights.update(delta);
 			audioBtn.update(delta);
 			stage.act();
 			
@@ -71,6 +71,7 @@ public class ChooseSongScreen implements Screen {
 		}
 
 		{// draw
+			MGOA.temporals.lights.draw(null);
 			stage.draw();
 			audioBtn.draw(MGOA.gfx.defaultSpriteBatch);
 			Table.drawDebug(stage);
@@ -110,7 +111,7 @@ public class ChooseSongScreen implements Screen {
 	
 	private void finish(){
 		Gdx.input.setInputProcessor(null);
-		GameConfiguration.song = new Song(browser.getSelection());
+		MGOA.temporals.song = new Song(browser.getSelection());
 		MGOA.game.setScreen(new ConfigScreen());
 	}
 

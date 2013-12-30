@@ -16,11 +16,14 @@ public class MenuScreen implements Screen {
 	private Stage stage = new Stage();
 	Table root = new Table();
 	
-	private PrettyLights prettyLights = new PrettyLights(15);
-	
 	AudioCtlButton audioControl = new AudioCtlButton();
 	
 	public MenuScreen() {
+		
+		if (MGOA.temporals.lights == null)
+			MGOA.temporals.lights = new PrettyLights(4, PrettyLights.Mode.IDLE);
+		else
+			MGOA.temporals.lights.setMode(PrettyLights.Mode.IDLE);
 		
 		// stage setup
 		Gdx.input.setInputProcessor(stage);
@@ -70,13 +73,13 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
-			prettyLights.update(delta);
+			MGOA.temporals.lights.update(delta);
 			stage.act(delta);
 			audioControl.update(delta);
 		}
 
 		{// draw
-			prettyLights.draw(null);
+			MGOA.temporals.lights.draw(null);
 			stage.draw();
 			audioControl.draw(MGOA.gfx.defaultSpriteBatch);
 		}
@@ -90,13 +93,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		MGOA.audio.menuMusic.setLooping(true);
-		MGOA.audio.menuMusic.setVolume(1f);
-		if (!MGOA.settings.contains("bgmusic")
-				|| MGOA.settings.getBoolean("bgmusic"))
-			MGOA.audio.menuMusic.play();
 		
-		System.gc();
 	}
 
 	@Override

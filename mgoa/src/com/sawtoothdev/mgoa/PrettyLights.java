@@ -28,12 +28,28 @@ import com.sawtoothdev.mgoa.game.BeatCore;
 
 public class PrettyLights implements IUpdateable, IDrawable {
 
+	public enum Mode {IDLE, REACT};
+	
 	private World world = new World(new Vector2(0, 0), false);
 
 	private RayHandler rayHandler;
 	private ArrayList<Light> lights = new ArrayList<Light>();
+	
+	private final float
+		LIGHT_DISTANCE_CAP = 3,
+		LIGHT_MIN_DISTANCE = 1,
+		LIGHT_SHRINK_RATE = 6,
+		LIGHT_LINEAR_DAMPING = .5f;
+	private final float
+		IDLE_TIMER_MIN = 4,
+		IDLE_TIMER_MAX = 8;
+	
+	float idleTimer;
+	
+	private Mode mode;
 
-	public PrettyLights(int numLights) {
+	public PrettyLights(int numLights, Mode mode) {
+		this.mode = mode;
 
 		makeWall(5, 0, .25f, 6);
 		makeWall(-5, 0, .25f, 6);
@@ -44,7 +60,9 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		rayHandler.setCombinedMatrix(MGOA.gfx.worldCam.combined);
 		
 		for (int i = 0; i < numLights; i++)
-			makeOrb(Color.WHITE, MGOA.util.random.nextFloat() + .5f);
+			addOrb(Color.WHITE, MGOA.util.random.nextFloat() + .5f);
+		
+		idleTimer = IDLE_TIMER_MIN;
 
 	}
 
@@ -53,10 +71,24 @@ public class PrettyLights implements IUpdateable, IDrawable {
 
 		world.step(1 / 45f, 6, 2);
 
-		for (Light l : lights) {
-			if (l.getDistance() > 1)
-				l.setDistance((float) (l.getDistance() - (delta * 6)));
+		switch (mode){
+		case IDLE:
+			idleTimer -= delta;
+			if (idleTimer <= 0){
+				applyRandomImpulseToAllLights(2);
+				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MGOA.util.random.nextFloat() + IDLE_TIMER_MIN);
+			}
+			break;
+		case REACT:
+			for (Light l : lights) {
+				if (l.getDistance() > LIGHT_MIN_DISTANCE){
+					float newDistance = l.getDistance() - (delta * LIGHT_SHRINK_RATE);
+					l.setDistance(newDistance);
+				}
+			}
+			break;
 		}
+
 	}
 
 	@Override
@@ -66,20 +98,35 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	}
 
 	public void react(Beat b) {
+		if (mode == Mode.IDLE)
+			return;
 
+		// pulse lights
+		additivePulse(b.energy * 4);
+
+		// move lights
+		//if (b.energy > .3)
+			applyRandomImpulseToAllLights(25 * b.energy);
+		
+		// colorize
+		if (BeatCore.getEnergyColor(b.energy) != Color.MAGENTA)
+			changeAllColors(BeatCore.getEnergyColor(b.energy));
+	}
+	private void additivePulse(float distance){
 		for (Light l : lights) {
-			float lightDistance = l.getDistance() + b.energy * 4;
+			float newDistance = l.getDistance() + distance;
 
-			if (lightDistance > 3)
-				l.setDistance(3);
+			if (newDistance > LIGHT_DISTANCE_CAP)
+				l.setDistance(LIGHT_DISTANCE_CAP);
 			else
-				l.setDistance(lightDistance);
+				l.setDistance(newDistance);
 		}
-
+	}
+	private void applyRandomImpulseToAllLights(float multiplier){
 		Iterator<Body> bodies = world.getBodies();
 
 		while (bodies.hasNext()) {
-			float min = .03f, max = 1f, multiplier = 30 * b.energy;
+			float min = .03f, max = 1f;
 
 			float xImpulse = ((max - min) * MGOA.util.random.nextFloat() + min)
 					* multiplier;
@@ -91,12 +138,13 @@ public class PrettyLights implements IUpdateable, IDrawable {
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
-		
-		if (BeatCore.getEnergyColor(b.energy) != Color.MAGENTA)
-			changeAllColors(BeatCore.getEnergyColor(b.energy));
 	}
-
-	public void makeOrb(Color color, float distance) {
+	public void changeAllColors(Color color){
+		for (Light l : lights)
+			l.setColor(color);
+	}
+	
+	private void addOrb(Color color, float distance) {
 
 		BodyDef orbDef = new BodyDef();
 
@@ -116,7 +164,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		orbBody.createFixture(circfix);
 		orbBody.setLinearVelocity(MGOA.util.random.nextFloat() - .5f,
 				MGOA.util.random.nextFloat() - .5f);
-		//orbBody.setLinearDamping(.5f);
+		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
 
 		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,
 				0);
@@ -126,7 +174,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		plight.setXray(true);
 		lights.add(plight);
 	}
-
 	private void makeWall(float x, float y, float width, float height) {
 		BodyDef wallDef = new BodyDef();
 		wallDef.type = BodyType.StaticBody;
@@ -145,8 +192,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		wall.createFixture(wallFixture);
 	}
 
-	public void changeAllColors(Color color){
-		for (Light l : lights)
-			l.setColor(color);
+	public void setMode(Mode mode){
+		this.mode = mode;
 	}
 }

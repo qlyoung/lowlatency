@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.MGOA;
 import com.sawtoothdev.mgoa.OneShotMusicPlayer;
+import com.sawtoothdev.mgoa.Stats;
 
 public class GameWorld implements IUpdateable, IDrawable, IPausable {
 
@@ -17,17 +19,20 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	
 	private final Countdown countdown;
 	
-	public enum WorldState { INITIALIZED, COUNTDOWN, ACTIVE, PAUSED, FINISHED };
+	public enum WorldState { INITIALIZED, BEFORE, ACTIVE, AFTER, PAUSED, FINISHED };
 	private WorldState state;
 
 	
 	public GameWorld() {
 
-		music = new OneShotMusicPlayer(GameConfiguration.song.getHandle());
+		music = new OneShotMusicPlayer(MGOA.temporals.song.getHandle());
 		
-		hud = new HUD(GameConfiguration.song);
+		hud = new HUD(MGOA.temporals.song);
 		coreManager = new CoreManager(this);
 		visuals = new Visuals(this);
+		
+		MGOA.temporals.stats = new Stats();
+		MGOA.temporals.stats.numBeats = MGOA.temporals.beatmap.size();
 		
 		countdown = new Countdown(hud, 4);
 
@@ -40,9 +45,11 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 		switch (state) {
 		case INITIALIZED:
 			break;
-		case COUNTDOWN:
+		case BEFORE:
 			countdown.update(delta);
+			countdown.draw(null);
 			hud.update(delta);
+			
 			if (countdown.isFinished()){
 				state = WorldState.ACTIVE;
 				music.play();
@@ -60,6 +67,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 			if (!music.isPlaying() && state != WorldState.PAUSED)
 				state = WorldState.FINISHED;
 			break;
+		case AFTER:
+			
 		case PAUSED:
 		case FINISHED:
 		default:
@@ -77,7 +86,7 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	}
 
 	public void start() {
-		state = WorldState.COUNTDOWN;
+		state = WorldState.BEFORE;
 	}
 
 	@Override

@@ -23,7 +23,7 @@ class HUD implements IUpdateable, IDrawable {
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
 
 	// game values
-	private int score, displayScore;
+	private int displayScore;
 	private String message = null;
 	private Song song;
 	private PointsHUD ph = new PointsHUD();
@@ -34,6 +34,7 @@ class HUD implements IUpdateable, IDrawable {
 	public HUD(Song song){
 		pauseButton.setPosition(pauseButton.getX() + 5, Gdx.graphics.getHeight() - pauseButton.getHeight() - 5);
 		this.song = song;
+		messageFont.setColor(Color.WHITE);
 	}
 	
 	@Override
@@ -50,10 +51,10 @@ class HUD implements IUpdateable, IDrawable {
 		}
 		
 		// update the score spinner
-		if (displayScore < score)
+		if (displayScore < MGOA.temporals.stats.points)
 			displayScore += 17;
-		else if (displayScore > score)
-			displayScore = score;
+		else if (displayScore > MGOA.temporals.stats.points)
+			displayScore = MGOA.temporals.stats.points;
 
 		// update point messages
 		ph.update(delta);
@@ -96,16 +97,13 @@ class HUD implements IUpdateable, IDrawable {
 		batch.end();
 	}
 
-	public void showMessage(String message) {
+	public void showMessage(String message, Color color){
+		messageFont.setColor(color);
 		this.message = message;
-		messageFont.setColor(Color.WHITE);
 	}
 	public void showPoints(int points, Vector2 position){
 		Vector2 screenPosition = MGOA.gfx.projectToScreen(position);
-		ph.spawnPoints(points, screenPosition, new Vector2(Gdx.graphics.getWidth() - 30, bottomFadeBar.getRegionHeight()));
-	}
-	public void updateDisplay(int totalBeatsShown, int totalBeatsHit, int combo, int score){
-		this.score = score;
+		ph.spawnPoints(points, screenPosition, new Vector2(Gdx.graphics.getWidth() - 100, bottomFadeBar.getRegionHeight()));
 	}
 
 }

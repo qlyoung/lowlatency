@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.game.GameConfiguration;
 
 public class ConfigScreen implements Screen {
 	
@@ -53,7 +52,10 @@ public class ConfigScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		MGOA.temporals.lights.update(delta);
 		stage.act();
+		
+		MGOA.temporals.lights.draw(null);
 		stage.draw();
 		
 	}
@@ -98,7 +100,7 @@ public class ConfigScreen implements Screen {
 		SelectBox selector = ((SelectBox) root.getChildren().get(1));
 		int index = selector.getSelectionIndex();
 		
-		GameConfiguration.difficulty = MGOA.util.difficulties[index];
+		MGOA.temporals.difficulty = MGOA.util.difficulties[index];
 		
 		Gdx.input.setInputProcessor(null);
 		MGOA.game.setScreen(new LoadScreen());
