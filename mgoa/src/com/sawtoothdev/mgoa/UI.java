@@ -28,9 +28,10 @@ public class UI {
 		TextButtonStyle tStyle = new TextButtonStyle();
 		tStyle.font = uiFnt;
 
-		TextureRegionDrawable graybg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/dropdown-bg.png"))));
-		TextureRegionDrawable clearbg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/clear-bg.png"))));
-		uiSelectBoxStyle = new SelectBoxStyle(uiFnt, Color.WHITE, clearbg, graybg, graybg);
+		TextureRegionDrawable
+			graybg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/dropdown-bg.png")))),
+			regbg = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/textures/ui/selector-base.png"))));
+		uiSelectBoxStyle = new SelectBoxStyle(uiFnt, Color.WHITE, regbg, graybg, graybg);
 	}
 	
 	public final LabelStyle uiLabelStyle;

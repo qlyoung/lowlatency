@@ -1,11 +1,10 @@
-package com.sawtoothdev.mgoa.game;
+package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.game.GameWorld;
 import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
-import com.sawtoothdev.mgoa.ui.FinishScreen;
-import com.sawtoothdev.mgoa.ui.PausedScreen;
 
 /**
  * What are we here for, anyway?
@@ -40,7 +39,7 @@ public class GameScreen implements Screen {
 			break;
 		case RUNNING:
 			gameWorld.update(delta);
-			gameWorld.draw(MGOA.gfx.defaultSpriteBatch);
+			gameWorld.draw(MGOA.gfx.sysSB);
 
 			// end condition
 			if (gameWorld.getState() == WorldState.FINISHED)

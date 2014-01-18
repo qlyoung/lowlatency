@@ -1,10 +1,9 @@
-package com.sawtoothdev.mgoa.ui;
+package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.sawtoothdev.mgoa.LoadingThread;
 import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.game.GameScreen;
 
 /**
  * Responsible for loading all resources before gameplay begins. This includes
@@ -35,13 +34,12 @@ public class LoadScreen implements Screen {
 		{// draw
 			MGOA.temporals.lights.draw(null);
 			
-			MGOA.gfx.defaultSpriteBatch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
-			MGOA.gfx.defaultSpriteBatch.begin();
-				MGOA.ui.uiFnt.draw(MGOA.gfx.defaultSpriteBatch, "Loading...",
-						Gdx.graphics.getWidth() / 2f - 20f,
-						Gdx.graphics.getHeight() / 2f);
-			MGOA.gfx.defaultSpriteBatch.end();
-
+			MGOA.gfx.sysSB.setProjectionMatrix(MGOA.gfx.screenCam.combined);
+			MGOA.gfx.sysSB.begin();
+			MGOA.ui.uiFnt.draw(MGOA.gfx.sysSB, "Loading...",
+					Gdx.graphics.getWidth() / 2f - 20f,
+					Gdx.graphics.getHeight() / 2f);
+			MGOA.gfx.sysSB.end();
 		}
 
 	}

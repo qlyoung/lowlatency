@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Gfx {
 	
-	public final SpriteBatch defaultSpriteBatch;
+	public final SpriteBatch sysSB;
 	public final OrthographicCamera screenCam, worldCam;
 
 	public Gfx(){
-		defaultSpriteBatch = new SpriteBatch();
+		sysSB = new SpriteBatch();
 		screenCam = new OrthographicCamera();
 		worldCam = new OrthographicCamera(10, 6);
 		

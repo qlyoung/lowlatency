@@ -1,6 +1,5 @@
 package com.sawtoothdev.mgoa;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import box2dLight.Light;
@@ -33,7 +32,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	private World world = new World(new Vector2(0, 0), false);
 
 	private RayHandler rayHandler;
-	private ArrayList<Light> lights = new ArrayList<Light>();
 	
 	private final float
 		LIGHT_DISTANCE_CAP = 3,
@@ -80,7 +78,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			}
 			break;
 		case REACT:
-			for (Light l : lights) {
+			for (Light l : rayHandler.lightList) {
 				if (l.getDistance() > LIGHT_MIN_DISTANCE){
 					float newDistance = l.getDistance() - (delta * LIGHT_SHRINK_RATE);
 					l.setDistance(newDistance);
@@ -94,7 +92,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		rayHandler.updateAndRender();
-
 	}
 
 	public void react(Beat b) {
@@ -113,7 +110,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			changeAllColors(BeatCore.getEnergyColor(b.energy));
 	}
 	private void additivePulse(float distance){
-		for (Light l : lights) {
+		for (Light l : rayHandler.lightList) {
 			float newDistance = l.getDistance() + distance;
 
 			if (newDistance > LIGHT_DISTANCE_CAP)
@@ -140,7 +137,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		}
 	}
 	public void changeAllColors(Color color){
-		for (Light l : lights)
+		for (Light l : rayHandler.lightList)
 			l.setColor(color);
 	}
 	
@@ -172,7 +169,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		plight.setSoft(true);
 		plight.setSoftnessLenght(0);
 		plight.setXray(true);
-		lights.add(plight);
 	}
 	private void makeWall(float x, float y, float width, float height) {
 		BodyDef wallDef = new BodyDef();

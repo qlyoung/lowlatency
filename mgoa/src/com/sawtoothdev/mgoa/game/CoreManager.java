@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
@@ -16,6 +17,15 @@ import com.sawtoothdev.mgoa.game.BeatCore.CoreState;
 
 public class CoreManager implements IUpdateable, IDrawable {
 
+	class CorePool extends Pool<BeatCore> {
+		
+		@Override
+		protected BeatCore newObject() {
+			return new BeatCore();
+		}
+
+	}
+	
 	// pools and cores
 	private CorePool corePool;
 	private ArrayList<BeatCore> activeCores = new ArrayList<BeatCore>();
@@ -90,12 +100,9 @@ public class CoreManager implements IUpdateable, IDrawable {
 	public void draw(SpriteBatch batch) {
 
 		batch.setProjectionMatrix(MGOA.gfx.worldCam.combined);
-		batch.begin();
-		{
-			for (BeatCore core : activeCores)
-				core.draw(batch);
-		}
-		batch.end();
+		
+		for (BeatCore core : activeCores)
+			core.draw(batch);
 
 	}
 
@@ -144,7 +151,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		MGOA.temporals.stats.points += points;
 
 		// pretty lights
-		GW.visuals.box.makeExplosion(core.getPosition(), core.getColor());
+		GW.fxbox.makeExplosion(core.getPosition(), core.getColor());
 
 		// user feedback
 		GW.hud.showMessage(accuracy.toString() + "!", Color.WHITE);

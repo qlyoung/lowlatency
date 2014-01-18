@@ -12,24 +12,24 @@ public class DebugOverlay implements IDrawable {
 	
 	public DebugOverlay(){
 		debugFont.setFixedWidthGlyphs("123456789abcdefghijklmnopqrstuvwxyz-");
-		debugFont.setColor(Color.GREEN);
+		debugFont.setColor(Color.BLUE);
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch) {
 		
 		batch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
-		MGOA.gfx.defaultSpriteBatch.begin();
+		MGOA.gfx.sysSB.begin();
 			debugFont.draw(
-				MGOA.gfx.defaultSpriteBatch,
+				MGOA.gfx.sysSB,
 				MGOA.VERSION,
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight());
 			debugFont.draw(
-				MGOA.gfx.defaultSpriteBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
+				MGOA.gfx.sysSB, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
-		MGOA.gfx.defaultSpriteBatch.end();
+		MGOA.gfx.sysSB.end();
 
 	}
 

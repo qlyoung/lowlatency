@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.ui;
+package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,22 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.PrettyLights;
-import com.sawtoothdev.mgoa.ui.component.AudioCtlButton;
 
 public class MenuScreen implements Screen {
 
 	private Stage stage = new Stage();
 	Table root = new Table();
 	
-	AudioCtlButton audioControl = new AudioCtlButton();
-	
 	public MenuScreen() {
-		
-		if (MGOA.temporals.lights == null)
-			MGOA.temporals.lights = new PrettyLights(4, PrettyLights.Mode.IDLE);
-		else
-			MGOA.temporals.lights.setMode(PrettyLights.Mode.IDLE);
 		
 		// stage setup
 		Gdx.input.setInputProcessor(stage);
@@ -66,7 +57,6 @@ public class MenuScreen implements Screen {
 
 		stage.addActor(root);
 
-		audioControl.setPosition(10, Gdx.graphics.getHeight() - 30);
 	}
 
 	@Override
@@ -75,13 +65,12 @@ public class MenuScreen implements Screen {
 		{// update
 			MGOA.temporals.lights.update(delta);
 			stage.act(delta);
-			audioControl.update(delta);
 		}
 
 		{// draw
 			MGOA.temporals.lights.draw(null);
 			stage.draw();
-			audioControl.draw(MGOA.gfx.defaultSpriteBatch);
+			//audioControl.draw(MGOA.gfx.defaultSpriteBatch);
 		}
 
 	}

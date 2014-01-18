@@ -46,13 +46,10 @@ public class FxBox implements IUpdateable, IDrawable {
 		
 		// draw
         batch.setProjectionMatrix(MGOA.gfx.worldCam.combined);
-        batch.begin();
-        {
-        	for (ParticleEffect effect : effects)
-        		effect.draw(batch, Gdx.graphics.getDeltaTime());
-        }
-        batch.end();
         
+        for (ParticleEffect effect : effects)
+        	effect.draw(batch, Gdx.graphics.getDeltaTime());
+
 	}
 	
 	public void makeExplosion(Vector2 position, Color color){

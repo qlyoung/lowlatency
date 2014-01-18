@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.ui;
+package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,24 +16,24 @@ public class ConfigScreen implements Screen {
 	private Stage stage;
 	private Table root;
 	
+	SelectBox selector;
+	
 	public ConfigScreen(){
 		
 		stage = new Stage();
+		root = new Table();
+		
+		root.setFillParent(true);
 		Gdx.input.setInputProcessor(stage);
 		
-		root = new Table();
-		root.setFillParent(true);
-		
-		Label lbl = new Label("Difficulty: ", MGOA.ui.uiLabelStyle);
-		
 		String[] selections = new String[MGOA.util.difficulties.length];
-		
 		for (int i = 0; i < MGOA.util.difficulties.length; i++)
 			selections[i] = MGOA.util.difficulties[i].name;
 			
-		final SelectBox selector = new SelectBox(selections, MGOA.ui.uiSelectBoxStyle);
-		
+		selector = new SelectBox(selections, MGOA.ui.uiSelectBoxStyle);
+		Label lbl = new Label("Difficulty: ", MGOA.ui.uiLabelStyle);
 		TextButton playButton = new TextButton("Play", MGOA.ui.uiTextButtonStyle);
+		TextButton backToMenu = new TextButton("MAIN MENU", MGOA.ui.uiTextButtonStyle);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -41,11 +41,20 @@ public class ConfigScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
+		backToMenu.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				MGOA.game.setScreen(new MenuScreen());
+				super.clicked(event, x, y);
+			}
+		});
 		
-		root.add(lbl);
-		root.add(selector);
+		root.add(backToMenu).expandY().expandX().top().left().colspan(2);
 		root.row();
-		root.add(playButton).colspan(2);
+		root.add(lbl).right();
+		root.add(selector).left();
+		root.row();
+		root.add(playButton).colspan(2).center().padTop(30).padBottom(30);
 		
 		stage.addActor(root);
 	}
@@ -97,7 +106,6 @@ public class ConfigScreen implements Screen {
 	}
 	
 	private void finish(){
-		SelectBox selector = ((SelectBox) root.getChildren().get(1));
 		int index = selector.getSelectionIndex();
 		
 		MGOA.temporals.difficulty = MGOA.util.difficulties[index];

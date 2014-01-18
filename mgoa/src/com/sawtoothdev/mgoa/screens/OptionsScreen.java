@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.ui;
+package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

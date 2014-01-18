@@ -33,7 +33,7 @@ public class Countdown implements IUpdateable, IDrawable {
 	public void draw(SpriteBatch batch) {
 		if (lastSecond != (int) timer){
 			lastSecond = (int) timer;
-			hud.showMessage(String.valueOf(lastSecond), Color.BLACK);
+			hud.showMessage(String.valueOf(lastSecond), Color.CYAN);
 		}
 	}
 	

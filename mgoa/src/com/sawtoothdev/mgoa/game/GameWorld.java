@@ -12,11 +12,10 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 
 	
 	public final OneShotMusicPlayer music;
-	
 	public final CoreManager coreManager;
-	public final Visuals visuals;
+	public final Visualizer visualizer;
+	public final FxBox fxbox;
 	public final HUD hud;
-	
 	private final Countdown countdown;
 	
 	public enum WorldState { INITIALIZED, BEFORE, ACTIVE, AFTER, PAUSED, FINISHED };
@@ -26,10 +25,10 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	public GameWorld() {
 
 		music = new OneShotMusicPlayer(MGOA.temporals.song.getHandle());
-		
 		hud = new HUD(MGOA.temporals.song);
 		coreManager = new CoreManager(this);
-		visuals = new Visuals(this);
+		visualizer = new Visualizer(MGOA.temporals.rawmap, music);
+		fxbox = new FxBox();
 		
 		MGOA.temporals.stats = new Stats();
 		MGOA.temporals.stats.numBeats = MGOA.temporals.beatmap.size();
@@ -56,7 +55,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 			}
 			break;
 		case ACTIVE:
-			visuals.update(delta);
+			visualizer.update(delta);
+			fxbox.update(delta);
 			coreManager.update(delta);
 			hud.update(delta);
 			// weird behavior here, when pause() gets called libgdx
@@ -80,9 +80,13 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	@Override
 	public void draw(SpriteBatch batch) {
 
-		visuals.draw(batch);
+		visualizer.draw(batch);
+		
+		batch.begin();
+		fxbox.draw(batch);
 		coreManager.draw(batch);
 		hud.draw(batch);
+		batch.end();
 	}
 
 	public void start() {
