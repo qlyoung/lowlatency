@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.objects;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
+import com.sawtoothdev.mgoa.MainGame;
 
 public class LoadingThread extends Thread {
 
@@ -18,7 +19,7 @@ public class LoadingThread extends Thread {
 		LinkedList<Beat> rawbeats = null;
 
 		try {
-			rawbeats = FastBeatDetector.detectBeats(MGOA.temporals.song.getHandle(), sensitivity);
+			rawbeats = FastBeatDetector.detectBeats(MainGame.temporals.song.getHandle(), sensitivity);
 		} catch (IOException e) {
 			Gdx.app.log("Load Screen", e.getMessage());
 			return;
@@ -26,9 +27,9 @@ public class LoadingThread extends Thread {
 
 		// drop beats under .01 energiez
 		LinkedList<Beat> beatmap = BeatsProcessor.dropLowBeats(rawbeats, .01f);
-		beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MGOA.temporals.difficulty.minBeatSpace);
+		beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MainGame.temporals.difficulty.minBeatSpace);
 		
-		MGOA.temporals.rawmap = rawbeats;
-		MGOA.temporals.beatmap = beatmap;
+		MainGame.temporals.rawmap = rawbeats;
+		MainGame.temporals.beatmap = beatmap;
 	}
 }

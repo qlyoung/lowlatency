@@ -2,7 +2,6 @@ package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -10,8 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.Stats;
+import com.sawtoothdev.mgoa.MainGame;
 
 public class FinishScreen implements Screen {
 
@@ -23,25 +21,25 @@ public class FinishScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		LabelStyle ls = MGOA.ui.uiLabelStyle;
+		LabelStyle ls = MainGame.ui.uiLabelStyle;
 		
-		String songinfo = MGOA.temporals.song.getArtist() + " - " + MGOA.temporals.song.getTitle();
+		String songinfo = MainGame.temporals.song.getArtist() + " - " + MainGame.temporals.song.getTitle();
 		Label songLabel = new Label(songinfo, ls);
-		TextButton okay = new TextButton("OK", MGOA.ui.uiTextButtonStyle);
+		TextButton okay = new TextButton("OK", MainGame.ui.uiTextButtonStyle);
 		okay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MGOA.game.setScreen(new MenuScreen());
+				MainGame.game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", ls)).left();
-		summary.add(new Label(String.valueOf(MGOA.temporals.stats.points), ls)).right();
+		summary.add(new Label(String.valueOf(MainGame.temporals.stats.points), ls)).right();
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", ls)).left();
-		summary.add(new Label(String.valueOf(MGOA.temporals.difficulty.scoreMultiplier), ls)).right();
+		summary.add(new Label(String.valueOf(MainGame.temporals.difficulty.scoreMultiplier), ls)).right();
 
 		root.add(songLabel);
 		root.row();
@@ -52,11 +50,6 @@ public class FinishScreen implements Screen {
 		stage.addActor(root);
 	}
 
-	private void writeStats(Stats stats){
-		FileHandle statsFile = Gdx.files.local("corndog");
-		
-	}
-	
 	@Override
 	public void render(float delta) {
 		

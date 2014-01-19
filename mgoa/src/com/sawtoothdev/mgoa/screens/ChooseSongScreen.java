@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.FileBrowser;
-import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.Song;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.FileBrowser;
+import com.sawtoothdev.mgoa.objects.Song;
 
 public class ChooseSongScreen implements Screen {
 
@@ -28,10 +28,10 @@ public class ChooseSongScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 
 		// controls
-		TextButton homeButton = new TextButton("Main Menu", MGOA.ui.uiTextButtonStyle);
+		TextButton homeButton = new TextButton("Main Menu", MainGame.ui.uiTextButtonStyle);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
-				MGOA.game.setScreen(new MenuScreen());
+				MainGame.game.setScreen(new MenuScreen());
 			}
 		});
 
@@ -52,13 +52,13 @@ public class ChooseSongScreen implements Screen {
 	public void render(float delta) {
 
 		// update
-		MGOA.temporals.lights.update(delta);
+		MainGame.gfx.lights.update(delta);
 		stage.act();
 		if (browser.getSelection() != null)
 			finish();
 
 		// draw
-		MGOA.temporals.lights.draw(null);
+		MainGame.gfx.lights.draw(null);
 		stage.draw();
 	}
 
@@ -94,8 +94,8 @@ public class ChooseSongScreen implements Screen {
 	
 	private void finish(){
 		Gdx.input.setInputProcessor(null);
-		MGOA.temporals.song = new Song(browser.getSelection());
-		MGOA.game.setScreen(new ConfigScreen());
+		MainGame.temporals.song = new Song(browser.getSelection());
+		MainGame.game.setScreen(new ConfigScreen());
 	}
 
 }

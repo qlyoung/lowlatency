@@ -18,18 +18,18 @@ public class DebugOverlay implements IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
-		MGOA.gfx.sysSB.begin();
+		batch.setProjectionMatrix(MainGame.gfx.screenCam.combined);
+		MainGame.gfx.sysSB.begin();
 			debugFont.draw(
-				MGOA.gfx.sysSB,
-				MGOA.VERSION,
+				MainGame.gfx.sysSB,
+				MainGame.VERSION,
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight());
 			debugFont.draw(
-				MGOA.gfx.sysSB, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
+				MainGame.gfx.sysSB, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
-		MGOA.gfx.sysSB.end();
+		MainGame.gfx.sysSB.end();
 
 	}
 

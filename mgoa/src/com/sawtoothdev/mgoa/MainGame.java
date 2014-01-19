@@ -14,7 +14,7 @@ import com.sawtoothdev.mgoa.screens.MenuScreen;
  *
  */
 
-public class MGOA extends Game {
+public class MainGame extends Game {
 	
 	public static Audio audio;
 	public static Gfx gfx;
@@ -31,22 +31,20 @@ public class MGOA extends Game {
 	
 	@Override
 	public void create() {
-		
+				
 		// init
+		settings = Gdx.app.getPreferences("settings");
+		util = new Utilities();
 		audio = new Audio();
 		gfx = new Gfx();
-		util = new Utilities();
 		ui = new UI();
 		temporals = new Temporals();
 		game = this;
-		settings = Gdx.app.getPreferences("settings");
 		
 		// config
 		settings.putBoolean("firstrun", !settings.contains("firstrun"));
 		settings.flush();
-		if (!MGOA.settings.contains("bgmusic") || MGOA.settings.getBoolean("bgmusic"))
-			MGOA.audio.menuMusic.play();
-		MGOA.temporals.lights = new PrettyLights(4, PrettyLights.Mode.IDLE);
+
 		
 		// begin
 		this.setScreen(new MenuScreen());

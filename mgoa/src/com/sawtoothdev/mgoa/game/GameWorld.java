@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.OneShotMusicPlayer;
-import com.sawtoothdev.mgoa.Stats;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
+import com.sawtoothdev.mgoa.objects.Stats;
 
 public class GameWorld implements IUpdateable, IDrawable, IPausable {
 
@@ -14,8 +14,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	public final OneShotMusicPlayer music;
 	public final CoreManager coreManager;
 	public final Visualizer visualizer;
-	public final FxBox fxbox;
-	public final HUD hud;
+	public final EffectsManager fxbox;
+	public final HudManager hud;
 	private final Countdown countdown;
 	
 	public enum WorldState { INITIALIZED, BEFORE, ACTIVE, AFTER, PAUSED, FINISHED };
@@ -24,14 +24,14 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	
 	public GameWorld() {
 
-		music = new OneShotMusicPlayer(MGOA.temporals.song.getHandle());
-		hud = new HUD(MGOA.temporals.song);
+		music = new OneShotMusicPlayer(MainGame.temporals.song.getHandle());
+		hud = new HudManager(MainGame.temporals.song);
 		coreManager = new CoreManager(this);
-		visualizer = new Visualizer(MGOA.temporals.rawmap, music);
-		fxbox = new FxBox();
+		visualizer = new Visualizer(MainGame.temporals.rawmap, music);
+		fxbox = new EffectsManager();
 		
-		MGOA.temporals.stats = new Stats();
-		MGOA.temporals.stats.numBeats = MGOA.temporals.beatmap.size();
+		MainGame.temporals.stats = new Stats();
+		MainGame.temporals.stats.numBeats = MainGame.temporals.beatmap.size();
 		
 		countdown = new Countdown(hud, 4);
 

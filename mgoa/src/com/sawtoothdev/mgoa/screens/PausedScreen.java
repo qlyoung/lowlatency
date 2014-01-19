@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
 
 public class PausedScreen implements Screen {
 	
@@ -33,8 +33,8 @@ public class PausedScreen implements Screen {
 		
 		// actors
 		playButton.setPosition(5, Gdx.graphics.getHeight() - playButton.getHeight() - 5);
-		TextButton resume = new TextButton("Resume", MGOA.ui.uiTextButtonStyle);
-		TextButton quitToMenu = new TextButton("Quit to Main Menu", MGOA.ui.uiTextButtonStyle);
+		TextButton resume = new TextButton("Resume", MainGame.ui.uiTextButtonStyle);
+		TextButton quitToMenu = new TextButton("Quit to Main Menu", MainGame.ui.uiTextButtonStyle);
 		
 		// actor setup
 		resume.addListener(new ClickListener(){
@@ -48,7 +48,7 @@ public class PausedScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.input.setInputProcessor(null);
-				MGOA.game.setScreen(new MenuScreen());
+				MainGame.game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -76,15 +76,15 @@ public class PausedScreen implements Screen {
 		stage.act();
 		
 		stage.draw();
-		MGOA.gfx.sysSB.setProjectionMatrix(MGOA.gfx.screenCam.combined);
-		MGOA.gfx.sysSB.begin();
-		playButton.draw(MGOA.gfx.sysSB);
-		MGOA.gfx.sysSB.end();
+		MainGame.gfx.sysSB.setProjectionMatrix(MainGame.gfx.screenCam.combined);
+		MainGame.gfx.sysSB.begin();
+		playButton.draw(MainGame.gfx.sysSB);
+		MainGame.gfx.sysSB.end();
 	}
 
 	public void returnToGame(){
 		Gdx.input.setInputProcessor(null);
-		MGOA.game.setScreen(home);
+		MainGame.game.setScreen(home);
 	}
 	
 	@Override

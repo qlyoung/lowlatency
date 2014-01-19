@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
 
 public class OptionsScreen implements Screen {
 
@@ -22,7 +22,7 @@ public class OptionsScreen implements Screen {
 		root.setFillParent(true);
 
 		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen",
-				MGOA.ui.uiTextButtonStyle);
+				MainGame.ui.uiTextButtonStyle);
 		fullscreenToggle.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -30,26 +30,26 @@ public class OptionsScreen implements Screen {
 					Gdx.graphics.setDisplayMode(
 							Gdx.graphics.getDesktopDisplayMode().width,
 							Gdx.graphics.getDesktopDisplayMode().height, true);
-					MGOA.game.setScreen(new OptionsScreen());
+					MainGame.game.setScreen(new OptionsScreen());
 				} else {
 					Gdx.graphics.setDisplayMode(1280, 720, false);
-					MGOA.game.setScreen(new OptionsScreen());
+					MainGame.game.setScreen(new OptionsScreen());
 				}
 
 				super.clicked(event, x, y);
 			}
 		});
 		TextButton backToMenu = new TextButton("Main Menu",
-				MGOA.ui.uiTextButtonStyle);
+				MainGame.ui.uiTextButtonStyle);
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MGOA.game.setScreen(new MenuScreen());
+				MainGame.game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
 
-		root.add(new Label("---Graphics Options---", MGOA.ui.uiLabelStyle));
+		root.add(new Label("---Graphics Options---", MainGame.ui.uiLabelStyle));
 		root.row();
 		root.add(fullscreenToggle);
 		root.row();
@@ -62,7 +62,7 @@ public class OptionsScreen implements Screen {
 
 		{// update
 			if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-				MGOA.game.setScreen(new MenuScreen());
+				MainGame.game.setScreen(new MenuScreen());
 			stage.act();
 		}
 

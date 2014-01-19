@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.sawtoothdev.mgoa.objects.Difficulty;
 
 /**
  * Heavyweights, globals and misfit objects

@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.objects;
 
 import java.util.Iterator;
 
@@ -6,6 +6,7 @@ import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +18,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.game.BeatCore;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.MainGame;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -46,7 +49,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	
 	private Mode mode;
 
-	public PrettyLights(int numLights, Mode mode) {
+	public PrettyLights(int numLights, Mode mode, Camera worldcam) {
 		this.mode = mode;
 
 		makeWall(5, 0, .25f, 6);
@@ -55,10 +58,10 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		makeWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
-		rayHandler.setCombinedMatrix(MGOA.gfx.worldCam.combined);
+		rayHandler.setCombinedMatrix(worldcam.combined);
 		
 		for (int i = 0; i < numLights; i++)
-			addOrb(Color.WHITE, MGOA.util.random.nextFloat() + .5f);
+			addOrb(Color.WHITE, MainGame.util.random.nextFloat() + .5f);
 		
 		idleTimer = IDLE_TIMER_MIN;
 
@@ -74,7 +77,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			idleTimer -= delta;
 			if (idleTimer <= 0){
 				applyRandomImpulseToAllLights(2);
-				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MGOA.util.random.nextFloat() + IDLE_TIMER_MIN);
+				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MainGame.util.random.nextFloat() + IDLE_TIMER_MIN);
 			}
 			break;
 		case REACT:
@@ -94,7 +97,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		rayHandler.updateAndRender();
 	}
 
-	public void react(Beat b) {
+	public void react(Beat b, Color c) {
 		if (mode == Mode.IDLE)
 			return;
 
@@ -106,8 +109,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			applyRandomImpulseToAllLights(25 * b.energy);
 		
 		// colorize
-		if (BeatCore.getEnergyColor(b.energy) != Color.MAGENTA)
-			changeAllColors(BeatCore.getEnergyColor(b.energy));
+		changeAllColors(c);
 	}
 	private void additivePulse(float distance){
 		for (Light l : rayHandler.lightList) {
@@ -125,13 +127,13 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		while (bodies.hasNext()) {
 			float min = .03f, max = 1f;
 
-			float xImpulse = ((max - min) * MGOA.util.random.nextFloat() + min)
+			float xImpulse = ((max - min) * MainGame.util.random.nextFloat() + min)
 					* multiplier;
-			float yImpulse = ((max - min) * MGOA.util.random.nextFloat() + min)
+			float yImpulse = ((max - min) * MainGame.util.random.nextFloat() + min)
 					* multiplier;
 
-			xImpulse = MGOA.util.random.nextBoolean() ? xImpulse : -xImpulse;
-			yImpulse = MGOA.util.random.nextBoolean() ? -yImpulse : yImpulse;
+			xImpulse = MainGame.util.random.nextBoolean() ? xImpulse : -xImpulse;
+			yImpulse = MainGame.util.random.nextBoolean() ? -yImpulse : yImpulse;
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
@@ -159,8 +161,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		circfix.density = 0f;
 
 		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(MGOA.util.random.nextFloat() - .5f,
-				MGOA.util.random.nextFloat() - .5f);
+		orbBody.setLinearVelocity(MainGame.util.random.nextFloat() - .5f,
+				MainGame.util.random.nextFloat() - .5f);
 		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
 
 		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,

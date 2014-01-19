@@ -7,12 +7,12 @@ import com.sawtoothdev.mgoa.IUpdateable;
 
 public class Countdown implements IUpdateable, IDrawable {
 
-	private HUD hud;
+	private HudManager hud;
 	private float timer;
 	private int lastSecond;
 	private boolean finished = false;
 	
-	public Countdown(HUD hud, int seconds){
+	public Countdown(HudManager hud, int seconds){
 		this.hud = hud;
 		this.timer = seconds;
 	}

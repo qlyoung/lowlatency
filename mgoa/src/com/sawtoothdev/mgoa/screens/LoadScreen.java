@@ -2,8 +2,8 @@ package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sawtoothdev.mgoa.LoadingThread;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.LoadingThread;
 
 /**
  * Responsible for loading all resources before gameplay begins. This includes
@@ -25,21 +25,21 @@ public class LoadScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
-			MGOA.temporals.lights.update(delta);
+			MainGame.gfx.lights.update(delta);
 			
 			if (!loadThread.isAlive())
 				finish();
 		}
 
 		{// draw
-			MGOA.temporals.lights.draw(null);
+			MainGame.gfx.lights.draw(null);
 			
-			MGOA.gfx.sysSB.setProjectionMatrix(MGOA.gfx.screenCam.combined);
-			MGOA.gfx.sysSB.begin();
-			MGOA.ui.uiFnt.draw(MGOA.gfx.sysSB, "Loading...",
+			MainGame.gfx.sysSB.setProjectionMatrix(MainGame.gfx.screenCam.combined);
+			MainGame.gfx.sysSB.begin();
+			MainGame.ui.uiFnt.draw(MainGame.gfx.sysSB, "Loading...",
 					Gdx.graphics.getWidth() / 2f - 20f,
 					Gdx.graphics.getHeight() / 2f);
-			MGOA.gfx.sysSB.end();
+			MainGame.gfx.sysSB.end();
 		}
 
 	}
@@ -75,8 +75,8 @@ public class LoadScreen implements Screen {
 	}
 
 	private void finish(){
-		MGOA.audio.menuMusic.pause();
+		MainGame.audio.menuMusic.pause();
 		System.gc();
-		MGOA.game.setScreen(new GameScreen());
+		MainGame.game.setScreen(new GameScreen());
 	}
 }

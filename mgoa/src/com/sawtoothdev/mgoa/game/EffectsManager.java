@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
 
-public class FxBox implements IUpdateable, IDrawable {
+public class EffectsManager implements IUpdateable, IDrawable {
 
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
@@ -45,7 +45,7 @@ public class FxBox implements IUpdateable, IDrawable {
 		}
 		
 		// draw
-        batch.setProjectionMatrix(MGOA.gfx.worldCam.combined);
+        batch.setProjectionMatrix(MainGame.gfx.worldCam.combined);
         
         for (ParticleEffect effect : effects)
         	effect.draw(batch, Gdx.graphics.getDeltaTime());

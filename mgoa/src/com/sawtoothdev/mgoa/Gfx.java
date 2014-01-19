@@ -4,16 +4,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.sawtoothdev.mgoa.objects.PrettyLights;
 
 public class Gfx {
 	
 	public final SpriteBatch sysSB;
 	public final OrthographicCamera screenCam, worldCam;
-
+	public PrettyLights lights;
+	
 	public Gfx(){
 		sysSB = new SpriteBatch();
 		screenCam = new OrthographicCamera();
 		worldCam = new OrthographicCamera(10, 6);
+		lights = new PrettyLights(4, PrettyLights.Mode.IDLE, worldCam);
 		
 		screenCam.setToOrtho(false);
 	}

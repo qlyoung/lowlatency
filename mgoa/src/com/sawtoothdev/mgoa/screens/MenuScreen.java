@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.PrettyLights.Mode;
 
 public class MenuScreen implements Screen {
 
@@ -18,26 +19,28 @@ public class MenuScreen implements Screen {
 		
 		// stage setup
 		Gdx.input.setInputProcessor(stage);
-
+		
+		MainGame.gfx.lights.setMode(Mode.IDLE);
+		
 		// actors
 		TextButton
-			playButton = new TextButton("Play", MGOA.ui.uiTextButtonStyle),
-			optionsButton = new TextButton("Options", MGOA.ui.uiTextButtonStyle),
-			statsButton = new TextButton("Leaderboards", MGOA.ui.uiTextButtonStyle),
-			creditsButton = new TextButton("Credits", MGOA.ui.uiTextButtonStyle);
+			playButton = new TextButton("Play", MainGame.ui.uiTextButtonStyle),
+			optionsButton = new TextButton("Options", MainGame.ui.uiTextButtonStyle),
+			statsButton = new TextButton("Leaderboards", MainGame.ui.uiTextButtonStyle),
+			creditsButton = new TextButton("Credits", MainGame.ui.uiTextButtonStyle);
 
 		// actors setup
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MGOA.game.setScreen(new ChooseSongScreen());
+				MainGame.game.setScreen(new ChooseSongScreen());
 				super.clicked(event, x, y);
 			}
 		});
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MGOA.game.setScreen(new OptionsScreen());
+				MainGame.game.setScreen(new OptionsScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -63,12 +66,12 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
-			MGOA.temporals.lights.update(delta);
+			MainGame.gfx.lights.update(delta);
 			stage.act(delta);
 		}
 
 		{// draw
-			MGOA.temporals.lights.draw(null);
+			MainGame.gfx.lights.draw(null);
 			stage.draw();
 			//audioControl.draw(MGOA.gfx.defaultSpriteBatch);
 		}

@@ -1,8 +1,9 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
+import com.sawtoothdev.mgoa.IPausable;
 
 public class OneShotMusicPlayer implements IPausable {
 

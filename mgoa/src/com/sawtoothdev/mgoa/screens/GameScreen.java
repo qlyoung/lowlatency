@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sawtoothdev.mgoa.MGOA;
+import com.sawtoothdev.mgoa.MainGame;
 import com.sawtoothdev.mgoa.game.GameWorld;
 import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 
@@ -14,16 +14,11 @@ import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 
 public class GameScreen implements Screen {
 
+	private enum GameScreenState { INITIALIZED, RUNNING, DONE, PAUSED };
 	private final GameWorld gameWorld;
-
-	// state
-	private enum GameScreenState {
-		INITIALIZED, RUNNING, DONE, PAUSED
-	};
 	private GameScreenState state;
 	
 	public GameScreen() {
-
 		gameWorld = new GameWorld();
 
 		// IT BEGINS
@@ -39,14 +34,14 @@ public class GameScreen implements Screen {
 			break;
 		case RUNNING:
 			gameWorld.update(delta);
-			gameWorld.draw(MGOA.gfx.sysSB);
+			gameWorld.draw(MainGame.gfx.sysSB);
 
 			// end condition
 			if (gameWorld.getState() == WorldState.FINISHED)
 				this.state = GameScreenState.DONE;
 			break;
 		case DONE:
-			MGOA.game.setScreen(new FinishScreen());
+			MainGame.game.setScreen(new FinishScreen());
 			break;
 		case PAUSED:
 			Gdx.app.log("gamescreen", "paused update");
@@ -66,11 +61,9 @@ public class GameScreen implements Screen {
 		if (state == GameScreenState.INITIALIZED) {
 			gameWorld.start();
 			state = GameScreenState.RUNNING;
-			Gdx.app.log("game screen", "starting");
 		}
-		else if (state == GameScreenState.PAUSED){
+		else if (state == GameScreenState.PAUSED)
 			resume();
-		}
 	}
 
 	@Override
@@ -83,7 +76,7 @@ public class GameScreen implements Screen {
 		Gdx.app.log("game screen", "pausing");
 		gameWorld.pause();
 		this.state = GameScreenState.PAUSED;
-		MGOA.game.setScreen(new PausedScreen(this));
+		MainGame.game.setScreen(new PausedScreen(this));
 	}
 
 	@Override

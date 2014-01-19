@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa;
+package com.sawtoothdev.mgoa.objects;
 
 import java.io.IOException;
 

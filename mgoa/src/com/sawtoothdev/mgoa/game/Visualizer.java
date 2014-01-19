@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.OneShotMusicPlayer;
-import com.sawtoothdev.mgoa.PrettyLights;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
+import com.sawtoothdev.mgoa.objects.PrettyLights;
 
 /**
  * Wet layer that interfaces PrettyLights to mgoa
@@ -25,7 +25,7 @@ public class Visualizer implements IDrawable, IUpdateable {
 	private PrettyLights pl;
 	
 	public Visualizer(LinkedList<Beat> beatevents, OneShotMusicPlayer music){
-		pl = MGOA.temporals.lights;
+		pl = MainGame.gfx.lights;
 		pl.setMode(PrettyLights.Mode.REACT);
 		this.music = music;
 		
@@ -38,7 +38,7 @@ public class Visualizer implements IDrawable, IUpdateable {
 		
 		if (nextBeat != null)
 			if (music.currentTime() >= nextBeat.timeMs) {
-				pl.react(nextBeat);
+				pl.react(nextBeat, CoreManager.getEnergyColor(nextBeat.energy));
 				nextBeat = events.hasNext() ? events.next() : null;
 			}
 

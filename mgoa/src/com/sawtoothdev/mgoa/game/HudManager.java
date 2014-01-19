@@ -15,10 +15,10 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MGOA;
-import com.sawtoothdev.mgoa.Song;
+import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.objects.Song;
 
-class HUD implements IUpdateable, IDrawable {
+class HudManager implements IUpdateable, IDrawable {
 
 	public class PointsHUD implements IDrawable, IUpdateable {
 
@@ -82,7 +82,7 @@ class HUD implements IUpdateable, IDrawable {
 		@Override
 		public void draw(SpriteBatch batch) {
 			for (PointMessage p : activePoints)
-				MGOA.ui.uiFnt.draw(batch, p.text, p.position.x, p.position.y);
+				MainGame.ui.uiFnt.draw(batch, p.text, p.position.x, p.position.y);
 		}
 		
 		public void spawnPoints(int value, Vector2 position, Vector2 target){
@@ -104,7 +104,7 @@ class HUD implements IUpdateable, IDrawable {
 	private Sprite pauseButton = new Sprite(new Texture("data/textures/ui/pause.png"));
 	
 	
-	public HUD(Song song){
+	public HudManager(Song song){
 		pauseButton.setPosition(5, Gdx.graphics.getHeight() - pauseButton.getHeight() - 5);
 		this.song = song;
 		messageFont.setColor(Color.WHITE);
@@ -120,14 +120,14 @@ class HUD implements IUpdateable, IDrawable {
 			Rectangle spriteBox = pauseButton.getBoundingRectangle();
 
 			if (spriteBox.contains(lastTouch.x, lastTouch.y))
-				MGOA.game.getScreen().pause();
+				MainGame.game.getScreen().pause();
 		}
 		
 		// update the score spinner
-		if (displayScore < MGOA.temporals.stats.points)
+		if (displayScore < MainGame.temporals.stats.points)
 			displayScore += 17;
-		else if (displayScore > MGOA.temporals.stats.points)
-			displayScore = MGOA.temporals.stats.points;
+		else if (displayScore > MainGame.temporals.stats.points)
+			displayScore = MainGame.temporals.stats.points;
 
 		// update point messages
 		pointsHud.update(delta);
@@ -143,15 +143,15 @@ class HUD implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch){
 
-		batch.setProjectionMatrix(MGOA.gfx.screenCam.combined);
+		batch.setProjectionMatrix(MainGame.gfx.screenCam.combined);
 		
 		// gfx
 		batch.draw(bottomFadeBar, 0, 0);
 		// song data
-		MGOA.ui.uiFnt.setColor(Color.CYAN);
-		MGOA.ui.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
+		MainGame.ui.uiFnt.setColor(Color.CYAN);
+		MainGame.ui.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
 		// score
-		MGOA.ui.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 23);
+		MainGame.ui.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 23);
 		// messages
 		if (message != null){
 			float length = messageFont.getBounds(message).width;
@@ -169,7 +169,7 @@ class HUD implements IUpdateable, IDrawable {
 		this.message = message;
 	}
 	public void showPoints(int points, Vector2 position){
-		Vector2 screenPosition = MGOA.gfx.projectToScreen(position);
+		Vector2 screenPosition = MainGame.gfx.projectToScreen(position);
 		pointsHud.spawnPoints(points, screenPosition, new Vector2(Gdx.graphics.getWidth() - 100, bottomFadeBar.getRegionHeight()));
 	}
 

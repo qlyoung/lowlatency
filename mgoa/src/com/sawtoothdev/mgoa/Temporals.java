@@ -3,6 +3,9 @@ package com.sawtoothdev.mgoa;
 import java.util.LinkedList;
 
 import com.sawtoothdev.audioanalysis.Beat;
+import com.sawtoothdev.mgoa.objects.Difficulty;
+import com.sawtoothdev.mgoa.objects.Song;
+import com.sawtoothdev.mgoa.objects.Stats;
 
 public class Temporals {
 	
@@ -10,7 +13,6 @@ public class Temporals {
 	public Difficulty difficulty;
 	public LinkedList<Beat> beatmap;
 	public LinkedList<Beat> rawmap;
-	public PrettyLights lights;
 	public Stats stats;
 	
 }
