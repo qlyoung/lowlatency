@@ -20,15 +20,13 @@ import com.sawtoothdev.mgoa.MainGame;
 
 public class CoreManager implements IUpdateable, IDrawable {
 
-	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST	};
-	public enum CoreState { alive, dying, dead };
-	public class BeatCore implements IUpdateable, IDrawable, Poolable {
+	class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 		// animation
 		private final float shrinkRate;
 		private static final float SYNCH_SIZE = .45f;
 
-		// gfx
+		// Gfx
 		private final Sprite ring, core;
 		private Color intensityColor;
 		private float alpha = 1;
@@ -44,14 +42,14 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 		public BeatCore() {
 			// delta size / delta time
-			shrinkRate = (1 - SYNCH_SIZE) / (0 - (MainGame.temporals.difficulty.ringTimeMs / 1000f));
+			shrinkRate = (1 - SYNCH_SIZE) / (0 - (MainGame.Temporal.difficulty.ringTimeMs / 1000f));
 
-			Texture t = new Texture("data/textures/ring.png");
+			Texture t = new Texture("textures/ring.png");
 			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			ring = new Sprite(t);
 			ring.setSize(1.6f, 1.6f * ring.getHeight() / ring.getWidth());
 
-			Texture y = new Texture("data/textures/core.png");
+			Texture y = new Texture("textures/core.png");
 			y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			core = new Sprite(y);
 
@@ -196,8 +194,6 @@ public class CoreManager implements IUpdateable, IDrawable {
 			return intensityColor;
 		}
 	}
-
-	
 	class CorePool extends Pool<BeatCore> {
 		
 		@Override
@@ -206,6 +202,11 @@ public class CoreManager implements IUpdateable, IDrawable {
 		}
 
 	}
+	
+	//-------------------------------------------------------------
+	
+	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST	};
+	public enum CoreState { alive, dying, dead };
 	
 	// pools and cores
 	private CorePool corePool;
@@ -216,14 +217,13 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 	// vars
 	public int combo = 0;
-
 	private GameWorld GW;
 
 	public CoreManager(GameWorld gw) {
 
 		this.GW = gw;
 
-		for (Beat b : MainGame.temporals.beatmap)
+		for (Beat b : MainGame.Temporal.beatmap)
 			this.events.add(b);
 
 		this.corePool = new CorePool();
@@ -235,8 +235,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		// hit detection
 		if (Gdx.input.isTouched()) {
 
-			Vector2 touchPos = MainGame.gfx.projectToWorld(new Vector2(Gdx.input
-					.getX(), Gdx.input.getY()));
+			Vector2 touchPos = MainGame.Gfx.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
 			for (BeatCore core : activeCores) {
 
@@ -251,7 +250,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 		// song events
 		while (events.peek() != null
-				&& GW.music.currentTime() >= events.peek().timeMs - MainGame.temporals.difficulty.ringTimeMs)
+				&& GW.music.currentTime() >= events.peek().timeMs - MainGame.Temporal.difficulty.ringTimeMs)
 			spawnCore(events.poll());
 
 		// active core management
@@ -279,7 +278,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 
-		batch.setProjectionMatrix(MainGame.gfx.worldCam.combined);
+		batch.setProjectionMatrix(MainGame.Gfx.worldCam.combined);
 		
 		for (BeatCore core : activeCores)
 			core.draw(batch);
@@ -292,15 +291,15 @@ public class CoreManager implements IUpdateable, IDrawable {
 		core.setBeat(beat);
 
 		Vector2 position = new Vector2();
-		position.set(MainGame.util.random.nextInt(9) - 4,
-				MainGame.util.random.nextInt(5) - 2);
+		position.set(MainGame.Util.random.nextInt(9) - 4,
+				MainGame.Util.random.nextInt(5) - 2);
 
 		if (activeCores.size() > 0) {
 
 			boolean emptySpace = false;
 			while (!emptySpace) {
 
-				position.set(MainGame.util.random.nextInt(9) - 4, MainGame.util.random.nextInt(5) - 2);
+				position.set(MainGame.Util.random.nextInt(9) - 4, MainGame.Util.random.nextInt(5) - 2);
 				for (BeatCore c : activeCores) {
 					emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
 					if (!emptySpace) break;
@@ -318,7 +317,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		Accuracy accuracy = core.onHit(GW.music.currentTime());
 
 		// record in stats
-		MainGame.temporals.stats.numBeatsHit++;
+		MainGame.Temporal.stats.numBeatsHit++;
 
 		// calculate the score value based on accuracy
 		int divisor = accuracy.ordinal() + 1;
@@ -326,8 +325,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 		// statistics & scoring
 		combo++;
-		MainGame.temporals.stats.numBeatsHit++;
-		MainGame.temporals.stats.points += points;
+		MainGame.Temporal.stats.numBeatsHit++;
+		MainGame.Temporal.stats.points += points;
 
 		// pretty lights
 		GW.fxbox.makeExplosion(core.getPosition(), core.getColor());

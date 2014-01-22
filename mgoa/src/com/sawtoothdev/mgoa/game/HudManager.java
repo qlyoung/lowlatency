@@ -20,9 +20,9 @@ import com.sawtoothdev.mgoa.objects.Song;
 
 class HudManager implements IUpdateable, IDrawable {
 
-	public class PointsHUD implements IDrawable, IUpdateable {
+	class PointsHUD implements IDrawable, IUpdateable {
 
-		class PointMessage implements Poolable {
+		class PointMessage implements Poolable, IUpdateable, IDrawable {
 			
 			public String text;
 			public Vector2 target = new Vector2();
@@ -33,7 +33,6 @@ class HudManager implements IUpdateable, IDrawable {
 				this.position.set(position);
 				this.target.set(target);
 			}
-			
 			@Override
 			public void reset() {
 				text = null;
@@ -41,8 +40,28 @@ class HudManager implements IUpdateable, IDrawable {
 				position.set(0, 0);
 			}
 			
+			@Override
+			public void update(float delta) {
+				float xshift = delta * 400;
+				float yshift = xshift * getSlopeToTarget();
+				
+				position.x += position.x < target.x ? xshift : -xshift;
+				position.y += position.y < target.y ? -yshift : yshift;
+			}
+			@Override
+			public void draw(SpriteBatch batch) {
+				font.draw(batch, text, position.x, position.y);
+			}
+			
 			public float getSlopeToTarget(){
 				return (target.y - position.y) / (target.x - position.x);
+			}
+			public boolean isNearTarget(float maxDistance){
+				if (Math.abs(target.y - position.y) < maxDistance &&
+					Math.abs(target.x - position.x) < maxDistance)
+					return true;
+				else
+					return false;
 			}
 		}
 		
@@ -54,6 +73,7 @@ class HudManager implements IUpdateable, IDrawable {
 			}
 			
 		};
+		
 		ArrayList<PointMessage> activePoints = new ArrayList<PointsHUD.PointMessage>();
 		
 		@Override
@@ -61,31 +81,22 @@ class HudManager implements IUpdateable, IDrawable {
 			
 			for (int i = 0; i < activePoints.size(); i++){
 				PointMessage p = activePoints.get(i);
-				// if we're within five pixels of our target
-				if (Math.abs(p.position.x - p.target.x) < 5 &&
-					Math.abs(p.position.y - p.target.y) < 5){
-					
+				p.update(delta);
+				
+				if (p.isNearTarget(5)){
 					pointPool.free(p);
 					activePoints.remove(p);				
-				}
-				else {
-					float xshift = delta * 400;
-					float yshift = xshift * p.getSlopeToTarget();
-					
-					p.position.x += p.position.x < p.target.x ? xshift : -xshift;
-					p.position.y += p.position.y < p.target.y ? -yshift : yshift;
 				}
 			}
 
 		}
-
 		@Override
 		public void draw(SpriteBatch batch) {
 			for (PointMessage p : activePoints)
-				MainGame.ui.uiFnt.draw(batch, p.text, p.position.x, p.position.y);
+				p.draw(batch);
 		}
 		
-		public void spawnPoints(int value, Vector2 position, Vector2 target){
+		public void spawnPointMessage(int value, Vector2 position, Vector2 target){
 			PointMessage pm = pointPool.obtain();
 			pm.set(value, position, target);
 			activePoints.add(pm);
@@ -95,13 +106,14 @@ class HudManager implements IUpdateable, IDrawable {
 	public enum HUDState { COUNTDOWN, REALTIME }
 	
 	public HUDState state;
-	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("data/fonts/typeone.fnt"), false);
-	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("data/textures/fadebar_bottom.png"));
+	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("fonts/typeone.fnt"), false);
+	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("textures/fadebar_bottom.png"));
+	private BitmapFont font = MainGame.Ui.skin.getFont("naipol");
 	private int displayScore;
 	private String message = null;
 	private Song song;
 	private PointsHUD pointsHud = new PointsHUD();
-	private Sprite pauseButton = new Sprite(new Texture("data/textures/ui/pause.png"));
+	private Sprite pauseButton = new Sprite(new Texture("ui/pause.png"));
 	
 	
 	public HudManager(Song song){
@@ -124,10 +136,10 @@ class HudManager implements IUpdateable, IDrawable {
 		}
 		
 		// update the score spinner
-		if (displayScore < MainGame.temporals.stats.points)
+		if (displayScore < MainGame.Temporal.stats.points)
 			displayScore += 17;
-		else if (displayScore > MainGame.temporals.stats.points)
-			displayScore = MainGame.temporals.stats.points;
+		else if (displayScore > MainGame.Temporal.stats.points)
+			displayScore = MainGame.Temporal.stats.points;
 
 		// update point messages
 		pointsHud.update(delta);
@@ -143,15 +155,15 @@ class HudManager implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch){
 
-		batch.setProjectionMatrix(MainGame.gfx.screenCam.combined);
+		batch.setProjectionMatrix(MainGame.Gfx.screenCam.combined);
 		
-		// gfx
+		// Gfx
 		batch.draw(bottomFadeBar, 0, 0);
 		// song data
-		MainGame.ui.uiFnt.setColor(Color.CYAN);
-		MainGame.ui.uiFnt.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
+		font.setColor(Color.LIGHT_GRAY);
+		font.draw(batch, song.getArtist() + " - " + song.getTitle(), 10, 23);
 		// score
-		MainGame.ui.uiFnt.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 23);
+		font.draw(batch, String.format("%08d", displayScore), Gdx.graphics.getWidth() - 140f, 23);
 		// messages
 		if (message != null){
 			float length = messageFont.getBounds(message).width;
@@ -164,13 +176,16 @@ class HudManager implements IUpdateable, IDrawable {
 
 	}
 
-	public void showMessage(String message, Color color){
+	public void showMessage(String msg, Color color){
 		messageFont.setColor(color);
-		this.message = message;
+		message = msg;
 	}
 	public void showPoints(int points, Vector2 position){
-		Vector2 screenPosition = MainGame.gfx.projectToScreen(position);
-		pointsHud.spawnPoints(points, screenPosition, new Vector2(Gdx.graphics.getWidth() - 100, bottomFadeBar.getRegionHeight()));
+		pointsHud.spawnPointMessage(
+				points,
+				MainGame.Gfx.worldToScreen(position),
+				new Vector2(Gdx.graphics.getWidth() - 100,
+				bottomFadeBar.getRegionHeight()));
 	}
 
 }

@@ -42,8 +42,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		LIGHT_SHRINK_RATE = 6,
 		LIGHT_LINEAR_DAMPING = .5f;
 	private final float
-		IDLE_TIMER_MIN = 4,
-		IDLE_TIMER_MAX = 8;
+		IDLE_TIMER_MIN = 8,
+		IDLE_TIMER_MAX = 10;
 	
 	float idleTimer;
 	
@@ -52,19 +52,18 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	public PrettyLights(int numLights, Mode mode, Camera worldcam) {
 		this.mode = mode;
 
-		makeWall(5, 0, .25f, 6);
-		makeWall(-5, 0, .25f, 6);
-		makeWall(0, 3, 10, .25f);
-		makeWall(0, -3, 10, .25f);
+		spawnWall(5, 0, .25f, 6);
+		spawnWall(-5, 0, .25f, 6);
+		spawnWall(0, 3, 10, .25f);
+		spawnWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(worldcam.combined);
 		
 		for (int i = 0; i < numLights; i++)
-			addOrb(Color.WHITE, MainGame.util.random.nextFloat() + .5f);
+			spawnOrb(Color.WHITE, MainGame.Util.random.nextFloat() + .5f);
 		
 		idleTimer = IDLE_TIMER_MIN;
-
 	}
 
 	@Override
@@ -77,7 +76,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			idleTimer -= delta;
 			if (idleTimer <= 0){
 				applyRandomImpulseToAllLights(2);
-				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MainGame.util.random.nextFloat() + IDLE_TIMER_MIN);
+				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MainGame.Util.random.nextFloat() + IDLE_TIMER_MIN);
 			}
 			break;
 		case REACT:
@@ -101,17 +100,12 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		if (mode == Mode.IDLE)
 			return;
 
-		// pulse lights
-		additivePulse(b.energy * 4);
-
-		// move lights
-		//if (b.energy > .3)
-			applyRandomImpulseToAllLights(25 * b.energy);
-		
-		// colorize
-		changeAllColors(c);
+		pulse(b.energy * 4);
+		applyRandomImpulseToAllLights(25 * b.energy);
+		if (c != Color.MAGENTA)
+			changeAllColors(c);
 	}
-	private void additivePulse(float distance){
+	private void pulse(float distance){
 		for (Light l : rayHandler.lightList) {
 			float newDistance = l.getDistance() + distance;
 
@@ -127,13 +121,13 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		while (bodies.hasNext()) {
 			float min = .03f, max = 1f;
 
-			float xImpulse = ((max - min) * MainGame.util.random.nextFloat() + min)
+			float xImpulse = ((max - min) * MainGame.Util.random.nextFloat() + min)
 					* multiplier;
-			float yImpulse = ((max - min) * MainGame.util.random.nextFloat() + min)
+			float yImpulse = ((max - min) * MainGame.Util.random.nextFloat() + min)
 					* multiplier;
 
-			xImpulse = MainGame.util.random.nextBoolean() ? xImpulse : -xImpulse;
-			yImpulse = MainGame.util.random.nextBoolean() ? -yImpulse : yImpulse;
+			xImpulse = MainGame.Util.random.nextBoolean() ? xImpulse : -xImpulse;
+			yImpulse = MainGame.Util.random.nextBoolean() ? -yImpulse : yImpulse;
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
@@ -143,7 +137,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			l.setColor(color);
 	}
 	
-	private void addOrb(Color color, float distance) {
+	private void spawnOrb(Color color, float distance) {
 
 		BodyDef orbDef = new BodyDef();
 
@@ -161,8 +155,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		circfix.density = 0f;
 
 		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(MainGame.util.random.nextFloat() - .5f,
-				MainGame.util.random.nextFloat() - .5f);
+		orbBody.setLinearVelocity(MainGame.Util.random.nextFloat() - .5f,
+				MainGame.Util.random.nextFloat() - .5f);
 		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
 
 		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,
@@ -172,7 +166,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		plight.setSoftnessLenght(0);
 		plight.setXray(true);
 	}
-	private void makeWall(float x, float y, float width, float height) {
+	private void spawnWall(float x, float y, float width, float height) {
 		BodyDef wallDef = new BodyDef();
 		wallDef.type = BodyType.StaticBody;
 		wallDef.position.set(new Vector2(x, y));

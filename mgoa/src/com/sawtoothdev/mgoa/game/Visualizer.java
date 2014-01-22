@@ -25,7 +25,7 @@ public class Visualizer implements IDrawable, IUpdateable {
 	private PrettyLights pl;
 	
 	public Visualizer(LinkedList<Beat> beatevents, OneShotMusicPlayer music){
-		pl = MainGame.gfx.lights;
+		pl = MainGame.Gfx.lights;
 		pl.setMode(PrettyLights.Mode.REACT);
 		this.music = music;
 		

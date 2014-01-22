@@ -21,8 +21,7 @@ public class OptionsScreen implements Screen {
 		stage.addActor(root);
 		root.setFillParent(true);
 
-		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen",
-				MainGame.ui.uiTextButtonStyle);
+		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen", MainGame.Ui.skin, "menuTextButtonStyle");
 		fullscreenToggle.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -39,8 +38,7 @@ public class OptionsScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
-		TextButton backToMenu = new TextButton("Main Menu",
-				MainGame.ui.uiTextButtonStyle);
+		TextButton backToMenu = new TextButton("Main Menu", MainGame.Ui.skin, "menuTextButtonStyle");
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -49,7 +47,7 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		root.add(new Label("---Graphics Options---", MainGame.ui.uiLabelStyle));
+		root.add(new Label("---Graphics Options---", MainGame.Ui.skin, "menuLabelStyle"));
 		root.row();
 		root.add(fullscreenToggle);
 		root.row();

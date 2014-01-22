@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.MainGame;
 
@@ -26,14 +27,15 @@ public class ConfigScreen implements Screen {
 		root.setFillParent(true);
 		Gdx.input.setInputProcessor(stage);
 		
-		String[] selections = new String[MainGame.util.difficulties.length];
-		for (int i = 0; i < MainGame.util.difficulties.length; i++)
-			selections[i] = MainGame.util.difficulties[i].name;
-		selector = new SelectBox(selections, MainGame.ui.uiSelectBoxStyle);
+		String[] selections = new String[MainGame.Util.difficulties.length];
+		for (int i = 0; i < MainGame.Util.difficulties.length; i++)
+			selections[i] = MainGame.Util.difficulties[i].name;
+		selector = new SelectBox(selections, MainGame.Ui.skin, "menuSelectBoxStyle");
 		
-		Label lbl = new Label("Difficulty: ", MainGame.ui.uiLabelStyle);
-		TextButton playButton = new TextButton("Play", MainGame.ui.uiTextButtonStyle);
-		TextButton backToMenu = new TextButton("MAIN MENU", MainGame.ui.uiTextButtonStyle);
+		TextButtonStyle tbstyle = MainGame.Ui.skin.get("menuTextButtonStyle", TextButtonStyle.class);
+		Label lbl = new Label("Difficulty: ", MainGame.Ui.skin, "menuLabelStyle");
+		TextButton playButton = new TextButton("Play", tbstyle);
+		TextButton backToMenu = new TextButton("MAIN MENU", tbstyle);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -67,10 +69,10 @@ public class ConfigScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		MainGame.gfx.lights.update(delta);
+		MainGame.Gfx.lights.update(delta);
 		stage.act();
 		
-		MainGame.gfx.lights.draw(null);
+		MainGame.Gfx.lights.draw(null);
 		stage.draw();
 		
 	}
@@ -114,7 +116,7 @@ public class ConfigScreen implements Screen {
 	private void finish(){
 		int index = selector.getSelectionIndex();
 		
-		MainGame.temporals.difficulty = MainGame.util.difficulties[index];
+		MainGame.Temporal.difficulty = MainGame.Util.difficulties[index];
 		
 		Gdx.input.setInputProcessor(null);
 		MainGame.game.setScreen(new LoadScreen());

@@ -18,7 +18,7 @@ public class PausedScreen implements Screen {
 	private Stage stage;
 	private Table root;
 	
-	private Sprite playButton = new Sprite(new Texture("data/textures/ui/play.png"));
+	private Sprite playButton = new Sprite(new Texture("ui/play.png"));
 	
 	private GameScreen home;
 	
@@ -33,8 +33,8 @@ public class PausedScreen implements Screen {
 		
 		// actors
 		playButton.setPosition(5, Gdx.graphics.getHeight() - playButton.getHeight() - 5);
-		TextButton resume = new TextButton("Resume", MainGame.ui.uiTextButtonStyle);
-		TextButton quitToMenu = new TextButton("Quit to Main Menu", MainGame.ui.uiTextButtonStyle);
+		TextButton resume = new TextButton("Resume", MainGame.Ui.skin, "menuTextButtonStyle");
+		TextButton quitToMenu = new TextButton("Quit to Main Menu", MainGame.Ui.skin, "menuTextButtonStyle");
 		
 		// actor setup
 		resume.addListener(new ClickListener(){
@@ -76,10 +76,10 @@ public class PausedScreen implements Screen {
 		stage.act();
 		
 		stage.draw();
-		MainGame.gfx.sysSB.setProjectionMatrix(MainGame.gfx.screenCam.combined);
-		MainGame.gfx.sysSB.begin();
-		playButton.draw(MainGame.gfx.sysSB);
-		MainGame.gfx.sysSB.end();
+		MainGame.Gfx.systemBatch.setProjectionMatrix(MainGame.Gfx.screenCam.combined);
+		MainGame.Gfx.systemBatch.begin();
+		playButton.draw(MainGame.Gfx.systemBatch);
+		MainGame.Gfx.systemBatch.end();
 	}
 
 	public void returnToGame(){

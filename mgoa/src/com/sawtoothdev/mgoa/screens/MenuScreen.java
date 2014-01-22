@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.MainGame;
 import com.sawtoothdev.mgoa.objects.PrettyLights.Mode;
@@ -20,14 +21,16 @@ public class MenuScreen implements Screen {
 		// stage setup
 		Gdx.input.setInputProcessor(stage);
 		
-		MainGame.gfx.lights.setMode(Mode.IDLE);
+		// lights setup
+		MainGame.Gfx.lights.setMode(Mode.IDLE);
 		
 		// actors
+		TextButtonStyle tbstyle = MainGame.Ui.skin.get("menuTextButtonStyle", TextButtonStyle.class);
 		TextButton
-			playButton = new TextButton("Play", MainGame.ui.uiTextButtonStyle),
-			optionsButton = new TextButton("Options", MainGame.ui.uiTextButtonStyle),
-			statsButton = new TextButton("Leaderboards", MainGame.ui.uiTextButtonStyle),
-			creditsButton = new TextButton("Credits", MainGame.ui.uiTextButtonStyle);
+			playButton = new TextButton("Play", tbstyle),
+			optionsButton = new TextButton("Options", tbstyle),
+			statsButton = new TextButton("Leaderboards", tbstyle),
+			creditsButton = new TextButton("Credits", tbstyle);
 
 		// actors setup
 		playButton.addListener(new ClickListener() {
@@ -47,7 +50,7 @@ public class MenuScreen implements Screen {
 
 		// scene layout
 		root.setFillParent(true);
-		root.defaults().uniform().padBottom(10);
+		root.defaults().uniform().padBottom(30);
 
 		root.add(playButton);
 		root.row();
@@ -66,14 +69,14 @@ public class MenuScreen implements Screen {
 	public void render(float delta) {
 
 		{// update
-			MainGame.gfx.lights.update(delta);
+			MainGame.Gfx.lights.update(delta);
 			stage.act(delta);
 		}
 
 		{// draw
-			MainGame.gfx.lights.draw(null);
+			MainGame.Gfx.lights.draw(null);
 			stage.draw();
-			//audioControl.draw(MGOA.gfx.defaultSpriteBatch);
+			//audioControl.draw(MGOA.Gfx.defaultSpriteBatch);
 		}
 
 	}

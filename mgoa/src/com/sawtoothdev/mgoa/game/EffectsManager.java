@@ -45,7 +45,7 @@ public class EffectsManager implements IUpdateable, IDrawable {
 		}
 		
 		// draw
-        batch.setProjectionMatrix(MainGame.gfx.worldCam.combined);
+        batch.setProjectionMatrix(MainGame.Gfx.worldCam.combined);
         
         for (ParticleEffect effect : effects)
         	effect.draw(batch, Gdx.graphics.getDeltaTime());
@@ -56,22 +56,22 @@ public class EffectsManager implements IUpdateable, IDrawable {
 		
 		ParticleEffect effect = pool.obtain();
 		
-		String path = "data/effects/white-explosion.p";
+		String path = "effects/white-explosion.p";
 		
 		if (color.toIntBits() == Color.MAGENTA.toIntBits())
-			path = "data/effects/purple.p";
+			path = "effects/purple.p";
 		else if (color.toIntBits() == Color.BLUE.toIntBits())
-			path = "data/effects/blue.p";
+			path = "effects/blue.p";
 		else if (color.toIntBits() == Color.GREEN.toIntBits())
-			path = "data/effects/green.p";
+			path = "effects/green.p";
 		else if (color.toIntBits() == Color.YELLOW.toIntBits())
-			path = "data/effects/yellow.p";
+			path = "effects/yellow.p";
 		else if (color.toIntBits() == Color.ORANGE.toIntBits())
-			path = "data/effects/orange.p";
+			path = "effects/orange.p";
 		else if (color.toIntBits() == Color.RED.toIntBits())
-			path = "data/effects/red.p";
+			path = "effects/red.p";
 		
-		effect.load(Gdx.files.internal(path), Gdx.files.internal("data/effects/"));
+		effect.load(Gdx.files.internal(path), Gdx.files.internal("effects/"));
 		
 		effect.setPosition(position.x, position.y);
 		effect.allowCompletion();

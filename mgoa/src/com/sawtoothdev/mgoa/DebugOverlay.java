@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DebugOverlay implements IDrawable {
 
-	
 	public static final BitmapFont debugFont = new BitmapFont();
 	
 	public DebugOverlay(){
@@ -18,18 +17,18 @@ public class DebugOverlay implements IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
-		batch.setProjectionMatrix(MainGame.gfx.screenCam.combined);
-		MainGame.gfx.sysSB.begin();
+		batch.setProjectionMatrix(MainGame.Gfx.screenCam.combined);
+		MainGame.Gfx.systemBatch.begin();
 			debugFont.draw(
-				MainGame.gfx.sysSB,
+				MainGame.Gfx.systemBatch,
 				MainGame.VERSION,
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight());
 			debugFont.draw(
-				MainGame.gfx.sysSB, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
+				MainGame.Gfx.systemBatch, String.valueOf(Gdx.graphics.getFramesPerSecond()) + " fps",
 				Gdx.graphics.getWidth() - 120,
 				Gdx.graphics.getHeight() - debugFont.getCapHeight() - 10);
-		MainGame.gfx.sysSB.end();
+		MainGame.Gfx.systemBatch.end();
 
 	}
 

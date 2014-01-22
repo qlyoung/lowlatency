@@ -9,29 +9,27 @@ import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
 public class GameWorld implements IUpdateable, IDrawable, IPausable {
-
 	
-	public final OneShotMusicPlayer music;
-	public final CoreManager coreManager;
-	public final Visualizer visualizer;
-	public final EffectsManager fxbox;
-	public final HudManager hud;
-	private final Countdown countdown;
+	final OneShotMusicPlayer music;
+	final CoreManager coreManager;
+	final Visualizer visualizer;
+	final EffectsManager fxbox;
+	final HudManager hud;
+	final Countdown countdown;
 	
 	public enum WorldState { INITIALIZED, BEFORE, ACTIVE, AFTER, PAUSED, FINISHED };
 	private WorldState state;
-
 	
 	public GameWorld() {
 
-		music = new OneShotMusicPlayer(MainGame.temporals.song.getHandle());
-		hud = new HudManager(MainGame.temporals.song);
+		music = new OneShotMusicPlayer(MainGame.Temporal.song.getHandle());
+		hud = new HudManager(MainGame.Temporal.song);
 		coreManager = new CoreManager(this);
-		visualizer = new Visualizer(MainGame.temporals.rawmap, music);
+		visualizer = new Visualizer(MainGame.Temporal.rawmap, music);
 		fxbox = new EffectsManager();
 		
-		MainGame.temporals.stats = new Stats();
-		MainGame.temporals.stats.numBeats = MainGame.temporals.beatmap.size();
+		MainGame.Temporal.stats = new Stats();
+		MainGame.Temporal.stats.numBeats = MainGame.Temporal.beatmap.size();
 		
 		countdown = new Countdown(hud, 4);
 

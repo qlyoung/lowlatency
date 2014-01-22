@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
 			break;
 		case RUNNING:
 			gameWorld.update(delta);
-			gameWorld.draw(MainGame.gfx.sysSB);
+			gameWorld.draw(MainGame.Gfx.systemBatch);
 
 			// end condition
 			if (gameWorld.getState() == WorldState.FINISHED)
@@ -73,7 +73,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		Gdx.app.log("game screen", "pausing");
 		gameWorld.pause();
 		this.state = GameScreenState.PAUSED;
 		MainGame.game.setScreen(new PausedScreen(this));
@@ -81,7 +80,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
-		Gdx.app.log("game screen", "resuming");
 		gameWorld.unpause();
 		this.state = GameScreenState.RUNNING;
 	}
