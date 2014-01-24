@@ -47,7 +47,7 @@ public class ChooseSongScreen implements Screen {
 		public FileBrowser(FileHandle root, Skin skin) {
 			this.skin = skin;
 			
-			ListStyle style = new ListStyle(game.skin.getFont("naipol"), Color.WHITE,
+			ListStyle style = new ListStyle(game.skin.getFont("naipol"), Color.BLUE,
 					Color.WHITE, skin.getDrawable("selector-listbg"));
 			
 			viewer = new List(new String[] {"dog"}, style);
@@ -84,6 +84,9 @@ public class ChooseSongScreen implements Screen {
 				
 				items.add(new ListItem(h.name(), h));
 			}
+			
+			Gdx.app.log("chooser", directory.path());
+			items.add(new ListItem("<-- Back", directory.parent()));
 			
 			curItems = new ListItem[items.size()];
 			items.toArray(curItems);

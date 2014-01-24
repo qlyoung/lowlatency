@@ -33,7 +33,7 @@ public class ConfigScreen implements Screen {
 		selector = new SelectBox(selections, game.skin, "menuSelectBoxStyle");
 		
 		TextButtonStyle tbstyle = game.skin.get("menuTextButtonStyle", TextButtonStyle.class);
-		Label lbl = new Label("Difficulty: ", game.skin, "menuLabelStyle");
+		Label lbl = new Label("Difficulty: ", game.skin);
 		TextButton playButton = new TextButton("Play", tbstyle);
 		TextButton backToMenu = new TextButton("MAIN MENU", tbstyle);
 		playButton.addListener(new ClickListener(){
