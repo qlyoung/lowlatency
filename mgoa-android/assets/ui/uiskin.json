@@ -5,14 +5,15 @@
 	
 	com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		naipol: { file: fonts/naipol.fnt },
-		typeone: { file: fonts/typeone.fnt }
+		typeone: { file: fonts/typeone.fnt },
+		gimenell: { file: fonts/gimenell.fnt }
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		menuTextButtonStyle: {
 			down: menubtn-down,
 			up: menubtn-up,
-			font: typeone,
+			font: gimenell,
 			fontColor: white
 		}
 	},

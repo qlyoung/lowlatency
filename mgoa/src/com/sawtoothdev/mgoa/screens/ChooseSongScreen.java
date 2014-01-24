@@ -47,7 +47,8 @@ public class ChooseSongScreen implements Screen {
 		public FileBrowser(FileHandle root, Skin skin) {
 			this.skin = skin;
 			
-			ListStyle style = new ListStyle(game.skin.getFont("naipol"), Color.BLUE, Color.WHITE, skin.getDrawable("selector-listbg"));
+			ListStyle style = new ListStyle(game.skin.getFont("naipol"), Color.WHITE,
+					Color.WHITE, skin.getDrawable("selector-listbg"));
 			
 			viewer = new List(new String[] {"dog"}, style);
 			viewer.addListener(new ClickListener(){
@@ -86,6 +87,7 @@ public class ChooseSongScreen implements Screen {
 			
 			curItems = new ListItem[items.size()];
 			items.toArray(curItems);
+			
 			viewer.setItems(curItems);
 		}
 		
@@ -94,8 +96,7 @@ public class ChooseSongScreen implements Screen {
 		}
 	}
 
-	
-	private final Stage stage;
+	Stage stage;
 	FileBrowser browser;
 	Mgoa game;
 
