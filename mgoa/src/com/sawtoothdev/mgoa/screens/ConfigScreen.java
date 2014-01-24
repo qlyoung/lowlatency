@@ -10,43 +10,46 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 
 public class ConfigScreen implements Screen {
 	
-	private Stage stage;
-	private Table root;
-	
+	Stage stage;
+	Table root;
 	SelectBox selector;
+	Mgoa game;
 	
-	public ConfigScreen(){
-		
+	public ConfigScreen(Mgoa gam){
+		game = gam;
 		stage = new Stage();
 		root = new Table();
 		
 		root.setFillParent(true);
 		Gdx.input.setInputProcessor(stage);
 		
-		String[] selections = new String[MainGame.Util.difficulties.length];
-		for (int i = 0; i < MainGame.Util.difficulties.length; i++)
-			selections[i] = MainGame.Util.difficulties[i].name;
-		selector = new SelectBox(selections, MainGame.Ui.skin, "menuSelectBoxStyle");
+		String[] selections = new String[game.difficulties.length];
+		for (int i = 0; i < game.difficulties.length; i++)
+			selections[i] = game.difficulties[i].name;
+		selector = new SelectBox(selections, game.skin, "menuSelectBoxStyle");
 		
-		TextButtonStyle tbstyle = MainGame.Ui.skin.get("menuTextButtonStyle", TextButtonStyle.class);
-		Label lbl = new Label("Difficulty: ", MainGame.Ui.skin, "menuLabelStyle");
+		TextButtonStyle tbstyle = game.skin.get("menuTextButtonStyle", TextButtonStyle.class);
+		Label lbl = new Label("Difficulty: ", game.skin, "menuLabelStyle");
 		TextButton playButton = new TextButton("Play", tbstyle);
 		TextButton backToMenu = new TextButton("MAIN MENU", tbstyle);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				finish();
+				int index = selector.getSelectionIndex();
+				game.difficulty = game.difficulties[index];
+				Gdx.input.setInputProcessor(null);
+				game.setScreen(new LoadScreen(game));
 				super.clicked(event, x, y);
 			}
 		});
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MainGame.game.setScreen(new MenuScreen());
+				game.setScreen(new MenuScreen(game));
 				super.clicked(event, x, y);
 			}
 		});
@@ -69,10 +72,10 @@ public class ConfigScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		MainGame.Gfx.lights.update(delta);
+		game.lights.update(delta);
 		stage.act();
 		
-		MainGame.Gfx.lights.draw(null);
+		game.lights.draw(null);
 		stage.draw();
 		
 	}
@@ -111,15 +114,6 @@ public class ConfigScreen implements Screen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	private void finish(){
-		int index = selector.getSelectionIndex();
-		
-		MainGame.Temporal.difficulty = MainGame.Util.difficulties[index];
-		
-		Gdx.input.setInputProcessor(null);
-		MainGame.game.setScreen(new LoadScreen());
 	}
 
 }

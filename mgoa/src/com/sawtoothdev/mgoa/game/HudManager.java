@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Song;
 
 class HudManager implements IUpdateable, IDrawable {
@@ -108,7 +108,7 @@ class HudManager implements IUpdateable, IDrawable {
 	public HUDState state;
 	private BitmapFont messageFont = new BitmapFont(Gdx.files.internal("fonts/typeone.fnt"), false);
 	private TextureRegion bottomFadeBar = new TextureRegion(new Texture("textures/fadebar_bottom.png"));
-	private BitmapFont font = MainGame.Ui.skin.getFont("naipol");
+	private BitmapFont font = Mgoa.skin.getFont("naipol");
 	private int displayScore;
 	private String message = null;
 	private Song song;
@@ -132,14 +132,14 @@ class HudManager implements IUpdateable, IDrawable {
 			Rectangle spriteBox = pauseButton.getBoundingRectangle();
 
 			if (spriteBox.contains(lastTouch.x, lastTouch.y))
-				MainGame.game.getScreen().pause();
+				Mgoa.game.getScreen().pause();
 		}
 		
 		// update the score spinner
-		if (displayScore < MainGame.Temporal.stats.points)
+		if (displayScore < Mgoa.Temporal.stats.points)
 			displayScore += 17;
-		else if (displayScore > MainGame.Temporal.stats.points)
-			displayScore = MainGame.Temporal.stats.points;
+		else if (displayScore > Mgoa.Temporal.stats.points)
+			displayScore = Mgoa.Temporal.stats.points;
 
 		// update point messages
 		pointsHud.update(delta);
@@ -155,7 +155,7 @@ class HudManager implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch){
 
-		batch.setProjectionMatrix(MainGame.Gfx.screenCam.combined);
+		batch.setProjectionMatrix(Mgoa.Gfx.screenCam.combined);
 		
 		// Gfx
 		batch.draw(bottomFadeBar, 0, 0);
@@ -183,7 +183,7 @@ class HudManager implements IUpdateable, IDrawable {
 	public void showPoints(int points, Vector2 position){
 		pointsHud.spawnPointMessage(
 				points,
-				MainGame.Gfx.worldToScreen(position),
+				Mgoa.Gfx.worldToScreen(position),
 				new Vector2(Gdx.graphics.getWidth() - 100,
 				bottomFadeBar.getRegionHeight()));
 	}

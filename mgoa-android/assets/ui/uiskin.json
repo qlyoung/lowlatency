@@ -18,6 +18,9 @@
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: {
+			font: naipol
+		},
 		menuLabelStyle: {
 			font: naipol
 		}

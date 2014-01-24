@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.game.GameWorld;
 import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 
@@ -15,13 +15,14 @@ import com.sawtoothdev.mgoa.game.GameWorld.WorldState;
 public class GameScreen implements Screen {
 
 	private enum GameScreenState { INITIALIZED, RUNNING, DONE, PAUSED };
-	private final GameWorld gameWorld;
+	private final GameWorld world;
 	private GameScreenState state;
+	Mgoa game;
 	
-	public GameScreen() {
-		gameWorld = new GameWorld();
+	public GameScreen(Mgoa gam) {
+		game = gam;
+		world = new GameWorld(game);
 
-		// IT BEGINS
 		state = GameScreenState.INITIALIZED;
 	}
 
@@ -33,15 +34,15 @@ public class GameScreen implements Screen {
 		case INITIALIZED:
 			break;
 		case RUNNING:
-			gameWorld.update(delta);
-			gameWorld.draw(MainGame.Gfx.systemBatch);
+			world.update(delta);
+			world.draw(game.batch);
 
 			// end condition
-			if (gameWorld.getState() == WorldState.FINISHED)
+			if (world.getState() == WorldState.FINISHED)
 				this.state = GameScreenState.DONE;
 			break;
 		case DONE:
-			MainGame.game.setScreen(new FinishScreen());
+			game.setScreen(new FinishScreen(game, world.getStats()));
 			break;
 		case PAUSED:
 			Gdx.app.log("gamescreen", "paused update");
@@ -59,7 +60,7 @@ public class GameScreen implements Screen {
 	public void show() {
 		
 		if (state == GameScreenState.INITIALIZED) {
-			gameWorld.start();
+			world.start();
 			state = GameScreenState.RUNNING;
 		}
 		else if (state == GameScreenState.PAUSED)
@@ -73,14 +74,14 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		gameWorld.pause();
+		world.pause();
 		this.state = GameScreenState.PAUSED;
-		MainGame.game.setScreen(new PausedScreen(this));
+		game.setScreen(new PausedScreen(game));
 	}
 
 	@Override
 	public void resume() {
-		gameWorld.unpause();
+		world.unpause();
 		this.state = GameScreenState.RUNNING;
 	}
 

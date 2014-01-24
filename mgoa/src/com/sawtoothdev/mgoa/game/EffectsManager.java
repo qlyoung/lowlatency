@@ -3,6 +3,7 @@ package com.sawtoothdev.mgoa.game;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,12 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MainGame;
 
 public class EffectsManager implements IUpdateable, IDrawable {
 
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
+	Camera cam;
+	
+	public EffectsManager(Camera camera){
+		cam = camera;
+	}
 	
 	@Override
 	public void update(float delta) {
@@ -45,7 +50,7 @@ public class EffectsManager implements IUpdateable, IDrawable {
 		}
 		
 		// draw
-        batch.setProjectionMatrix(MainGame.Gfx.worldCam.combined);
+        batch.setProjectionMatrix(cam.combined);
         
         for (ParticleEffect effect : effects)
         	effect.draw(batch, Gdx.graphics.getDeltaTime());

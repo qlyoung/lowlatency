@@ -1,13 +1,14 @@
 package com.sawtoothdev.mgoa.objects;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -20,7 +21,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MainGame;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -33,7 +33,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 	public enum Mode {IDLE, REACT};
 	
 	private World world = new World(new Vector2(0, 0), false);
-
+	private OrthographicCamera cam = new OrthographicCamera(10, 6);
 	private RayHandler rayHandler;
 	
 	private final float
@@ -46,11 +46,12 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		IDLE_TIMER_MAX = 10;
 	
 	float idleTimer;
-	
 	private Mode mode;
+	Random random;
 
-	public PrettyLights(int numLights, Mode mode, Camera worldcam) {
+	public PrettyLights(int numLights, Mode mode, Random random) {
 		this.mode = mode;
+		this.random = random;
 
 		spawnWall(5, 0, .25f, 6);
 		spawnWall(-5, 0, .25f, 6);
@@ -58,10 +59,10 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		spawnWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
-		rayHandler.setCombinedMatrix(worldcam.combined);
+		rayHandler.setCombinedMatrix(cam.combined);
 		
 		for (int i = 0; i < numLights; i++)
-			spawnOrb(Color.WHITE, MainGame.Util.random.nextFloat() + .5f);
+			spawnOrb(Color.WHITE, random.nextFloat() + .5f);
 		
 		idleTimer = IDLE_TIMER_MIN;
 	}
@@ -76,7 +77,7 @@ public class PrettyLights implements IUpdateable, IDrawable {
 			idleTimer -= delta;
 			if (idleTimer <= 0){
 				applyRandomImpulseToAllLights(2);
-				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * MainGame.Util.random.nextFloat() + IDLE_TIMER_MIN);
+				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * random.nextFloat() + IDLE_TIMER_MIN);
 			}
 			break;
 		case REACT:
@@ -90,7 +91,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		}
 
 	}
-
 	@Override
 	public void draw(SpriteBatch batch) {
 		rayHandler.updateAndRender();
@@ -121,18 +121,18 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		while (bodies.hasNext()) {
 			float min = .03f, max = 1f;
 
-			float xImpulse = ((max - min) * MainGame.Util.random.nextFloat() + min)
+			float xImpulse = ((max - min) * random.nextFloat() + min)
 					* multiplier;
-			float yImpulse = ((max - min) * MainGame.Util.random.nextFloat() + min)
+			float yImpulse = ((max - min) * random.nextFloat() + min)
 					* multiplier;
 
-			xImpulse = MainGame.Util.random.nextBoolean() ? xImpulse : -xImpulse;
-			yImpulse = MainGame.Util.random.nextBoolean() ? -yImpulse : yImpulse;
+			xImpulse = random.nextBoolean() ? xImpulse : -xImpulse;
+			yImpulse = random.nextBoolean() ? -yImpulse : yImpulse;
 
 			bodies.next().setLinearVelocity(xImpulse, yImpulse);
 		}
 	}
-	public void changeAllColors(Color color){
+	private void changeAllColors(Color color){
 		for (Light l : rayHandler.lightList)
 			l.setColor(color);
 	}
@@ -155,12 +155,11 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		circfix.density = 0f;
 
 		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(MainGame.Util.random.nextFloat() - .5f,
-				MainGame.Util.random.nextFloat() - .5f);
+		orbBody.setLinearVelocity(random.nextFloat() - .5f,
+				random.nextFloat() - .5f);
 		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
 
-		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,
-				0);
+		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,	0);
 		plight.attachToBody(orbBody, 0, 0);
 		plight.setSoft(true);
 		plight.setSoftnessLenght(0);

@@ -9,19 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 
 public class OptionsScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private final Table root = new Table();
+	Mgoa game;
 
-	public OptionsScreen() {
+	public OptionsScreen(Mgoa gam) {
+		game = gam;
 		Gdx.input.setInputProcessor(stage);
 		stage.addActor(root);
 		root.setFillParent(true);
 
-		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen", MainGame.Ui.skin, "menuTextButtonStyle");
+		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen", game.skin, "menuTextButtonStyle");
 		fullscreenToggle.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -29,25 +31,25 @@ public class OptionsScreen implements Screen {
 					Gdx.graphics.setDisplayMode(
 							Gdx.graphics.getDesktopDisplayMode().width,
 							Gdx.graphics.getDesktopDisplayMode().height, true);
-					MainGame.game.setScreen(new OptionsScreen());
+					game.setScreen(new OptionsScreen(game));
 				} else {
 					Gdx.graphics.setDisplayMode(1280, 720, false);
-					MainGame.game.setScreen(new OptionsScreen());
+					game.setScreen(new OptionsScreen(game));
 				}
 
 				super.clicked(event, x, y);
 			}
 		});
-		TextButton backToMenu = new TextButton("Main Menu", MainGame.Ui.skin, "menuTextButtonStyle");
+		TextButton backToMenu = new TextButton("Main Menu", game.skin, "menuTextButtonStyle");
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MainGame.game.setScreen(new MenuScreen());
+				game.setScreen(new MenuScreen(game));
 				super.clicked(event, x, y);
 			}
 		});
 
-		root.add(new Label("---Graphics Options---", MainGame.Ui.skin, "menuLabelStyle"));
+		root.add(new Label("---Graphics Options---", game.skin, "menuLabelStyle"));
 		root.row();
 		root.add(fullscreenToggle);
 		root.row();
@@ -60,7 +62,7 @@ public class OptionsScreen implements Screen {
 
 		{// update
 			if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-				MainGame.game.setScreen(new MenuScreen());
+				game.setScreen(new MenuScreen(game));
 			stage.act();
 		}
 

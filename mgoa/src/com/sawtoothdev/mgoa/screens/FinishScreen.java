@@ -6,42 +6,47 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
+import com.sawtoothdev.mgoa.objects.Stats;
 
 public class FinishScreen implements Screen {
 
 	private Stage stage = new Stage();
 	private Table root = new Table();
+	Stats stats;
+	Mgoa game;
 	
-	public FinishScreen(){
-		// init
+	public FinishScreen(Mgoa gam, Stats stat){
+		game = gam;
+		stats = stat;
+		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		LabelStyle ls = MainGame.Ui.skin.get("menuLabelStyle", LabelStyle.class);
-		TextButtonStyle tbstyle = MainGame.Ui.skin.get("menuTextButtonStyle", TextButtonStyle.class);
+		LabelStyle ls = game.skin.get("menuLabelStyle", LabelStyle.class);
+		TextButtonStyle tbstyle = game.skin.get("menuTextButtonStyle", TextButtonStyle.class);
 		
-		String songinfo = MainGame.Temporal.song.getArtist() + " - " + MainGame.Temporal.song.getTitle();
+		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
 		Label songLabel = new Label(songinfo, ls);
 		TextButton okay = new TextButton("OK", tbstyle);
 		okay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				MainGame.game.setScreen(new MenuScreen());
+				game.setScreen(new MenuScreen(game));
 				super.clicked(event, x, y);
 			}
 		});
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", ls)).left();
-		summary.add(new Label(String.valueOf(MainGame.Temporal.stats.points), ls)).right();
+		summary.add(new Label(String.valueOf(stats.points), ls)).right();
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", ls)).left();
-		summary.add(new Label(String.valueOf(MainGame.Temporal.difficulty.scoreMultiplier), ls)).right();
+		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), ls)).right();
 
 		root.add(songLabel);
 		root.row();

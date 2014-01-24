@@ -5,11 +5,13 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 
 /**
  * Responsible for loading all resources before gameplay begins. This includes
@@ -31,7 +33,7 @@ public class LoadScreen implements Screen {
 			LinkedList<Beat> rawbeats = null;
 
 			try {
-				rawbeats = FastBeatDetector.detectBeats(MainGame.Temporal.song.getHandle(), sensitivity);
+				rawbeats = FastBeatDetector.detectBeats(game.song.getHandle(), sensitivity);
 			} catch (IOException e) {
 				Gdx.app.log("Load Screen", e.getMessage());
 				return;
@@ -39,40 +41,44 @@ public class LoadScreen implements Screen {
 
 			// drop beats under .01 energiez
 			LinkedList<Beat> beatmap = BeatsProcessor.dropLowBeats(rawbeats, .01f);
-			beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MainGame.Temporal.difficulty.minBeatSpace);
+			beatmap = BeatsProcessor.removeCloseBeats(rawbeats, game.difficulty.minBeatSpace);
 			
-			MainGame.Temporal.rawmap = rawbeats;
-			MainGame.Temporal.beatmap = beatmap;
+			game.rawmap = rawbeats;
+			game.beatmap = beatmap;
 		}
 	}
 
-	private LoadingThread loadThread;
-	BitmapFont font = MainGame.Ui.skin.getFont("naipol");
+	LoadingThread loadThread;
+	BitmapFont font;
+	Mgoa game;
+	Camera cam;
 	
-	public LoadScreen(){
+	public LoadScreen(Mgoa gam){
+		game = gam;
 		loadThread = new LoadingThread();
+		font = gam.skin.getFont("naipol");
+		cam = new OrthographicCamera();
 	}
 	
 	@Override
 	public void render(float delta) {
 
 		{// update
-			MainGame.Gfx.lights.update(delta);
+			game.lights.update(delta);
 			
 			if (!loadThread.isAlive())
 				finish();
 		}
 
 		{// draw
-			MainGame.Gfx.lights.draw(null);
+			game.lights.draw(null);
 			
-			MainGame.Gfx.systemBatch.setProjectionMatrix(MainGame.Gfx.screenCam.combined);
-			MainGame.Gfx.systemBatch.begin();
-			
-			font.draw(MainGame.Gfx.systemBatch, "Loading...",
-					Gdx.graphics.getWidth() / 2f - 20f,
-					Gdx.graphics.getHeight() / 2f);
-			MainGame.Gfx.systemBatch.end();
+			game.batch.setProjectionMatrix(cam.combined);
+			game.batch.begin();
+				font.draw(game.batch, "Loading...", 
+						Gdx.graphics.getWidth() / 2f - 20f,
+						Gdx.graphics.getHeight() / 2f);
+			game.batch.end();
 		}
 
 	}
@@ -108,8 +114,8 @@ public class LoadScreen implements Screen {
 	}
 
 	private void finish(){
-		MainGame.Audio.menuMusic.pause();
+		game.menuMusic.pause();
 		System.gc();
-		MainGame.game.setScreen(new GameScreen());
+		game.setScreen(new GameScreen(game));
 	}
 }

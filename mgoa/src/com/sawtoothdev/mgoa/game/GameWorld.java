@@ -1,57 +1,45 @@
 package com.sawtoothdev.mgoa.game;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IPausable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.MainGame;
+import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
 public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	
 	final OneShotMusicPlayer music;
-	final CoreManager coreManager;
-	final Visualizer visualizer;
 	final EffectsManager fxbox;
-	final HudManager hud;
-	final Countdown countdown;
+	final Visualizer visualizer;
+	final CoreManager coreManager;
+	final HeadsUpDisplay hud;
+	final Mgoa game;
+	final Stats stats;
+	final OrthographicCamera camera;
 	
-	public enum WorldState { INITIALIZED, BEFORE, ACTIVE, AFTER, PAUSED, FINISHED };
+	public enum WorldState { INACTIVE, ACTIVE, PAUSED, FINISHED };
 	private WorldState state;
 	
-	public GameWorld() {
-
-		music = new OneShotMusicPlayer(MainGame.Temporal.song.getHandle());
-		hud = new HudManager(MainGame.Temporal.song);
-		coreManager = new CoreManager(this);
-		visualizer = new Visualizer(MainGame.Temporal.rawmap, music);
-		fxbox = new EffectsManager();
+	public GameWorld(Mgoa gam) {
+		game = gam;
+		stats = new Stats();
+		music = new OneShotMusicPlayer(game.song.getHandle());
+		camera = new OrthographicCamera(10, 6);
+		fxbox = new EffectsManager(camera);
+		coreManager = new CoreManager(game.beatmap, game.difficulty, camera, music, stats, fxbox);
+		hud = new HeadsUpDisplay(game.song, game.skin, stats);
+		visualizer = new Visualizer(game.rawmap, music, game.lights);
 		
-		MainGame.Temporal.stats = new Stats();
-		MainGame.Temporal.stats.numBeats = MainGame.Temporal.beatmap.size();
-		
-		countdown = new Countdown(hud, 4);
-
-		state = WorldState.INITIALIZED;
+		state = WorldState.INACTIVE;
 	}
 
 	@Override
 	public void update(float delta) {
 
 		switch (state) {
-		case INITIALIZED:
-			break;
-		case BEFORE:
-			countdown.update(delta);
-			countdown.draw(null);
-			hud.update(delta);
-			
-			if (countdown.isFinished()){
-				state = WorldState.ACTIVE;
-				music.play();
-			}
-			break;
 		case ACTIVE:
 			visualizer.update(delta);
 			fxbox.update(delta);
@@ -62,10 +50,11 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 			// the music will pause in the middle of an update tick
 			// and be interpreted as a game over, thus we check if
 			// the game is paused before setting game over
-			if (!music.isPlaying() && state != WorldState.PAUSED)
+			//if (!music.isPlaying() && state != WorldState.PAUSED)
+				//state = WorldState.FINISHED;
+			if (state == WorldState.ACTIVE && !music.isPlaying())
 				state = WorldState.FINISHED;
 			break;
-		case AFTER:
 			
 		case PAUSED:
 		case FINISHED:
@@ -74,7 +63,6 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 		}
 
 	}
-
 	@Override
 	public void draw(SpriteBatch batch) {
 
@@ -88,7 +76,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	}
 
 	public void start() {
-		state = WorldState.BEFORE;
+		state = WorldState.ACTIVE;
+		music.play();
 	}
 
 	@Override
@@ -105,5 +94,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 
 	public WorldState getState() {
 		return state;
+	}
+	public Stats getStats(){
+		return stats;
 	}
 }

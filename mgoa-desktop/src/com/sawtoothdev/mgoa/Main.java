@@ -6,11 +6,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "_latency";
+		cfg.title = "mgoa";
 		cfg.useGL20 = false;
 		cfg.width = 1280;
 		cfg.height = 720;
 		
-		new LwjglApplication(new MainGame(), cfg);
+		new LwjglApplication(new Mgoa(), cfg);
 	}
 }
