@@ -12,15 +12,15 @@ import com.sawtoothdev.mgoa.objects.Stats;
 public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	
 	final OneShotMusicPlayer music;
-	final EffectsManager fxbox;
-	final Visualizer visualizer;
+	final EffectsManager fxmanager;
+	final LightboxManager visualizer;
 	final CoreManager coreManager;
 	final HeadsUpDisplay hud;
 	final Mgoa game;
 	final Stats stats;
 	final OrthographicCamera camera;
 	
-	public enum WorldState { INACTIVE, ACTIVE, PAUSED, FINISHED };
+	public enum WorldState { INACTIVE, ACTIVE, FINISHING, FINISHED, PAUSED };
 	private WorldState state;
 	
 	public GameWorld(Mgoa gam) {
@@ -28,10 +28,10 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 		stats = new Stats();
 		music = new OneShotMusicPlayer(game.song.getHandle());
 		camera = new OrthographicCamera(10, 6);
-		fxbox = new EffectsManager(camera);
-		coreManager = new CoreManager(game.beatmap, game.difficulty, camera, music, stats, fxbox);
-		hud = new HeadsUpDisplay(game.song, game.skin, stats);
-		visualizer = new Visualizer(game.rawmap, music, game.lights);
+		fxmanager = new EffectsManager(camera);
+		coreManager = new CoreManager(game.beatmap, game.difficulty, camera, music, stats, fxmanager);
+		hud = new HeadsUpDisplay(game.song, game.skin, stats, game.batch);
+		visualizer = new LightboxManager(game.rawmap, music, game.lights);
 		
 		state = WorldState.INACTIVE;
 	}
@@ -42,19 +42,18 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 		switch (state) {
 		case ACTIVE:
 			visualizer.update(delta);
-			fxbox.update(delta);
+			fxmanager.update(delta);
 			coreManager.update(delta);
 			hud.update(delta);
-			// weird behavior here, when pause() gets called libgdx
-			// calls it from another thread and so it is possible that
-			// the music will pause in the middle of an update tick
-			// and be interpreted as a game over, thus we check if
-			// the game is paused before setting game over
-			//if (!music.isPlaying() && state != WorldState.PAUSED)
-				//state = WorldState.FINISHED;
-			if (state == WorldState.ACTIVE && !music.isPlaying())
+
+			if (state == WorldState.ACTIVE && !music.isPlaying()){
 				state = WorldState.FINISHED;
+				visualizer.flourish();
+				hud.fadeout();
+			}
 			break;
+			
+		case FINISHING:
 			
 		case PAUSED:
 		case FINISHED:
@@ -69,10 +68,11 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 		visualizer.draw(batch);
 		
 		batch.begin();
-		fxbox.draw(batch);
+		fxmanager.draw(batch);
 		coreManager.draw(batch);
-		hud.draw(batch);
 		batch.end();
+		
+		hud.draw(null);
 	}
 
 	public void start() {

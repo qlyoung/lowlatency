@@ -85,8 +85,9 @@ public class ChooseSongScreen implements Screen {
 				items.add(new ListItem(h.name(), h));
 			}
 			
-			Gdx.app.log("chooser", directory.path());
-			items.add(new ListItem("<-- Back", directory.parent()));
+			
+			if (directory.path() != "")
+				items.add(new ListItem("<-- Back", directory.parent()));
 			
 			curItems = new ListItem[items.size()];
 			items.toArray(curItems);
@@ -114,8 +115,9 @@ public class ChooseSongScreen implements Screen {
 				game.setScreen(new MenuScreen(game));
 			}
 		});
-
-		browser = new FileBrowser(Gdx.files.external(""), game.skin);
+		
+		FileHandle externalRoot = Gdx.files.external("");
+		browser = new FileBrowser(externalRoot, game.skin);
 
 		
 		Table root = new Table();

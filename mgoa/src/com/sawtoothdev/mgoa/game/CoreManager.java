@@ -35,7 +35,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 		// Gfx
 		private final Sprite ring, core;
-		private Color intensityColor;
+		private Color corecolor;
 		private float alpha = 1;
 
 		// mechanical
@@ -135,10 +135,10 @@ public class CoreManager implements IUpdateable, IDrawable {
 		public void setBeat(Beat beat) {
 			this.beat = beat;
 			
-			this.intensityColor = getEnergyColor(beat.energy);
+			this.corecolor = getEnergyColor(beat.energy);
 			
-			this.core.setColor(intensityColor);
-			this.ring.setColor(intensityColor);
+			this.core.setColor(corecolor);
+			this.ring.setColor(corecolor);
 		}
 		public void setPosition(Vector2 worldPos) {
 
@@ -198,7 +198,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 			return position;
 		}
 		public Color getColor() {
-			return intensityColor;
+			return corecolor;
 		}
 	}
 	class CorePool extends Pool<BeatCore> {

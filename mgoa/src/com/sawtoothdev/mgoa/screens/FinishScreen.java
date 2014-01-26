@@ -23,6 +23,8 @@ public class FinishScreen implements Screen {
 	public FinishScreen(Mgoa gam, Stats stat){
 		game = gam;
 		stats = stat;
+
+		game.records.writeScore(game.song.getHandle(), stats.points);
 		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
@@ -57,6 +59,8 @@ public class FinishScreen implements Screen {
 		stage.addActor(root);
 	}
 
+
+	
 	@Override
 	public void render(float delta) {
 		

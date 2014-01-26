@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.sawtoothdev.audioanalysis.Beat;
@@ -51,13 +50,14 @@ public class LoadScreen implements Screen {
 	LoadingThread loadThread;
 	BitmapFont font;
 	Mgoa game;
-	Camera cam;
+	OrthographicCamera cam;
 	
 	public LoadScreen(Mgoa gam){
 		game = gam;
 		loadThread = new LoadingThread();
-		font = gam.skin.getFont("naipol");
+		font = game.skin.getFont("naipol");
 		cam = new OrthographicCamera();
+		cam.setToOrtho(false);
 	}
 	
 	@Override

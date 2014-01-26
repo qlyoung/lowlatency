@@ -38,6 +38,7 @@ public class EffectsManager implements IUpdateable, IDrawable {
 	@Override
 	public void draw(SpriteBatch batch) {
 		
+		
 		// update
 		for (int i = 0; i < effects.size(); i++){
 			ParticleEffect effect = effects.get(i);

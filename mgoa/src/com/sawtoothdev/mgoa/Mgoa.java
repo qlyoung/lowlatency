@@ -9,6 +9,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,8 +18,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.objects.Difficulty;
-import com.sawtoothdev.mgoa.objects.PrettyLights;
-import com.sawtoothdev.mgoa.objects.PrettyLights.Mode;
+import com.sawtoothdev.mgoa.objects.LightBox;
+import com.sawtoothdev.mgoa.objects.LightBox.Mode;
+import com.sawtoothdev.mgoa.objects.ScoreRecords;
 import com.sawtoothdev.mgoa.objects.Song;
 import com.sawtoothdev.mgoa.screens.MenuScreen;
 
@@ -41,17 +43,18 @@ public class Mgoa extends Game {
 	public Difficulty difficulties[];
 	public Music menuMusic;
 	public SpriteBatch batch;
-	public PrettyLights lights;
+	public LightBox lights;
 	public Skin skin;
 	public Song song;
 	public Difficulty difficulty;
 	public LinkedList<Beat> beatmap;
 	public LinkedList<Beat> rawmap;
 	public Preferences settings;
+	public ScoreRecords records;
 
 	@Override
 	public void create() {
-
+		
 		// util
 		Difficulty[] diffs = new Difficulty[3];
 		diffs[0] = new Difficulty(800, 250, "Relaxed", 1);
@@ -83,18 +86,24 @@ public class Mgoa extends Game {
 
 		// gfx
 		batch = new SpriteBatch();
-		lights = new PrettyLights(4, Mode.IDLE, random);
+		lights = new LightBox(Mode.IDLE, random);
+		for (int i = 0; i < 4; i++)
+			lights.addLight(Color.WHITE, 1f);
+		
+		// scoring
+		records = new ScoreRecords();
 
 		// ui
-		TextureAtlas atlas = new TextureAtlas(
-				Gdx.files.internal("ui/uiskin.atlas"));
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
 		skin = new Skin(Gdx.files.internal("ui/uiskin.json"), atlas);
 
-		// other
+		// settings
 		settings = Gdx.app.getPreferences("settings");
-		Gdx.app.log("launch", Boolean.toString(settings.contains("firstrun")));
 		settings.putBoolean("firstrun", !settings.contains("firstrun"));
 		settings.flush();
+		
+		if (TESTING)
+			System.out.println("Systems init successful");
 
 		// begin
 		setScreen(new MenuScreen(this));

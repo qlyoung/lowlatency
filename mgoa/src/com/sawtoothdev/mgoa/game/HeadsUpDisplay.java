@@ -2,9 +2,11 @@ package com.sawtoothdev.mgoa.game;
 
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,13 +21,13 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable {
 	private HashMap<String, Actor> tickers;
 	private Stats stats;
 	
-	public HeadsUpDisplay(Song song, Skin skin, Stats stat){
+	public HeadsUpDisplay(Song song, Skin skin, Stats stat, SpriteBatch batch){
 		stats = stat;
 		tickers = new HashMap<String, Actor>();
 		Table base = new Table(skin);
 		base.setFillParent(true);
 		
-		stage = new Stage();
+		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
 		stage.addActor(base);
 		
 		String songinfo = song.getArtist() + " - " + song.getTitle();
@@ -53,8 +55,15 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable {
 	public Stats getStats(){
 		return stats;
 	}
-	
-	public void notify(String message){
-		
+	public void showMessage(String message){
+		// implement message notifications
+	}	
+	public void fadeout(){
+		// implement stage fade here
+		AlphaAction aa = new AlphaAction();
+		aa.setDuration(5);
+		aa.setAlpha(0);
+		stage.addAction(new AlphaAction());
 	}
+
 }

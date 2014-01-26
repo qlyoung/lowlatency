@@ -7,6 +7,7 @@ import box2dLight.Light;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,7 +19,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
 
@@ -28,28 +28,28 @@ import com.sawtoothdev.mgoa.IUpdateable;
  *
  */
 
-public class PrettyLights implements IUpdateable, IDrawable {
+public class LightBox implements IUpdateable, IDrawable {
 
 	public enum Mode {IDLE, REACT};
 	
-	private World world = new World(new Vector2(0, 0), false);
-	private OrthographicCamera cam = new OrthographicCamera(10, 6);
-	private RayHandler rayHandler;
+	World world = new World(new Vector2(0, 0), false);
+	OrthographicCamera cam = new OrthographicCamera(10, 6);
+	RayHandler rayHandler;
+	Random random;
+	Mode mode;
+	float idleTimer;
 	
 	private final float
 		LIGHT_DISTANCE_CAP = 3,
 		LIGHT_MIN_DISTANCE = 1,
 		LIGHT_SHRINK_RATE = 6,
-		LIGHT_LINEAR_DAMPING = .5f;
-	private final float
+		LIGHT_LINEAR_DAMPING = .5f,
+		LIGHT_BODY_RADIUS = .1f,
 		IDLE_TIMER_MIN = 8,
 		IDLE_TIMER_MAX = 10;
 	
-	float idleTimer;
-	private Mode mode;
-	Random random;
 
-	public PrettyLights(int numLights, Mode mode, Random random) {
+	public LightBox(Mode mode, Random random) {
 		this.mode = mode;
 		this.random = random;
 
@@ -60,9 +60,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(cam.combined);
-		
-		for (int i = 0; i < numLights; i++)
-			spawnOrb(Color.WHITE, random.nextFloat() + .5f);
 		
 		idleTimer = IDLE_TIMER_MIN;
 	}
@@ -75,8 +72,8 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		switch (mode){
 		case IDLE:
 			idleTimer -= delta;
-			if (idleTimer <= 0){
-				applyRandomImpulseToAllLights(2);
+			if (idleTimer <= 0 || Gdx.input.justTouched()){
+				jerkLights(2);
 				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * random.nextFloat() + IDLE_TIMER_MIN);
 			}
 			break;
@@ -96,75 +93,6 @@ public class PrettyLights implements IUpdateable, IDrawable {
 		rayHandler.updateAndRender();
 	}
 
-	public void react(Beat b, Color c) {
-		if (mode == Mode.IDLE)
-			return;
-
-		pulse(b.energy * 4);
-		applyRandomImpulseToAllLights(25 * b.energy);
-		if (c != Color.MAGENTA)
-			changeAllColors(c);
-	}
-	private void pulse(float distance){
-		for (Light l : rayHandler.lightList) {
-			float newDistance = l.getDistance() + distance;
-
-			if (newDistance > LIGHT_DISTANCE_CAP)
-				l.setDistance(LIGHT_DISTANCE_CAP);
-			else
-				l.setDistance(newDistance);
-		}
-	}
-	private void applyRandomImpulseToAllLights(float multiplier){
-		Iterator<Body> bodies = world.getBodies();
-
-		while (bodies.hasNext()) {
-			float min = .03f, max = 1f;
-
-			float xImpulse = ((max - min) * random.nextFloat() + min)
-					* multiplier;
-			float yImpulse = ((max - min) * random.nextFloat() + min)
-					* multiplier;
-
-			xImpulse = random.nextBoolean() ? xImpulse : -xImpulse;
-			yImpulse = random.nextBoolean() ? -yImpulse : yImpulse;
-
-			bodies.next().setLinearVelocity(xImpulse, yImpulse);
-		}
-	}
-	private void changeAllColors(Color color){
-		for (Light l : rayHandler.lightList)
-			l.setColor(color);
-	}
-	
-	private void spawnOrb(Color color, float distance) {
-
-		BodyDef orbDef = new BodyDef();
-
-		orbDef.position.set(new Vector2());
-		orbDef.type = BodyType.DynamicBody;
-
-		Body orbBody = world.createBody(orbDef);
-
-		CircleShape circle = new CircleShape();
-		circle.setRadius(.75f);
-		FixtureDef circfix = new FixtureDef();
-		circfix.shape = circle;
-		circfix.friction = 0f;
-		// circfix.restitution = 1f;
-		circfix.density = 0f;
-
-		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(random.nextFloat() - .5f,
-				random.nextFloat() - .5f);
-		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
-
-		PointLight plight = new PointLight(rayHandler, 128, color, distance, 0,	0);
-		plight.attachToBody(orbBody, 0, 0);
-		plight.setSoft(true);
-		plight.setSoftnessLenght(0);
-		plight.setXray(true);
-	}
 	private void spawnWall(float x, float y, float width, float height) {
 		BodyDef wallDef = new BodyDef();
 		wallDef.type = BodyType.StaticBody;
@@ -182,8 +110,75 @@ public class PrettyLights implements IUpdateable, IDrawable {
 
 		wall.createFixture(wallFixture);
 	}
+	public void addLight(Color color, float size){
+		BodyDef orbDef = new BodyDef();
 
+		orbDef.position.set(new Vector2());
+		orbDef.type = BodyType.DynamicBody;
+
+		Body orbBody = world.createBody(orbDef);
+
+		CircleShape circle = new CircleShape();
+		circle.setRadius(LIGHT_BODY_RADIUS);
+		FixtureDef circfix = new FixtureDef();
+		circfix.shape = circle;
+		circfix.friction = 0f;
+		// circfix.restitution = 1f;
+		circfix.density = 0f;
+
+		orbBody.createFixture(circfix);
+		orbBody.setLinearVelocity(random.nextFloat() - .5f,
+				random.nextFloat() - .5f);
+		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
+
+		PointLight plight = new PointLight(rayHandler, 128, color, size, 0,	0);
+		plight.attachToBody(orbBody, 0, 0);
+		plight.setSoft(true);
+		plight.setSoftnessLenght(0);
+		plight.setXray(true);
+	}
+	public void removeLight(){
+		
+	}	
+	public void pulseLights(float force){
+		for (Light l : rayHandler.lightList) {
+			float newDistance = l.getDistance() + force;
+
+			if (newDistance > LIGHT_DISTANCE_CAP)
+				l.setDistance(LIGHT_DISTANCE_CAP);
+			else
+				l.setDistance(newDistance);
+		}
+	}
+	public void jerkLights(float force){
+		
+		Iterator<Body> bodies = world.getBodies();
+		while (bodies.hasNext()) {
+			float min = .03f, max = 1f;
+
+			float randomx = ((max - min) * random.nextFloat() + min);
+			float randomy = ((max - min) * random.nextFloat() + min);
+
+			randomx *= force;
+			randomy *= force;
+			
+			randomx = random.nextBoolean() ? randomx : -randomx;
+			randomy = random.nextBoolean() ? randomy : -randomy;
+			
+			bodies.next().setLinearVelocity(randomx, randomy);
+		}
+	}
+	public void setAllLightsColor(Color color){
+		for (Light l : rayHandler.lightList)
+			l.setColor(color);
+	}
 	public void setMode(Mode mode){
 		this.mode = mode;
+	}
+	public void turnOnGravity(){
+		world.setGravity(new Vector2(0f, -3f));
+	}
+	public void turnOffGravity(){
+		world.setGravity(new Vector2());
 	}
 }

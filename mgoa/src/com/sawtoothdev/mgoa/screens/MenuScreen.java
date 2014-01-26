@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.Mgoa;
-import com.sawtoothdev.mgoa.objects.PrettyLights.Mode;
+import com.sawtoothdev.mgoa.objects.LightBox.Mode;
 
 public class MenuScreen implements Screen {
 
