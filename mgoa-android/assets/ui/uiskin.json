@@ -1,6 +1,7 @@
 {
 	com.badlogic.gdx.graphics.Color: {
-		white: { r: 1, g: 1, b: 1, a: 1 }
+		white: { r: 1, g: 1, b: 1, a: 1 },
+		blue: { r: 0, g: 0, b: 1, a: 1 }
 	},
 	
 	com.badlogic.gdx.graphics.g2d.BitmapFont: {
@@ -10,7 +11,7 @@
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-		menuTextButtonStyle: {
+		default: {
 			down: menubtn-down,
 			up: menubtn-up,
 			font: naipol,
@@ -22,18 +23,31 @@
 		default: {
 			font: naipol
 		},
-		menuLabelStyle: {
-			font: naipol
-		}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
-		menuSelectBoxStyle: {
+		default: {
 			font: naipol,
 			fontColor: white,
-			background: selector-bg,
-			listBackground: selector-listbg,
-			listSelection: selector-listbg
+			background: selectorbg,
+			listBackground: graybrick,
+			listSelection: graybrick
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+		default: {
+			titleFont: naipol,
+			background: dialogbg
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+		default: {
+			font: naipol,
+			fontColorSelected: blue,
+			fontColorUnselected: white,
+			selection: graybrick
 		}
 	}
 

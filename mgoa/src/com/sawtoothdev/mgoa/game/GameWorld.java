@@ -2,14 +2,15 @@ package com.sawtoothdev.mgoa.game;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sawtoothdev.mgoa.IDrawable;
-import com.sawtoothdev.mgoa.IPausable;
-import com.sawtoothdev.mgoa.IUpdateable;
+import com.badlogic.gdx.utils.Disposable;
+import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Pausable;
+import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
-public class GameWorld implements IUpdateable, IDrawable, IPausable {
+public class GameWorld implements Updateable, Drawable, Pausable, Disposable {
 	
 	final OneShotMusicPlayer music;
 	final EffectsManager fxmanager;
@@ -20,7 +21,7 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	final Stats stats;
 	final OrthographicCamera camera;
 	
-	public enum WorldState { INACTIVE, ACTIVE, FINISHING, FINISHED, PAUSED };
+	public enum WorldState { INACTIVE, INTRO, MAIN, OUTRO, FINISHED, PAUSED };
 	private WorldState state;
 	
 	public GameWorld(Mgoa gam) {
@@ -40,23 +41,36 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	public void update(float delta) {
 
 		switch (state) {
-		case ACTIVE:
+		case INTRO:
+			hud.update(delta);
+			
+			if (hud.getAlpha() == 1.0f) {
+				state = WorldState.MAIN;
+				music.play();
+				hud.showMessage("BEGIN FAGGOT");
+			}
+			break;
+		case MAIN:
 			visualizer.update(delta);
 			fxmanager.update(delta);
 			coreManager.update(delta);
 			hud.update(delta);
 
-			if (state == WorldState.ACTIVE && !music.isPlaying()){
-				state = WorldState.FINISHED;
+			if (state == WorldState.MAIN && !music.isPlaying()){
 				visualizer.flourish();
 				hud.fadeout();
+				state = WorldState.OUTRO;
 			}
 			break;
 			
-		case FINISHING:
+		case OUTRO:
+			hud.update(delta);
 			
-		case PAUSED:
+			if (hud.getAlpha() == 0f)
+				state = WorldState.FINISHED;
+			break;
 		case FINISHED:
+		case PAUSED:
 		default:
 			break;
 		}
@@ -76,8 +90,8 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	}
 
 	public void start() {
-		state = WorldState.ACTIVE;
-		music.play();
+		hud.fadein();
+		state = WorldState.INTRO;
 	}
 
 	@Override
@@ -89,7 +103,7 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	@Override
 	public void unpause() {
 		music.play();
-		this.state = WorldState.ACTIVE;
+		this.state = WorldState.MAIN;
 	}
 
 	public WorldState getState() {
@@ -97,5 +111,12 @@ public class GameWorld implements IUpdateable, IDrawable, IPausable {
 	}
 	public Stats getStats(){
 		return stats;
+	}
+
+	@Override
+	public void dispose() {
+		music.dispose();
+		fxmanager.dispose();
+		hud.dispose();
 	}
 }

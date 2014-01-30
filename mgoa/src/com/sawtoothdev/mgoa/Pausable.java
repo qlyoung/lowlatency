@@ -1,6 +1,6 @@
 package com.sawtoothdev.mgoa;
 
-public interface IPausable {
+public interface Pausable {
 
 	public void pause();
 	public void unpause();

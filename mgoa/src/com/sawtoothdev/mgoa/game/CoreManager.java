@@ -16,20 +16,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.IDrawable;
-import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Difficulty;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
-public class CoreManager implements IUpdateable, IDrawable {
+public class CoreManager implements Updateable, Drawable {
 
-	class BeatCore implements IUpdateable, IDrawable, Poolable {
+	private static final Texture ringtex = new Texture("textures/ring.png");
+	private static final Texture coretex = new Texture("textures/core.png");
+	class BeatCore implements Updateable, Drawable, Poolable {
 
 		// animation
 		private final float shrinkRate;
-		private final float SYNCH_SIZE = .45f;
+		private final float SYNCH_SIZE = .55f;
 		
 		final float lifeLength;
 
@@ -52,14 +54,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 			// delta size / delta time
 			shrinkRate = -( (1 - SYNCH_SIZE) / lifeLength );
 
-			Texture t = new Texture("textures/ring.png");
-			t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			ring = new Sprite(t);
-			ring.setSize(1.55f, 1.55f * ring.getHeight() / ring.getWidth());
-
-			Texture y = new Texture("textures/core.png");
-			y.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			core = new Sprite(y);
+			ring = new Sprite(ringtex);
+			core = new Sprite(coretex);
 
 			state = CoreState.alive;
 			
@@ -111,8 +107,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 		}
 		
 		public void draw(SpriteBatch batch){
-			core.draw(batch);
 			ring.draw(batch);
+			core.draw(batch);
 		}
 
 		// modifiers
@@ -121,10 +117,11 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 			ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
 			ring.setScale(1);
+			ring.setSize(1.55f, 1.55f * ring.getHeight() / ring.getWidth());
 
 			core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
 			core.setRotation(0f);
-			core.setSize(.8f, .8f * core.getHeight() / core.getWidth());
+			core.setSize(1f, 1f * core.getHeight() / core.getWidth());
 
 			ring.setColor(1, 1, 1, 0f);
 			beat = null;
@@ -200,6 +197,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		public Color getColor() {
 			return corecolor;
 		}
+
 	}
 	class CorePool extends Pool<BeatCore> {
 		
@@ -237,6 +235,9 @@ public class CoreManager implements IUpdateable, IDrawable {
 		random = new Random();
 		stats = stat;
 		fx = effects;
+		
+		ringtex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		coretex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		for (Beat b : beatmap)
 			this.events.add(b);
@@ -304,15 +305,22 @@ public class CoreManager implements IUpdateable, IDrawable {
 		BeatCore core = corePool.obtain();
 		core.setBeat(beat);
 
-		Vector2 position = new Vector2();
-		position.set(random.nextInt(9) - 4, random.nextInt(5) - 2);
-
+		float[] xset = { -4, 2, 0, 2, 4 };
+		float[] yset = {-1.5f, 0, 1.5f };		
+		float x = xset[random.nextInt(xset.length)];
+		float y = yset[random.nextInt(yset.length)];
+		
+		Vector2 position = new Vector2(x, y);
+		
 		if (activeCores.size() > 0) {
 
 			boolean emptySpace = false;
 			while (!emptySpace) {
-
-				position.set(random.nextInt(9) - 4, random.nextInt(5) - 2);
+				
+				x = xset[random.nextInt(xset.length)];
+				y = yset[random.nextInt(yset.length)];
+				position.set(x, y);
+				
 				for (BeatCore c : activeCores) {
 					emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
 					if (!emptySpace) break;
@@ -364,4 +372,5 @@ public class CoreManager implements IUpdateable, IDrawable {
 		
 		return color;
 	}
+
 }

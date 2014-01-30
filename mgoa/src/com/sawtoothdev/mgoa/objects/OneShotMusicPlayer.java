@@ -3,9 +3,17 @@ package com.sawtoothdev.mgoa.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import com.sawtoothdev.mgoa.IPausable;
+import com.badlogic.gdx.utils.Disposable;
+import com.sawtoothdev.mgoa.Pausable;
 
-public class OneShotMusicPlayer implements IPausable {
+/**
+ * Wrapper for Music that keeps correct time
+ * 
+ * @author snowdrift
+ * 
+ */
+
+public class OneShotMusicPlayer implements Pausable, Disposable {
 
 	Music music;
 	private long start = 0, mark = 0;
@@ -16,20 +24,16 @@ public class OneShotMusicPlayer implements IPausable {
 	}
 
 	public void play() {
-		if (active)
-			unpause();
+		if (active) {
+			// unpause
+			start += System.currentTimeMillis() - mark;
+			music.play();
+		}
 		else {
 			music.play();
 			start = System.currentTimeMillis();
 			active = true;
 		}
-	}
-
-	public void stop() {
-		music.stop();
-		start = 0;
-		mark = 0;
-		active = false;
 	}
 	
 	@Override
@@ -42,10 +46,7 @@ public class OneShotMusicPlayer implements IPausable {
 	 * call play() instead
 	 */
 	@Override
-	public void unpause() {
-		start += System.currentTimeMillis() - mark;
-		music.play();
-	}
+	public void unpause() { }
 
 	public boolean isPlaying() {
 		return music.isPlaying();
@@ -63,6 +64,11 @@ public class OneShotMusicPlayer implements IPausable {
 				return mark - start;
 		else
 			return 0;
+	}
+
+	@Override
+	public void dispose() {
+		music.dispose();
 	}
 	
 }

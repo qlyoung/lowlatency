@@ -1,14 +1,13 @@
-package com.sawtoothdev.mgoa.screens;
+package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Stats;
@@ -29,12 +28,9 @@ public class FinishScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		LabelStyle ls = game.skin.get("menuLabelStyle", LabelStyle.class);
-		TextButtonStyle tbstyle = game.skin.get("menuTextButtonStyle", TextButtonStyle.class);
-		
 		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
-		Label songLabel = new Label(songinfo, ls);
-		TextButton okay = new TextButton("OK", tbstyle);
+		Label songLabel = new Label(songinfo, game.skin);
+		TextButton okay = new TextButton("OK", game.skin);
 		okay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -44,11 +40,11 @@ public class FinishScreen implements Screen {
 		});
 		
 		Table summary = new Table();
-		summary.add(new Label("Raw Points", ls)).left();
-		summary.add(new Label(String.valueOf(stats.points), ls)).right();
+		summary.add(new Label("Raw Points", game.skin)).left();
+		summary.add(new Label(String.valueOf(stats.points), game.skin)).right();
 		summary.row();
-		summary.add(new Label("Difficulty Multiplier", ls)).left();
-		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), ls)).right();
+		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
+		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), game.skin)).right();
 
 		root.add(songLabel);
 		root.row();
@@ -57,6 +53,7 @@ public class FinishScreen implements Screen {
 		root.add(okay);
 		
 		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
 	}
 
 
@@ -75,7 +72,7 @@ public class FinishScreen implements Screen {
 
 	@Override
 	public void show() {
-
+		stage.addAction(Actions.fadeIn(1));
 	}
 
 	@Override

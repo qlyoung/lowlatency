@@ -1,15 +1,14 @@
-package com.sawtoothdev.mgoa.screens;
+package com.sawtoothdev.mgoa;
 
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -38,6 +37,41 @@ public class ChooseSongScreen implements Screen {
 			}
 		}
 
+		ClickListener viewerListener = new ClickListener(){
+			
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				
+				FileHandle newhandle = curItems[viewer.getSelectedIndex()].handle;
+				
+				if (newhandle.isDirectory())
+					updateViewer(newhandle);
+				else {
+					String extension = newhandle.extension().toLowerCase();
+					boolean isAudio = extension.contains("mp3") || extension.contains("ogg");
+					
+					if (isAudio)
+						selection = newhandle;
+					else {
+						
+						final Dialog dialog = new Dialog("", game.skin);
+						
+						TextButton ok = new TextButton("Ok", game.skin);
+						ok.addListener(new ClickListener(){
+							public void clicked(InputEvent event, float x, float y) {
+								dialog.cancel();
+							};
+						});
+						dialog.text("Please choose a music file");
+						dialog.button(ok);
+						Dialog.fadeDuration = .2f;
+						
+						dialog.show(stage);
+					}
+				}
+			}
+		};
+		
 		FileHandle selection = null;
 		Skin skin;
 		TextButton upDirBtn;
@@ -47,20 +81,9 @@ public class ChooseSongScreen implements Screen {
 		public FileBrowser(FileHandle root, Skin skin) {
 			this.skin = skin;
 			
-			ListStyle style = new ListStyle(game.skin.getFont("naipol"), Color.BLUE,
-					Color.WHITE, skin.getDrawable("selector-listbg"));
 			
-			viewer = new List(new String[] {"dog"}, style);
-			viewer.addListener(new ClickListener(){
-				@Override
-				public void clicked(InputEvent event, float x, float y) {
-					FileHandle newhandle = curItems[viewer.getSelectedIndex()].handle;
-					if (newhandle.isDirectory())
-						updateViewer(newhandle);
-					else
-						selection = newhandle;
-				}
-			});
+			viewer = new List(new String[] {"dog"}, game.skin);
+			viewer.addListener(viewerListener);
 			ScrollPane sp = new ScrollPane(viewer);
 			
 			updateViewer(root);
@@ -109,16 +132,16 @@ public class ChooseSongScreen implements Screen {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		TextButton homeButton = new TextButton("Main Menu", game.skin, "menuTextButtonStyle");
+		TextButton homeButton = new TextButton("Main Menu", game.skin);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
+				dispose();
 				game.setScreen(new MenuScreen(game));
 			}
 		});
 		
 		FileHandle externalRoot = Gdx.files.external("");
 		browser = new FileBrowser(externalRoot, game.skin);
-
 		
 		Table root = new Table();
 		root.setFillParent(true);
@@ -161,6 +184,8 @@ public class ChooseSongScreen implements Screen {
 	@Override
 	public void resume() {}
 	@Override
-	public void dispose() {}
+	public void dispose() {
+		stage.dispose();
+	}
 
 }

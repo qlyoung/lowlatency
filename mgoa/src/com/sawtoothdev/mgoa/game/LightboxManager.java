@@ -5,56 +5,81 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.IDrawable;
-import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.objects.LightBox;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 
 /**
  * Wet layer that interfaces PrettyLights to mgoa
+ * 
  * @author snowdrift
- *
+ * 
  */
-public class LightboxManager implements IDrawable, IUpdateable {
+public class LightboxManager implements Drawable, Updateable {
 
 	private final Iterator<Beat> events;
 	private final OneShotMusicPlayer music;
 	Beat nextBeat;
-	
+	LinkedList<Color> window = new LinkedList<Color>();
+	// decrease for more alive color changes, increase
+	// for more relaxed changes
+	private int WINDOW_SIZE = 5;
+
 	private LightBox lightbox;
-	
-	public LightboxManager(LinkedList<Beat> beatevents, OneShotMusicPlayer musc, LightBox lights){
+
+	public LightboxManager(LinkedList<Beat> beatevents,
+			OneShotMusicPlayer musc, LightBox lights) {
 		music = musc;
 		events = beatevents.iterator();
 		lightbox = lights;
-		
+
 		lightbox.setMode(LightBox.Mode.REACT);
 		nextBeat = events.next();
 	}
-	
+
 	@Override
 	public void update(float delta) {
-		
-		while (nextBeat != null && music.currentTime() >= nextBeat.timeMs){
+
+		while (nextBeat != null && music.currentTime() >= nextBeat.timeMs) {
+
 			Color color = CoreManager.getEnergyColor(nextBeat.energy);
+			// calculate the color average of the last 5 beats
+			if (window.size() == WINDOW_SIZE)
+				window.removeFirst();
+			if (color.toIntBits() != Color.MAGENTA.toIntBits())
+				window.addLast(color);
+			float r = 0, g = 0, b = 0;
+			for (Color c : window) {
+				r += c.r;
+				g += c.g;
+				b += c.b;
+			}
+			r /= window.size();
+			g /= window.size();
+			b /= window.size();
+			Color c = new Color(r, g, b, 1);
+			System.out.println(r + " " + g + " " + b);
+			color = c;
+
 			lightbox.setAllLightsColor(color);
 			lightbox.jerkLights(nextBeat.energy * 30);
-			lightbox.pulseLights(nextBeat.energy);
-			
+			lightbox.pulseLights(nextBeat.energy * 10);
+
 			nextBeat = events.hasNext() ? events.next() : null;
 		}
 
 		lightbox.update(delta);
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch) {
 		lightbox.draw(null);
 	}
-	
-	public void flourish(){
-		lightbox.turnOnGravity();
-	}
 
+	public void flourish() {
+		lightbox.setGravity(new Vector2(0, -3f));
+	}
 }

@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.screens;
+package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.LightBox.Mode;
@@ -22,16 +21,16 @@ public class MenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		game.lights.setMode(Mode.IDLE);
 		
-		TextButtonStyle tbstyle = game.skin.get("menuTextButtonStyle", TextButtonStyle.class);
 		TextButton
-			playButton = new TextButton("Play", tbstyle),
-			optionsButton = new TextButton("Options", tbstyle),
-			statsButton = new TextButton("Leaderboards", tbstyle),
-			creditsButton = new TextButton("Credits", tbstyle);
+			playButton = new TextButton("Play", game.skin),
+			optionsButton = new TextButton("Options", game.skin),
+			statsButton = new TextButton("Leaderboards", game.skin),
+			creditsButton = new TextButton("Credits", game.skin);
 
 		playButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				dispose();
 				game.setScreen(new ChooseSongScreen(game));
 				super.clicked(event, x, y);
 			}
@@ -39,6 +38,7 @@ public class MenuScreen implements Screen {
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				dispose();
 				game.setScreen(new OptionsScreen(game));
 				super.clicked(event, x, y);
 			}
@@ -84,7 +84,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		
+		game.menuMusic.play();
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		stage.dispose();
 	}
 
 }

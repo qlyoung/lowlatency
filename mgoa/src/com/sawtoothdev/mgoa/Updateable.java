@@ -1,6 +1,6 @@
 package com.sawtoothdev.mgoa;
 
-public interface IUpdateable {
+public interface Updateable {
 	
 	/**
 	 * Updates this object's logic

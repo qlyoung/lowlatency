@@ -2,7 +2,7 @@ package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public interface IDrawable {
+public interface Drawable {
 
 
 	public void draw(SpriteBatch batch);

@@ -8,15 +8,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
-import com.sawtoothdev.mgoa.IDrawable;
-import com.sawtoothdev.mgoa.IUpdateable;
+import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Updateable;
 
-public class EffectsManager implements IUpdateable, IDrawable {
+public class EffectsManager implements Updateable, Drawable, Disposable {
 
+	private class EffectsPool extends Pool<ParticleEffect> {
+		@Override
+		protected ParticleEffect newObject() {
+			return new ParticleEffect();
+		}
+	}
+	
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
-	Camera cam;
+	private Camera cam;
 	
 	public EffectsManager(Camera camera){
 		cam = camera;
@@ -87,11 +95,10 @@ public class EffectsManager implements IUpdateable, IDrawable {
 		
 	}
 	
-	private class EffectsPool extends Pool<ParticleEffect> {
-		@Override
-		protected ParticleEffect newObject() {
-			return new ParticleEffect();
-		}
+	@Override
+	public void dispose() {
+		for (ParticleEffect e : effects)
+			e.dispose();
 	}
 	
 }

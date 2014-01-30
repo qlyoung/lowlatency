@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.screens;
+package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -25,8 +25,8 @@ public class PausedScreen implements Screen {
 		root = new Table();
 		Gdx.input.setInputProcessor(stage);
 		
-		TextButton resume = new TextButton("Resume", game.skin, "menuTextButtonStyle");
-		TextButton quitToMenu = new TextButton("Quit to Main Menu", game.skin, "menuTextButtonStyle");
+		TextButton resume = new TextButton("Resume", game.skin);
+		TextButton quitToMenu = new TextButton("Quit to Main Menu", game.skin);
 		
 		resume.addListener(new ClickListener(){
 			@Override

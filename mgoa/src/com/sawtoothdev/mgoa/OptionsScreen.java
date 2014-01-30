@@ -1,4 +1,4 @@
-package com.sawtoothdev.mgoa.screens;
+package com.sawtoothdev.mgoa;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -23,24 +23,20 @@ public class OptionsScreen implements Screen {
 		stage.addActor(root);
 		root.setFillParent(true);
 
-		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen", game.skin, "menuTextButtonStyle");
+		TextButton fullscreenToggle = new TextButton("Toggle Fullscreen", game.skin);
 		fullscreenToggle.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (!Gdx.graphics.isFullscreen()) {
-					Gdx.graphics.setDisplayMode(
-							Gdx.graphics.getDesktopDisplayMode().width,
-							Gdx.graphics.getDesktopDisplayMode().height, true);
-					game.setScreen(new OptionsScreen(game));
-				} else {
+				
+				if (!Gdx.graphics.isFullscreen())
+					Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode());
+				else
 					Gdx.graphics.setDisplayMode(1280, 720, false);
-					game.setScreen(new OptionsScreen(game));
-				}
-
-				super.clicked(event, x, y);
+				
+				game.setScreen(new OptionsScreen(game));
 			}
 		});
-		TextButton backToMenu = new TextButton("Main Menu", game.skin, "menuTextButtonStyle");
+		TextButton backToMenu = new TextButton("Main Menu", game.skin);
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -49,7 +45,7 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		root.add(new Label("---Graphics Options---", game.skin, "menuLabelStyle"));
+		root.add(new Label("Graphics Options", game.skin));
 		root.row();
 		root.add(fullscreenToggle);
 		root.row();

@@ -19,8 +19,9 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sawtoothdev.mgoa.IDrawable;
-import com.sawtoothdev.mgoa.IUpdateable;
+import com.badlogic.gdx.utils.Disposable;
+import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Updateable;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -28,7 +29,7 @@ import com.sawtoothdev.mgoa.IUpdateable;
  *
  */
 
-public class LightBox implements IUpdateable, IDrawable {
+public class LightBox implements Updateable, Drawable, Disposable {
 
 	public enum Mode {IDLE, REACT};
 	
@@ -175,10 +176,13 @@ public class LightBox implements IUpdateable, IDrawable {
 	public void setMode(Mode mode){
 		this.mode = mode;
 	}
-	public void turnOnGravity(){
-		world.setGravity(new Vector2(0f, -3f));
+	public void setGravity(Vector2 gravity){
+		world.setGravity(gravity);
 	}
-	public void turnOffGravity(){
-		world.setGravity(new Vector2());
+	
+	@Override
+	public void dispose() {
+		world.dispose();
+		rayHandler.dispose();
 	}
 }
