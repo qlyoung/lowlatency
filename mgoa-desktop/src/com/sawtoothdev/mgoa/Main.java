@@ -11,7 +11,6 @@ public class Main {
 		cfg.width = 1280;
 		cfg.height = 720;
 		cfg.resizable = false;
-		//cfg.vSyncEnabled = true;
 		
 		new LwjglApplication(new Mgoa(), cfg);
 	}
