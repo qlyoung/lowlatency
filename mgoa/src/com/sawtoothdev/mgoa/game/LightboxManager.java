@@ -44,32 +44,35 @@ public class LightboxManager implements Drawable, Updateable {
 	public void update(float delta) {
 
 		while (nextBeat != null && music.currentTime() >= nextBeat.timeMs) {
-
-			Color color = CoreManager.getEnergyColor(nextBeat.energy);
+			Color ec = CoreManager.getEnergyColor(nextBeat.energy);
+			
 			// calculate the color average of the last 5 beats
 			if (window.size() == WINDOW_SIZE)
 				window.removeFirst();
-			if (color.toIntBits() != Color.MAGENTA.toIntBits())
-				window.addLast(color);
-			float r = 0, g = 0, b = 0;
-			for (Color c : window) {
-				r += c.r;
-				g += c.g;
-				b += c.b;
-			}
-			r /= window.size();
-			g /= window.size();
-			b /= window.size();
-			Color c = new Color(r, g, b, 1);
-			System.out.println(r + " " + g + " " + b);
-			color = c;
+			if (ec.toIntBits() != Color.MAGENTA.toIntBits())
+				window.addLast(ec);
+			
 
-			lightbox.setAllLightsColor(color);
+			float r = 0, g = 0, b = 0;
+			if (window.size() > 0){
+				for (Color c : window) {
+					r += c.r;
+					g += c.g;
+					b += c.b;
+				}
+				r /= window.size();
+				g /= window.size();
+				b /= window.size();
+			}
+			Color c = new Color(r, g, b, 1);
+			
+			lightbox.setAllLightsColor(c);
 			lightbox.jerkLights(nextBeat.energy * 30);
 			lightbox.pulseLights(nextBeat.energy * 10);
 
 			nextBeat = events.hasNext() ? events.next() : null;
 		}
+
 
 		lightbox.update(delta);
 	}

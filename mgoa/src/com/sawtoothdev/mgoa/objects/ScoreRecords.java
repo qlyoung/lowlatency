@@ -29,13 +29,17 @@ public class ScoreRecords {
 		String records = scoreFile.readString();
 		
 		boolean previousRecordExists = records.contains(hash);
-		if (!previousRecordExists)
+		
+		if (previousRecordExists) {
 			while (records.contains(hash)){
+				
+				// TODO: fix this shit
 				int recordStart = records.indexOf(hash);
 				int recordEnd   = records.indexOf("\n", recordStart);
 				String occurence = records.substring(recordStart, recordEnd);
 				records.replace(occurence, "");
 			}
+		}
 		
 		scoreFile.writeString(record, true);
 

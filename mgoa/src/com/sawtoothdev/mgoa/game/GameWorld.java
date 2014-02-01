@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.Pausable;
 import com.sawtoothdev.mgoa.Updateable;
-import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
@@ -55,7 +55,7 @@ public class GameWorld implements Updateable, Drawable, Pausable, Disposable {
 			fxmanager.update(delta);
 			coreManager.update(delta);
 			hud.update(delta);
-
+			
 			if (state == WorldState.MAIN && !music.isPlaying()){
 				visualizer.flourish();
 				hud.fadeout();

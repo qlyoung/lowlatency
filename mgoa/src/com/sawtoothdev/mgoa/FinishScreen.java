@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Stats;
 
 public class FinishScreen implements Screen {
@@ -22,11 +21,11 @@ public class FinishScreen implements Screen {
 	public FinishScreen(Mgoa gam, Stats stat){
 		game = gam;
 		stats = stat;
-
-		game.records.writeScore(game.song.getHandle(), stats.points);
-		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
+		
+		int totalPoints = stats.points * game.difficulty.scoreMultiplier;
+		game.records.writeScore(game.song.getHandle(), totalPoints);
 		
 		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
 		Label songLabel = new Label(songinfo, game.skin);
@@ -45,6 +44,9 @@ public class FinishScreen implements Screen {
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
 		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), game.skin)).right();
+		summary.row();
+		summary.add(new Label("Total Points", game.skin)).left();
+		summary.add(new Label(String.valueOf(totalPoints), game.skin)).right();
 
 		root.add(songLabel);
 		root.row();

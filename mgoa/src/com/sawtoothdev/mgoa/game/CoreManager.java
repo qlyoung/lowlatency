@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.Drawable;
-import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.Mgoa;
+import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.objects.Difficulty;
 import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
@@ -29,35 +29,24 @@ public class CoreManager implements Updateable, Drawable {
 	private static final Texture coretex = new Texture("textures/core.png");
 	class BeatCore implements Updateable, Drawable, Poolable {
 
-		// animation
-		private final float shrinkRate;
-		private final float SYNCH_SIZE = .55f;
-		
-		final float lifeLength;
-
-		// Gfx
-		private final Sprite ring, core;
-		private Color corecolor;
-		private float alpha = 1;
-
-		// mechanical
-		private Vector2 position;
+		private Sprite ring, core;
 		private Beat beat;
-
-		// state
-		private CoreState state;
+		private Color color, ec;
+		private float shrinkRate;
+		private float lifelength;
+		private float timeBeenAlive;
+		private Vector2 position;
 		private boolean hit = false;
 
-		public BeatCore(float lifeLength) {
-			this.lifeLength = lifeLength;
+		private CoreState state;
+		
+		public BeatCore() {
 			
-			// delta size / delta time
-			shrinkRate = -( (1 - SYNCH_SIZE) / lifeLength );
-
 			ring = new Sprite(ringtex);
 			core = new Sprite(coretex);
-
-			state = CoreState.alive;
+			color = new Color();
+			ec = new Color();
+			position = new Vector2();
 			
 			reset();
 		}
@@ -65,87 +54,80 @@ public class CoreManager implements Updateable, Drawable {
 		@Override
 		public void update(float delta) {
 
-			Color c = new Color();
-			
 			switch (state){
 			case alive:
-				c = ring.getColor();
-				if (c.a < .95f){
-					float alpha = c.a + (delta * 3) > 1 ? 1 : c.a + (delta * 3);
-					ring.setColor(c.r, c.g, c.b, alpha);
+				
+				if (color.a < 1){
+					color.a += delta * 2;
+					if (color.a > 1)
+						color.a = 1;
 				}
-
-				if (ring.getScaleX() > SYNCH_SIZE)
-					ring.scale(delta * shrinkRate);
-				else
+				
+				timeBeenAlive += delta;
+				
+				if (timeBeenAlive >= lifelength)
 					state = CoreState.dying;
+				else
+					ring.scale(delta * -shrinkRate);
 				
 				break;
 			case dying:
-				// fade out
-				if (alpha > .05) {
-					alpha -= (delta * 2);
-
-					alpha = alpha < 0 ? 0 : alpha;
-					
-					c = core.getColor();
-					core.setColor(c.r, c.g, c.b, alpha);
-					c = ring.getColor();
-					ring.setColor(c.r, c.g, c.b, alpha);
-				}
-				else {
-					c = ring.getColor();
+				
+				if (color.a > .05)
+					color.a -= (delta * 2);
+				else
 					state = CoreState.dead;
-				}
+				
 				break;
 			case dead:
+				break;
 			default:
 			}
-
-			core.rotate(delta * 360);
+			
+			core.setColor(color);
+			ring.setColor(color);
+			//core.rotate(delta * 360);
 
 		}
-		
 		public void draw(SpriteBatch batch){
 			ring.draw(batch);
 			core.draw(batch);
 		}
 
-		// modifiers
 		@Override
 		public void reset() {
-
-			ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
-			ring.setScale(1);
-			ring.setSize(1.55f, 1.55f * ring.getHeight() / ring.getWidth());
-
-			core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
-			core.setRotation(0f);
-			core.setSize(1f, 1f * core.getHeight() / core.getWidth());
-
-			ring.setColor(1, 1, 1, 0f);
+			
+			ring.setScale(1.8f);
+			ring.setSize(1f, 1f);
+			core.setSize(1f, 1f);
+			
 			beat = null;
-			alpha = 1;
+			color.set(Color.WHITE);
+			ec.set(Color.WHITE);
+			shrinkRate = 0;
+			lifelength = 0;
+			timeBeenAlive = 0;
+			position.set(0, 0);
 			hit = false;
+		}
+		public void set(Beat b, Vector2 pos, float lifetime) {
+			beat = b;
+			ec.set(getEnergyColor(b.energy));
+			color.set(ec.r, ec.g, ec.b, 0);
+			
+			shrinkRate = (ring.getScaleX() - core.getScaleX()) / lifetime;
+			lifelength = lifetime;
+			position.set(pos);
+			System.out.println(ring.getWidth());
+			Vector2 spritepos = new Vector2(pos.x - ring.getWidth() / 2f, pos.y - ring.getHeight() / 2f);
+			ring.setPosition(spritepos.x, spritepos.y);
+			core.setPosition(spritepos.x, spritepos.y);
+			ring.setOrigin(ring.getWidth() / 2f, ring.getHeight() / 2f);
+			core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
+			
 			state = CoreState.alive;
 		}
-		public void setBeat(Beat beat) {
-			this.beat = beat;
-			
-			this.corecolor = getEnergyColor(beat.energy);
-			
-			this.core.setColor(corecolor);
-			this.ring.setColor(corecolor);
-		}
-		public void setPosition(Vector2 worldPos) {
 
-			this.position = worldPos;
-
-			core.setOrigin(core.getWidth() / 2f, core.getHeight() / 2f);
-			ring.setPosition(worldPos.x - ring.getWidth() / 2f, worldPos.y - ring.getHeight() / 2f);
-			core.setPosition(worldPos.x - core.getWidth() / 2f, worldPos.y - core.getHeight() / 2f);
-
-		}
 		public boolean checkCollision(Vector2 point){
 			if (this.getHitbox().contains(point.x, point.y))
 				return true;
@@ -178,7 +160,6 @@ public class CoreManager implements Updateable, Drawable {
 				return Accuracy.ALMOST;
 		}
 		
-		// readers
 		public CoreState getState(){
 			return state;
 		}
@@ -195,7 +176,7 @@ public class CoreManager implements Updateable, Drawable {
 			return position;
 		}
 		public Color getColor() {
-			return corecolor;
+			return ec;
 		}
 
 	}
@@ -203,7 +184,7 @@ public class CoreManager implements Updateable, Drawable {
 		
 		@Override
 		protected BeatCore newObject() {
-			return new BeatCore(diff.ringTimeMs / 1000f);
+			return new BeatCore();
 		}
 
 	}
@@ -265,8 +246,10 @@ public class CoreManager implements Updateable, Drawable {
 
 		// song events
 		while (events.peek() != null
-				&& music.currentTime() >= events.peek().timeMs - diff.ringTimeMs)
+				&& music.currentTime() >= events.peek().timeMs - diff.ringTimeMs) {
 			spawnCore(events.poll());
+		}
+
 
 		// active core management
 		for (int i = 0; i < activeCores.size(); i++) {
@@ -275,7 +258,6 @@ public class CoreManager implements Updateable, Drawable {
 
 			// free the dead ones
 			if (c.getState() == CoreState.dead) {
-
 				// check if the current combo has been broken
 				if (!c.beenHit())
 					combo = 0;
@@ -288,7 +270,6 @@ public class CoreManager implements Updateable, Drawable {
 		// update cores
 		for (BeatCore core : activeCores)
 			core.update(delta);
-
 	}
 	@Override
 	public void draw(SpriteBatch batch) {
@@ -302,9 +283,6 @@ public class CoreManager implements Updateable, Drawable {
 
 	private void spawnCore(Beat beat) {
 
-		BeatCore core = corePool.obtain();
-		core.setBeat(beat);
-
 		float[] xset = { -4, 2, 0, 2, 4 };
 		float[] yset = {-1.5f, 0, 1.5f };		
 		float x = xset[random.nextInt(xset.length)];
@@ -313,7 +291,7 @@ public class CoreManager implements Updateable, Drawable {
 		Vector2 position = new Vector2(x, y);
 		
 		if (activeCores.size() > 0) {
-
+			
 			boolean emptySpace = false;
 			while (!emptySpace) {
 				
@@ -322,13 +300,16 @@ public class CoreManager implements Updateable, Drawable {
 				position.set(x, y);
 				
 				for (BeatCore c : activeCores) {
+					
 					emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
-					if (!emptySpace) break;
+					if (!emptySpace)
+						break;
 				}
 			}
 		}
-
-		core.setPosition(position);
+		
+		BeatCore core = corePool.obtain();
+		core.set(beat, position, diff.ringTimeMs / 1000f);
 
 		activeCores.add(core);
 
