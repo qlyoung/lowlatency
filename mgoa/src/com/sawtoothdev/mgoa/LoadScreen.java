@@ -29,6 +29,8 @@ public class LoadScreen implements Screen {
 	
 	class LoadingThread extends Thread {
 
+		private final long MIN_BEAT_SPACE_MS = 120l;
+		
 		@Override
 		public void run() {
 
@@ -43,9 +45,8 @@ public class LoadScreen implements Screen {
 				return;
 			}
 
-			// drop beats under .01 energiez
-			LinkedList<Beat> beatmap = BeatsProcessor.dropLowBeats(rawbeats, .05f);
-			beatmap = BeatsProcessor.removeCloseBeats(rawbeats, game.difficulty.minBeatSpace);
+			LinkedList<Beat> beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MIN_BEAT_SPACE_MS);
+			beatmap = BeatsProcessor.dropLowBeats(beatmap, game.difficulty.minBeatEnergy);
 			
 			game.rawmap = rawbeats;
 			game.beatmap = beatmap;

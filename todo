@@ -1,0 +1,10 @@
+TODO
+=====
+
+-fix score writer / reader
+-add difficulty indicator
+-add point message above each beat each time it's hit
+-flash the score counter whatever color just got hit
+-add best score indicator for first four seconds of song
+-add pause button to HUD
+-test preferences

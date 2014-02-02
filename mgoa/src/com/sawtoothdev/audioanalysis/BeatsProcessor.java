@@ -56,9 +56,10 @@ public class BeatsProcessor {
 	public static LinkedList<Beat> dropLowBeats(LinkedList<Beat> beats, float threshold){
 		LinkedList<Beat> result = new LinkedList<Beat>();
 		
-		for (Beat b : beats)
+		for (Beat b : beats){
 			if (b.energy > threshold)
 				result.add(b);
+		}
 		
 		return result;
 	}

@@ -60,9 +60,9 @@ public class Mgoa extends Game {
 		
 		// util
 		Difficulty[] diffs = new Difficulty[3];
-		diffs[0] = new Difficulty(800, 250, "Relaxed", 1);
-		diffs[1] = new Difficulty(650, 150, "Normal", 2);
-		diffs[2] = new Difficulty(600, 120, "Altered", 3);
+		diffs[0] = new Difficulty(800, .10f, "Relaxed", 1);
+		diffs[1] = new Difficulty(650, .05f, "Normal", 2);
+		diffs[2] = new Difficulty(600, .03f, "Altered", 3);
 		difficulties = diffs;
 		random = new Random();
 

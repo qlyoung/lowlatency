@@ -84,7 +84,8 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		game.menuMusic.play();
+		if (game.settings.getBoolean("musicon"))
+			game.menuMusic.play();
 	}
 
 	@Override

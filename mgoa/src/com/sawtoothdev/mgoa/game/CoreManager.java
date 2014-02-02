@@ -118,7 +118,6 @@ public class CoreManager implements Updateable, Drawable {
 			shrinkRate = (ring.getScaleX() - core.getScaleX()) / lifetime;
 			lifelength = lifetime;
 			position.set(pos);
-			System.out.println(ring.getWidth());
 			Vector2 spritepos = new Vector2(pos.x - ring.getWidth() / 2f, pos.y - ring.getHeight() / 2f);
 			ring.setPosition(spritepos.x, spritepos.y);
 			core.setPosition(spritepos.x, spritepos.y);

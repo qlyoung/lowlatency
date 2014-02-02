@@ -3,14 +3,14 @@ package com.sawtoothdev.mgoa.objects;
 public class Difficulty {
 	
 	public final long ringTimeMs;	
-	public final long minBeatSpace;
+	public final float minBeatEnergy;
 	public final String name;
 	public final int scoreMultiplier;
 	
-	public Difficulty(long ringTimeMs, long minBeatSpace, String name, int scoreMultiplier){
+	public Difficulty(long ringTimeMs, float minBeatEnergy, String name, int scoreMultiplier){
 		this.name = name;
 		this.ringTimeMs = ringTimeMs;
-		this.minBeatSpace = minBeatSpace;
+		this.minBeatEnergy = minBeatEnergy;
 		this.scoreMultiplier = scoreMultiplier;
 	}
 }

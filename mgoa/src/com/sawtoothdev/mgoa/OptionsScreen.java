@@ -44,10 +44,25 @@ public class OptionsScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
-
+		TextButton musicOff = new TextButton("Toggle Music", game.skin);
+		musicOff.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				boolean value = !game.settings.getBoolean("musicon");
+				game.settings.putBoolean("musicon", value);
+				
+				if (value)
+					game.menuMusic.play();
+				else
+					game.menuMusic.pause();
+			}
+		});
+		
 		root.add(new Label("Graphics Options", game.skin));
 		root.row();
 		root.add(fullscreenToggle);
+		root.row();
+		root.add(musicOff);
 		root.row();
 		root.add(backToMenu);
 
