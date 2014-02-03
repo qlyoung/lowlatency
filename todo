@@ -1,10 +1,17 @@
 TODO
 =====
 
--fix score writer / reader
+~~must implement~~
+--fix score writer / reader [COMPLETE]
+--add pause button to HUD
+--add dot beat order indicator - bright dot on next beat, medium bright
+  dot on second next beat, low bright dot on third beat, second increases
+  to first after first hit, third to second, etc
+
+~would be nice to implement~
 -add difficulty indicator
 -add point message above each beat each time it's hit
 -flash the score counter whatever color just got hit
 -add best score indicator for first four seconds of song
--add pause button to HUD
+
 -test preferences

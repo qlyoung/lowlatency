@@ -89,7 +89,7 @@ public class Mgoa extends Game {
 		// gfx
 		batch = new SpriteBatch();
 		lights = new LightBox(Mode.IDLE, random);
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 5; i++)
 			lights.addLight(Color.WHITE, 1f);
 
 		// scoring

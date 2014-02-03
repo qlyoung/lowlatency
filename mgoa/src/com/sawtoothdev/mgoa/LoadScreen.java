@@ -18,8 +18,7 @@ import com.sawtoothdev.audioanalysis.FastBeatDetector;
 import com.sawtoothdev.mgoa.Mgoa;
 
 /**
- * Responsible for loading all resources before gameplay begins. This includes
- * audio analysis, map generation, and graphics.
+ * Analyzes selected song and generates the various beatmaps.
  * 
  * @author albatross
  * 

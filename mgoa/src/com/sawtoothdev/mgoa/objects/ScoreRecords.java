@@ -26,21 +26,7 @@ public class ScoreRecords {
 		String scoreval = String.valueOf(score);
 		String record = hash + ":" + scoreval + "\n";
 		
-		String records = scoreFile.readString();
-		
-		boolean previousRecordExists = records.contains(hash);
-		
-		if (previousRecordExists) {
-			while (records.contains(hash)){
-				
-				// TODO: fix this shit
-				int recordStart = records.indexOf(hash);
-				int recordEnd   = records.indexOf("\n", recordStart);
-				String occurence = records.substring(recordStart, recordEnd);
-				records.replace(occurence, "");
-			}
-		}
-		
+		deleteRecord(hash);
 		scoreFile.writeString(record, true);
 
 	}
@@ -58,6 +44,11 @@ public class ScoreRecords {
 		}
 		else
 			return -1;
+	}
+	private void deleteRecord(String hash){
+		String scores = scoreFile.readString();
+		String blegh = scores.replaceAll(hash + ":[0-9]*\n", "");
+		scoreFile.writeString(blegh, false);
 	}
 	private static String MD5(byte[] input) {
 		

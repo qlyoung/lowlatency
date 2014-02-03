@@ -26,7 +26,7 @@ public class LightboxManager implements Drawable, Updateable {
 	LinkedList<Color> window = new LinkedList<Color>();
 	// decrease for more alive color changes, increase
 	// for more relaxed changes
-	private int WINDOW_SIZE = 5;
+	private int WINDOW_SIZE = 3;
 
 	private LightBox lightbox;
 
@@ -49,7 +49,7 @@ public class LightboxManager implements Drawable, Updateable {
 			// calculate the color average of the last 5 beats
 			if (window.size() == WINDOW_SIZE)
 				window.removeFirst();
-			if (ec.toIntBits() != Color.MAGENTA.toIntBits())
+		//	if (ec.toIntBits() != Color.MAGENTA.toIntBits())
 				window.addLast(ec);
 			
 
