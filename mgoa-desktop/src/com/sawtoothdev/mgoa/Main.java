@@ -14,4 +14,4 @@ public class Main {
 		
 		new LwjglApplication(new Mgoa(), cfg);
 	}
-}
+}	

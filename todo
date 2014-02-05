@@ -3,7 +3,7 @@ TODO
 
 ~~must implement~~
 --fix score writer / reader [COMPLETE]
---add pause button to HUD
+--add pause button to HUD [COMPLETE]
 --add dot beat order indicator - bright dot on next beat, medium bright
   dot on second next beat, low bright dot on third beat, second increases
   to first after first hit, third to second, etc

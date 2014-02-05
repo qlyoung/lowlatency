@@ -41,6 +41,8 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
 		 * code has been moved to this class's draw(), with delta time 
 		 * supplied by Gdx.graphics.getDeltaTime().
 		 */
+        for (ParticleEffect effect : effects)
+        	effect.update(delta);
 		
 	}
 	@Override
@@ -62,7 +64,7 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
         batch.setProjectionMatrix(cam.combined);
         
         for (ParticleEffect effect : effects)
-        	effect.draw(batch, Gdx.graphics.getDeltaTime());
+        	effect.draw(batch);
 
 	}
 	
