@@ -34,6 +34,8 @@ public class ScoreRecords {
 		String records = scoreFile.readString();
 		String hash = MD5(audiofile.readBytes());
 		
+		System.out.println("[+] Previous highscore: " + records.contains(hash));
+		
 		if (records.contains(hash)){
 			int recordStart = records.indexOf(hash);
 			int recordEnd   = records.indexOf("\n", recordStart);

@@ -6,8 +6,7 @@
 	
 	com.badlogic.gdx.graphics.g2d.BitmapFont: {
 		naipol: { file: fonts/naipol.fnt },
-		typeone: { file: fonts/typeone.fnt },
-		gimenell: { file: fonts/gimenell.fnt }
+		typeone: { file: fonts/typeone.fnt }
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {

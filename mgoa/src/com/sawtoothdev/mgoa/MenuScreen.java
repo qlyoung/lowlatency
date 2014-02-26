@@ -21,6 +21,7 @@ public class MenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		game.lights.setMode(Mode.IDLE);
 		
+		
 		TextButton
 			playButton = new TextButton("Play", game.skin),
 			optionsButton = new TextButton("Options", game.skin),

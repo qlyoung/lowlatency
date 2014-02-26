@@ -282,7 +282,7 @@ public class CoreManager implements Updateable, Drawable {
 
 	private void spawnCore(Beat beat) {
 
-		float[] xset = { -4, 2, 0, 2, 4 };
+		float[] xset = { -4, -2, 0, 2, 4 };
 		float[] yset = {-1.5f, 0, 1.5f };		
 		float x = xset[random.nextInt(xset.length)];
 		float y = yset[random.nextInt(yset.length)];

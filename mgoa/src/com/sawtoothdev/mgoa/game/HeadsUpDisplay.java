@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -63,10 +64,14 @@ public class HeadsUpDisplay extends Stage {
 		super.act(delta);
 	}
 
-	public void showMessage(String message){
+	public void showMessage(String message, Vector2 screenPosition, float fadein, float fadeout, float live){
 		Label msg = new Label(message, skin);
-		msg.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-		Action set = Actions.sequence(Actions.fadeOut(1), Actions.removeActor());
+		msg.setPosition(screenPosition.x, screenPosition.y);
+		Action set = Actions.sequence(
+				Actions.fadeIn(fadein),
+				Actions.delay(live),
+				Actions.fadeOut(fadeout),
+				Actions.removeActor());
 		msg.addAction(set);
 		addActor(msg);
 	}
@@ -75,6 +80,9 @@ public class HeadsUpDisplay extends Stage {
 	}
 	public void fadeout(float time){
 		getRoot().addAction(Actions.fadeOut(time));
+	}
+	public void present(){
+		fadein(3);
 	}
 	public float getAlpha(){
 		return getRoot().getColor().a;

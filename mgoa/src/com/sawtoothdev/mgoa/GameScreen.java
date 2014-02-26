@@ -3,6 +3,9 @@ package com.sawtoothdev.mgoa;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.mgoa.game.CoreManager;
 import com.sawtoothdev.mgoa.game.EffectsManager;
 import com.sawtoothdev.mgoa.game.HeadsUpDisplay;
@@ -22,6 +25,7 @@ public class GameScreen implements Screen {
 	private WorldState state;
 	private int cachedState;
 
+	final Texture background;
 	final OneShotMusicPlayer music;
 	final EffectsManager fxmanager;
 	final LightboxManager lightboxmanager;
@@ -42,9 +46,10 @@ public class GameScreen implements Screen {
 		hud = new HeadsUpDisplay(game.song, game.skin, stats, game.batch, this);
 		lightboxmanager = new LightboxManager(game.rawmap, music, game.lights);
 		pausedMenu = new PausedMenu(game.skin, game, this);
+		background = new Texture(Gdx.files.internal("textures/background.png"));
 		
 		Gdx.input.setInputProcessor(hud);
-		hud.fadein(2);
+		hud.present();
 		state = WorldState.INTRO;
 	}
 
@@ -58,22 +63,42 @@ public class GameScreen implements Screen {
 			hud.draw();
 			
 			if (hud.getAlpha() == 1.0f) {
-				state = WorldState.MAIN;
 				music.play();
-				hud.showMessage("BEGIN FAGGOT");
+				
+				Vector2 center = new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+				hud.showMessage("Begin", center, .3f, 1f, .1f);
+				
+				int score = game.records.readScore(game.song.getHandle());
+				if (score != -1){
+					String message = "Personal best: " + String.valueOf(score);
+					TextBounds bounds = game.skin.getFont("naipol").getBounds(message);
+					Vector2 top = new Vector2(
+							Gdx.graphics.getWidth()/2f - bounds.width / 2f,
+							Gdx.graphics.getHeight() - (bounds.height + 10f));
+					
+					hud.showMessage(message, top, .3f, .3f, 5f);
+				}
+				
+				state = WorldState.MAIN;
 			}
 			
 			break;
 			
 		case MAIN:
+
 			lightboxmanager.update(delta);
-			fxmanager.update(delta);
 			coreManager.update(delta);
 			hud.act(delta);
 			
+			OrthographicCamera c = new OrthographicCamera();
+			c.setToOrtho(false);
+			game.batch.setProjectionMatrix(c.combined);
+			game.batch.begin();
+			game.batch.draw(background, Gdx.graphics.getWidth()/2f - background.getWidth()/2f, 0);
+			game.batch.end();
 			lightboxmanager.draw(null);
 			game.batch.begin();
-			fxmanager.draw(game.batch);
+			fxmanager.render(game.batch);
 			coreManager.draw(game.batch);
 			game.batch.end();
 			hud.draw();

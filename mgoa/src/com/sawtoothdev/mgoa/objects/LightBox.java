@@ -173,6 +173,13 @@ public class LightBox implements Updateable, Drawable, Disposable {
 		for (Light l : rayHandler.lightList)
 			l.setColor(color);
 	}
+	public void setAllLightsRandomColor(){
+		float r = random.nextFloat();
+		float g = random.nextFloat();
+		float b = random.nextFloat();
+		Color c = new Color(r, g, b, 1);
+		setAllLightsColor(c);
+	}
 	public void setMode(Mode mode){
 		this.mode = mode;
 	}

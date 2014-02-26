@@ -2,10 +2,10 @@ package com.sawtoothdev.mgoa.game;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.Drawable;
 import com.sawtoothdev.mgoa.Updateable;
@@ -24,6 +24,7 @@ public class LightboxManager implements Drawable, Updateable {
 	private final OneShotMusicPlayer music;
 	Beat nextBeat;
 	LinkedList<Color> window = new LinkedList<Color>();
+	Random random = new Random();
 	// decrease for more alive color changes, increase
 	// for more relaxed changes
 	private int WINDOW_SIZE = 3;
@@ -49,7 +50,7 @@ public class LightboxManager implements Drawable, Updateable {
 			// calculate the color average of the last 5 beats
 			if (window.size() == WINDOW_SIZE)
 				window.removeFirst();
-		//	if (ec.toIntBits() != Color.MAGENTA.toIntBits())
+			if (ec.toIntBits() != Color.MAGENTA.toIntBits())
 				window.addLast(ec);
 			
 
@@ -83,6 +84,5 @@ public class LightboxManager implements Drawable, Updateable {
 	}
 
 	public void flourish() {
-		lightbox.setGravity(new Vector2(0, -3f));
 	}
 }

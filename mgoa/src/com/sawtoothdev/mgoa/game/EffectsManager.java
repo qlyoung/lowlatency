@@ -33,21 +33,38 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
 	@Override
 	public void update(float delta) {
 		
-		/*
-		 * Unfortunately, calling update() and draw() on a ParticleEffect
-		 * instead of calling the combined update/draw method (an overload
-		 * of draw()) seems to create undefined behavior; in this case
-		 * a white box renders for a split second. As a workaround the update
-		 * code has been moved to this class's draw(), with delta time 
-		 * supplied by Gdx.graphics.getDeltaTime().
-		 */
-        for (ParticleEffect effect : effects)
-        	effect.update(delta);
+
+		for (int i = 0; i < effects.size(); i++){
+			ParticleEffect effect = effects.get(i);
+			
+			if (effect.isComplete()) {
+				effect.reset();
+				effects.remove(effect);
+				pool.free(effect);
+			}
+			else
+				effect.update(delta);
+		}
+		 
 		
 	}
 	@Override
 	public void draw(SpriteBatch batch) {
-		
+
+        batch.setProjectionMatrix(cam.combined);
+        
+        for (ParticleEffect effect : effects)
+        	effect.draw(batch);
+
+	}
+	public void render(SpriteBatch batch){
+		/*
+		 * Unfortunately, calling update() and draw() on a ParticleEffect
+		 * instead of calling the combined update/draw method (an overload
+		 * of draw()) seems to create undefined behavior; in this case
+		 * a white box renders for a split second. This render() method
+		 * is a workaround that utilizes the draw() overload.
+		 */ 
 		
 		// update
 		for (int i = 0; i < effects.size(); i++){
@@ -64,7 +81,7 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
         batch.setProjectionMatrix(cam.combined);
         
         for (ParticleEffect effect : effects)
-        	effect.draw(batch);
+        	effect.draw(batch, Gdx.graphics.getDeltaTime());
 
 	}
 	

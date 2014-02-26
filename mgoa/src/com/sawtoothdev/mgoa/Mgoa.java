@@ -70,8 +70,7 @@ public class Mgoa extends Game {
 		FileHandle musicpath;
 		switch (Gdx.app.getType()) {
 		case Android:
-			// work around Music's inability to load Internal
-			// files on Android
+			// work around Music's inability to load Internal files on Android
 			Gdx.files.internal("audio/title.mp3").copyTo(
 					Gdx.files.local("title.mp3"));
 			musicpath = Gdx.files.local("title.mp3");
@@ -91,6 +90,7 @@ public class Mgoa extends Game {
 		lights = new LightBox(Mode.IDLE, random);
 		for (int i = 0; i < 5; i++)
 			lights.addLight(Color.WHITE, 1f);
+		lights.setAllLightsRandomColor();
 
 		// scoring
 		records = new ScoreRecords();
