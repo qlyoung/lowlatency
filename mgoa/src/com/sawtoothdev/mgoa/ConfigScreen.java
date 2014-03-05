@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Mgoa;
 
 public class ConfigScreen implements Screen {
 	
@@ -56,9 +55,11 @@ public class ConfigScreen implements Screen {
 		});
 		
 		Table controlBar = new Table();
+		controlBar.defaults().pad(10);
 		controlBar.add(backToMenu);
 		
 		Table configPane = new Table();
+		configPane.defaults().pad(10);
 		configPane.add(lbl);
 		configPane.add(selector);
 		configPane.row();

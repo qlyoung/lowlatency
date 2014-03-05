@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Mgoa;
 
 public class OptionsScreen implements Screen {
 
@@ -57,6 +56,8 @@ public class OptionsScreen implements Screen {
 					game.menuMusic.pause();
 			}
 		});
+		
+		root.defaults().uniform().padBottom(30);
 		
 		root.add(new Label("Graphics Options", game.skin));
 		root.row();

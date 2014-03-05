@@ -20,8 +20,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.sawtoothdev.mgoa.Drawable;
-import com.sawtoothdev.mgoa.Updateable;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -29,7 +29,7 @@ import com.sawtoothdev.mgoa.Updateable;
  *
  */
 
-public class LightBox implements Updateable, Drawable, Disposable {
+public class LightBox implements IUpdateable, IDrawable, Disposable {
 
 	public enum Mode {IDLE, REACT};
 	

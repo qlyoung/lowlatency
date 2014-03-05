@@ -2,15 +2,13 @@ package com.sawtoothdev.mgoa.game;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.Drawable;
-import com.sawtoothdev.mgoa.Updateable;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.objects.LightBox;
-import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 
 /**
  * Wet layer that interfaces PrettyLights to mgoa
@@ -18,22 +16,20 @@ import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
  * @author snowdrift
  * 
  */
-public class LightboxManager implements Drawable, Updateable {
+public class LightboxManager implements IDrawable, IUpdateable {
 
 	private final Iterator<Beat> events;
-	private final OneShotMusicPlayer music;
-	Beat nextBeat;
-	LinkedList<Color> window = new LinkedList<Color>();
-	Random random = new Random();
-	// decrease for more alive color changes, increase
-	// for more relaxed changes
-	private int WINDOW_SIZE = 3;
-
+	private Beat nextBeat;
+	private LinkedList<Color> window = new LinkedList<Color>();
 	private LightBox lightbox;
+	
+	// decrease for more alive color changes
+	private int WINDOW_SIZE = 3;
+	
+	private long songtime;
+	
 
-	public LightboxManager(LinkedList<Beat> beatevents,
-			OneShotMusicPlayer musc, LightBox lights) {
-		music = musc;
+	public LightboxManager(LinkedList<Beat> beatevents, LightBox lights) {
 		events = beatevents.iterator();
 		lightbox = lights;
 
@@ -44,7 +40,7 @@ public class LightboxManager implements Drawable, Updateable {
 	@Override
 	public void update(float delta) {
 
-		while (nextBeat != null && music.currentTime() >= nextBeat.timeMs) {
+		while (nextBeat != null && songtime >= nextBeat.timeMs) {
 			Color ec = CoreManager.getEnergyColor(nextBeat.energy);
 			
 			// calculate the color average of the last 5 beats
@@ -82,7 +78,7 @@ public class LightboxManager implements Drawable, Updateable {
 	public void draw(SpriteBatch batch) {
 		lightbox.draw(null);
 	}
-
-	public void flourish() {
+	public void setSongTime(long millis){
+		this.songtime = millis;
 	}
 }

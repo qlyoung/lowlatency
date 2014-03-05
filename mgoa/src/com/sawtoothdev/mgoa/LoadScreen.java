@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.audioanalysis.BeatsProcessor;
 import com.sawtoothdev.audioanalysis.FastBeatDetector;
-import com.sawtoothdev.mgoa.Mgoa;
 
 /**
  * Analyzes selected song and generates the various beatmaps.

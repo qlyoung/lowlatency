@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Song;
 
 public class ChooseSongScreen implements Screen {
@@ -144,6 +143,7 @@ public class ChooseSongScreen implements Screen {
 		browser = new FileBrowser(externalRoot, game.skin);
 		
 		Table root = new Table();
+		root.defaults().pad(10);
 		root.setFillParent(true);
 		
 		root.add(homeButton);

@@ -3,17 +3,17 @@ package com.sawtoothdev.mgoa.game;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
-import com.sawtoothdev.mgoa.Drawable;
-import com.sawtoothdev.mgoa.Updateable;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 
-public class EffectsManager implements Updateable, Drawable, Disposable {
+public class EffectsManager implements IUpdateable, IDrawable, Disposable {
 
 	private class EffectsPool extends Pool<ParticleEffect> {
 		@Override
@@ -24,11 +24,7 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
 	
 	private EffectsPool pool = new EffectsPool();
 	private LinkedList<ParticleEffect> effects = new LinkedList<ParticleEffect>();
-	private Camera cam;
-	
-	public EffectsManager(Camera camera){
-		cam = camera;
-	}
+	private OrthographicCamera cam = new OrthographicCamera(10, 6);
 	
 	@Override
 	public void update(float delta) {
@@ -52,12 +48,15 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
 	public void draw(SpriteBatch batch) {
 
         batch.setProjectionMatrix(cam.combined);
-        
-        for (ParticleEffect effect : effects)
-        	effect.draw(batch);
+        batch.begin();
+        {
+            for (ParticleEffect effect : effects)
+            	effect.draw(batch);
+        }
+        batch.end();
 
 	}
-	public void render(SpriteBatch batch){
+	public void render(float delta, SpriteBatch batch){
 		/*
 		 * Unfortunately, calling update() and draw() on a ParticleEffect
 		 * instead of calling the combined update/draw method (an overload
@@ -79,9 +78,12 @@ public class EffectsManager implements Updateable, Drawable, Disposable {
 		
 		// draw
         batch.setProjectionMatrix(cam.combined);
-        
-        for (ParticleEffect effect : effects)
-        	effect.draw(batch, Gdx.graphics.getDeltaTime());
+        batch.begin();
+        {
+            for (ParticleEffect effect : effects)
+            	effect.draw(batch, delta);
+        }
+        batch.end();
 
 	}
 	

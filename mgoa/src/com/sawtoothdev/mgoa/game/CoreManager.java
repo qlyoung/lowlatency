@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,18 +16,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
-import com.sawtoothdev.mgoa.Drawable;
+import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Mgoa;
-import com.sawtoothdev.mgoa.Updateable;
 import com.sawtoothdev.mgoa.objects.Difficulty;
-import com.sawtoothdev.mgoa.objects.OneShotMusicPlayer;
 import com.sawtoothdev.mgoa.objects.Stats;
 
-public class CoreManager implements Updateable, Drawable {
+public class CoreManager implements IUpdateable, IDrawable {
 
 	private static final Texture ringtex = new Texture("textures/ring.png");
 	private static final Texture coretex = new Texture("textures/core.png");
-	class BeatCore implements Updateable, Drawable, Poolable {
+	class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 		private Sprite ring, core;
 		private Beat beat;
@@ -169,7 +168,9 @@ public class CoreManager implements Updateable, Drawable {
 			return new Rectangle(position.x - .5f, position.y - .5f, 1f, 1f);
 		}
 		public int getScoreValue() {
-			return (int) (beat.energy * 100);
+			double sv = beat.energy * 100;
+			sv = Math.ceil(sv);
+			return (int) (sv);
 		}
 		public Vector2 getPosition() {
 			return position;
@@ -188,7 +189,6 @@ public class CoreManager implements Updateable, Drawable {
 
 	}
 	
-	//-------------------------------------------------------------
 	
 	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST	};
 	public enum CoreState { alive, dying, dead };
@@ -198,20 +198,20 @@ public class CoreManager implements Updateable, Drawable {
 	final ArrayList<BeatCore> activeCores;
 	final LinkedList<Beat> events;
 	public int combo = 0;
-	final Camera cam;
-	final OneShotMusicPlayer music;
+	final OrthographicCamera cam;
 	final Difficulty diff;
 	final Random random;
 	final Stats stats;
 	final EffectsManager fx;
 	
-	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, Camera camera, OneShotMusicPlayer musicplayer, Stats stat, EffectsManager effects) {
-		cam = camera;
+	private long songtime = 0;
+	
+	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, Stats stat, EffectsManager effects) {
+		cam = new OrthographicCamera(10, 6);
 		corePool = new CorePool();
 		activeCores = new ArrayList<BeatCore>();
 		events = new LinkedList<Beat>();
 		diff = difficulty;
-		music = musicplayer;
 		random = new Random();
 		stats = stat;
 		fx = effects;
@@ -221,62 +221,6 @@ public class CoreManager implements Updateable, Drawable {
 		
 		for (Beat b : beatmap)
 			this.events.add(b);
-
-	}
-
-	@Override
-	public void update(float delta) {
-
-		// hit detection
-		if (Gdx.input.isTouched()) {
-
-			Vector2 touchPos = Mgoa.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), cam);
-
-			for (BeatCore core : activeCores) {
-
-				if (!core.beenHit())
-					if (Mgoa.TESTING) {
-						if (core.getState() == CoreState.dying)
-							onCoreHit(core);
-					} else if (core.checkCollision(touchPos))
-						onCoreHit(core);
-			}
-		}
-
-		// song events
-		while (events.peek() != null
-				&& music.currentTime() >= events.peek().timeMs - diff.ringTimeMs) {
-			spawnCore(events.poll());
-		}
-
-
-		// active core management
-		for (int i = 0; i < activeCores.size(); i++) {
-
-			BeatCore c = activeCores.get(i);
-
-			// free the dead ones
-			if (c.getState() == CoreState.dead) {
-				// check if the current combo has been broken
-				if (!c.beenHit())
-					combo = 0;
-
-				activeCores.remove(c);
-				corePool.free(c);
-			}
-		}
-
-		// update cores
-		for (BeatCore core : activeCores)
-			core.update(delta);
-	}
-	@Override
-	public void draw(SpriteBatch batch) {
-
-		batch.setProjectionMatrix(cam.combined);
-		
-		for (BeatCore core : activeCores)
-			core.draw(batch);
 
 	}
 
@@ -315,7 +259,7 @@ public class CoreManager implements Updateable, Drawable {
 	}
 	private void onCoreHit(BeatCore core) {
 		// register a hit event with the beat and note the accuracy
-		Accuracy accuracy = core.onHit(music.currentTime());
+		Accuracy accuracy = core.onHit(songtime);
 
 		// record in stats
 		stats.numBeatsHit++;
@@ -332,6 +276,61 @@ public class CoreManager implements Updateable, Drawable {
 		// pretty lights
 		fx.makeExplosion(core.getPosition(), core.getColor());
 		
+	}
+	@Override
+	public void update(float delta) {
+
+		// hit detection
+		if (Gdx.input.isTouched()) {
+
+			Vector2 touchPos = Mgoa.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), cam);
+
+			for (BeatCore core : activeCores) {
+				if (!core.beenHit())
+					if (Mgoa.TESTING) {
+						if (core.getState() == CoreState.dying)
+							onCoreHit(core);
+					} else if (core.checkCollision(touchPos))
+						onCoreHit(core);
+			}
+		}
+
+		// check if we need to spawn cores
+		while (events.peek() != null && songtime >= events.peek().timeMs - diff.ringTimeMs) {
+			spawnCore(events.poll());
+		}
+
+
+		// clean up dead cores
+		for (int i = 0; i < activeCores.size(); i++) {
+
+			BeatCore c = activeCores.get(i);
+
+			// free the dead ones
+			if (c.getState() == CoreState.dead) {
+				// check if the current combo has been broken
+				if (!c.beenHit())
+					combo = 0;
+
+				activeCores.remove(c);
+				corePool.free(c);
+			}
+		}
+
+		// update cores
+		for (BeatCore core : activeCores)
+			core.update(delta);
+	}
+	@Override
+	public void draw(SpriteBatch batch) {
+		batch.setProjectionMatrix(cam.combined);
+		batch.begin();
+		{
+			for (BeatCore core : activeCores)
+				core.draw(batch);
+		}
+		batch.end();
+
 	}
 
 	public static Color getEnergyColor(float energy){
@@ -352,5 +351,7 @@ public class CoreManager implements Updateable, Drawable {
 		
 		return color;
 	}
-
+	public void setSongTime(long millis){
+		this.songtime = millis;
+	}
 }

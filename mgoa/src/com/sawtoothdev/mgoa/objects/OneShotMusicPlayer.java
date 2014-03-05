@@ -18,9 +18,12 @@ public class OneShotMusicPlayer implements Pausable, Disposable {
 	Music music;
 	private long start = 0, mark = 0;
 	private boolean active = false;
+	
+	long duration;
 
 	public OneShotMusicPlayer(FileHandle audio){
 		music = Gdx.audio.newMusic(audio);
+		
 	}
 
 	public void play() {
