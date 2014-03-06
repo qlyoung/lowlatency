@@ -50,9 +50,9 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 		IDLE_TIMER_MAX = 10;
 	
 
-	public LightBox(Mode mode, Random random) {
+	public LightBox(Mode mode) {
 		this.mode = mode;
-		this.random = random;
+		this.random = new Random();
 
 		spawnWall(5, 0, .25f, 6);
 		spawnWall(-5, 0, .25f, 6);

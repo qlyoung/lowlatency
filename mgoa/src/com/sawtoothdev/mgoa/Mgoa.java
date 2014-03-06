@@ -1,7 +1,6 @@
 package com.sawtoothdev.mgoa;
 
 import java.util.LinkedList;
-import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -37,42 +36,44 @@ public class Mgoa extends Game {
 	public static final String VERSION = "pre-alpha";
 	public static final boolean TESTING = true;
 	
-	private BitmapFont font;
-	private Camera cam = new OrthographicCamera();
 	
-	public Random random;
-	public Difficulty difficulties[];
-	public Music menuMusic;
+	private BitmapFont font;
+	private Camera cam;
+	
 	public SpriteBatch batch;
 	public LightBox lights;
-	public Skin skin;
-	public Song song;
+	public Music menuMusic;
+	public Difficulty difficulties[];
 	public Difficulty difficulty;
 	public LinkedList<Beat> beatmap;
 	public LinkedList<Beat> rawmap;
 	public Preferences settings;
 	public ScoreRecords records;
+	public Song song;
+	public Skin skin;
 
 	@Override
 	public void create() {
 
 		font = new BitmapFont();
+		cam = new OrthographicCamera();
+		batch = new SpriteBatch();
 		
-		// util
-		Difficulty[] diffs = new Difficulty[3];
-		diffs[0] = new Difficulty(800, .01f, "Relaxed", 1);
-		diffs[1] = new Difficulty(650, .005f, "Normal", 2);
-		diffs[2] = new Difficulty(600, .003f, "Altered", 3);
-		difficulties = diffs;
-		random = new Random();
+		lights = new LightBox(Mode.IDLE);
+		for (int i = 0; i < 5; i++)
+			lights.addLight(Color.WHITE, 1f);
+		lights.setAllLightsRandomColor();
+		
+		difficulties = new Difficulty[3];
+		difficulties[0] = new Difficulty(800, .01f, "Relaxed", 1);
+		difficulties[1] = new Difficulty(650, .005f, "Normal", 2);
+		difficulties[2] = new Difficulty(600, .003f, "Altered", 3);
 
-		// audio
 		FileHandle musicpath;
 		switch (Gdx.app.getType()) {
 		case Android:
 			// work around Music's inability to load Internal files on Android
-			Gdx.files.internal("audio/title.mp3").copyTo(
-					Gdx.files.local("title.mp3"));
+			Gdx.files.internal("audio/title.mp3").copyTo( Gdx.files.local("title.mp3"));
 			musicpath = Gdx.files.local("title.mp3");
 			break;
 		case Desktop:
@@ -85,19 +86,11 @@ public class Mgoa extends Game {
 		menuMusic.setLooping(true);
 		menuMusic.setVolume(.5f);
 
-		// gfx
-		batch = new SpriteBatch();
-		lights = new LightBox(Mode.IDLE, random);
-		for (int i = 0; i < 5; i++)
-			lights.addLight(Color.WHITE, 1f);
-		lights.setAllLightsRandomColor();
-
 		// scoring
 		records = new ScoreRecords();
 
 		// ui
-		TextureAtlas atlas = new TextureAtlas(
-				Gdx.files.internal("ui/uiskin.atlas"));
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
 		skin = new Skin(Gdx.files.internal("ui/uiskin.json"), atlas);
 
 		// settings

@@ -5,14 +5,13 @@
 	},
 	
 	com.badlogic.gdx.graphics.g2d.BitmapFont: {
-		naipol: { file: fonts/naipol.fnt },
-		typeone: { file: fonts/typeone.fnt }
+		naipol: { file: fonts/naipol.fnt }
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		default: {
-			down: menubtn-down,
-			up: menubtn-up,
+			down: box,
+			up: box,
 			font: naipol,
 			fontColor: white
 		}
@@ -35,25 +34,25 @@
 		default: {
 			font: naipol,
 			fontColor: white,
-			background: selectorbg,
-			listBackground: graybrick,
-			listSelection: graybrick
+			background: selector,
+			listBackground: box,
+			listSelection: box
 		}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		default: {
 			titleFont: naipol,
-			background: dialogbg
+			background: box
 		}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 		default: {
 			font: naipol,
-			fontColorSelected: blue,
+			fontColorSelected: white,
 			fontColorUnselected: white,
-			selection: graybrick
+			selection: box
 		}
 	}
 

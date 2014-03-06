@@ -13,10 +13,12 @@ import com.sawtoothdev.mgoa.objects.LightBox.Mode;
 
 public class MenuScreen implements Screen {
 
-	private Stage stage = new Stage();
 	ParticleEffect background;
 	OrthographicCamera bgcam;
+	
+	private Stage stage = new Stage();
 	Table root = new Table();
+
 	Mgoa game;
 	
 	public MenuScreen(Mgoa gam) {
@@ -67,10 +69,10 @@ public class MenuScreen implements Screen {
 		root.defaults().uniform().pad(0, 15, 0, 15);
 
 		root.add("Low Latency").colspan(3).row();
-		root.add(" ").row();
-		root.add(playButton);
-		root.add(optionsButton);
-		root.add(creditsButton);
+		root.add(" ").row().fillX();
+		root.add(playButton).minWidth(200);
+		root.add(optionsButton).minWidth(200);
+		root.add(creditsButton).minWidth(200);
 
 		stage.addActor(root);
 

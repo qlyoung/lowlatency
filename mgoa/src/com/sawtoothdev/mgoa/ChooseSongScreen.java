@@ -131,7 +131,7 @@ public class ChooseSongScreen implements Screen {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		TextButton homeButton = new TextButton("Main Menu", game.skin);
+		TextButton homeButton = new TextButton("Return", game.skin);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
@@ -142,13 +142,18 @@ public class ChooseSongScreen implements Screen {
 		FileHandle externalRoot = Gdx.files.external("");
 		browser = new FileBrowser(externalRoot, game.skin);
 		
-		Table root = new Table();
+		Table ctlbar = new Table(game.skin);
+		ctlbar.defaults().left();
+		ctlbar.add(homeButton);
+
+		Table root = new Table(game.skin);
 		root.defaults().pad(10);
 		root.setFillParent(true);
-		
-		root.add(homeButton);
+		root.add(ctlbar).expandX().left();
 		root.row();
-		root.add(browser).expand().fill();
+		root.add("Select Song").center();
+		root.row();
+		root.add(browser).expand().colspan(2).fill();
 
 		stage.addActor(root);
 	}

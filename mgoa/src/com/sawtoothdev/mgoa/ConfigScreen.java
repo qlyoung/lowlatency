@@ -19,15 +19,10 @@ public class ConfigScreen implements Screen {
 	
 	public ConfigScreen(Mgoa gam){
 		game = gam;
-		stage = new Stage();
-		root = new Table();
-		
-		root.setFillParent(true);
-		Gdx.input.setInputProcessor(stage);
 		
 		String[] selections = new String[game.difficulties.length];
 		for (int i = 0; i < game.difficulties.length; i++)
-			selections[i] = "   " + game.difficulties[i].name + "   ";
+			selections[i] = game.difficulties[i].name;
 		selector = new SelectBox(selections, game.skin);
 		selector.setSelection(1);
 		
@@ -54,20 +49,24 @@ public class ConfigScreen implements Screen {
 			}
 		});
 		
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
+		
+		root = new Table();
+		root.setFillParent(true);
+		
 		Table controlBar = new Table();
-		controlBar.defaults().pad(10);
-		controlBar.add(backToMenu);
+		controlBar.add(backToMenu).left();;
 		
-		Table configPane = new Table();
-		configPane.defaults().pad(10);
-		configPane.add(lbl);
-		configPane.add(selector);
-		configPane.row();
-		configPane.add(playButton).colspan(2).center();
+		Table content = new Table();
+		content.add(lbl);
+		content.add(selector).padBottom(100);
+		content.row();
+		content.add(playButton).colspan(2).fillX();
 		
-		root.add(controlBar);
+		root.add(controlBar).expandX().fillX();
 		root.row();
-		root.add(configPane).expandY();
+		root.add(content).expandY();
 		
 		stage.addActor(root);
 	}

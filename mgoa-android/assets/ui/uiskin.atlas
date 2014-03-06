@@ -3,32 +3,12 @@ uiskin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-dialogbg
-  rotate: false
-  xy: 2, 102
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-graybrick
-  rotate: false
-  xy: 260, 36
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-menubtn-down
+box
   rotate: false
   xy: 2, 36
-  size: 256, 64
-  orig: 256, 64
-  offset: 0, 0
-  index: -1
-menubtn-up
-  rotate: false
-  xy: 2, 36
-  size: 256, 64
-  orig: 256, 64
+  size: 64, 64
+  split: 7, 8, 7, 7
+  orig: 64, 64
   offset: 0, 0
   index: -1
 pause
@@ -40,15 +20,16 @@ pause
   index: -1
 play
   rotate: false
-  xy: 518, 198
+  xy: 132, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-selectorbg
+selector
   rotate: false
-  xy: 260, 166
-  size: 256, 64
-  orig: 256, 64
+  xy: 68, 38
+  size: 62, 62
+  split: 6, 16, 6, 35
+  orig: 62, 62
   offset: 0, 0
   index: -1
