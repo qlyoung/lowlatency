@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PausedMenu extends Stage {
 	
-	public PausedMenu(Skin skin, final Mgoa game, final GameScreen gs) {
+	public PausedMenu(final GameScreen gs) {
 		super();
+		
+		Skin skin = Mgoa.getInstance().skin;
 		
 		TextButton resume = new TextButton("Resume", skin);
 		TextButton quitToMenu = new TextButton("Quit to Main Menu", skin);
@@ -27,7 +29,7 @@ public class PausedMenu extends Stage {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.input.setInputProcessor(null);
-				game.setScreen(new MenuScreen(game));
+				Mgoa.getInstance().setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});

@@ -32,7 +32,7 @@ public class CreditScreen implements Screen {
 		TextButton backtomenu = new TextButton("Return", game.skin);
 		backtomenu.addListener(new ClickListener(){
 			public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 			};
 		});
 		

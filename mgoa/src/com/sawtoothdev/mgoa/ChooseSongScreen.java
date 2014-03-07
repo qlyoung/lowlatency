@@ -113,7 +113,7 @@ public class ChooseSongScreen implements Screen {
 			
 			curItems = new ListItem[items.size()];
 			items.toArray(curItems);
-			
+
 			viewer.setItems(curItems);
 		}
 		
@@ -126,8 +126,8 @@ public class ChooseSongScreen implements Screen {
 	FileBrowser browser;
 	Mgoa game;
 
-	public ChooseSongScreen(Mgoa gam) {
-		game = gam;
+	public ChooseSongScreen() {
+		game = Mgoa.getInstance();
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
@@ -135,7 +135,7 @@ public class ChooseSongScreen implements Screen {
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 			}
 		});
 		
@@ -175,7 +175,7 @@ public class ChooseSongScreen implements Screen {
 	private void finish(){
 		Gdx.input.setInputProcessor(null);
 		game.song = new Song(browser.getSelection());
-		game.setScreen(new ConfigScreen(game));
+		game.setScreen(new ConfigScreen());
 	}
 	
 	@Override

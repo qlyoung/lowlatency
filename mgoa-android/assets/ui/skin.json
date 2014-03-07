@@ -10,8 +10,8 @@
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 		default: {
-			down: box,
-			up: box,
+			down: ui/box,
+			up: ui/box,
 			font: naipol,
 			fontColor: white
 		}
@@ -19,8 +19,8 @@
 
 	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		default: {
-			up: pause,
-			down: pause
+			up: ui/pause,
+			down: ui/pause
 		}
 	},
 	
@@ -34,16 +34,16 @@
 		default: {
 			font: naipol,
 			fontColor: white,
-			background: selector,
-			listBackground: box,
-			listSelection: box
+			background: ui/box,
+			listBackground: ui/box,
+			listSelection: ui/box
 		}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		default: {
 			titleFont: naipol,
-			background: box
+			background: ui/box
 		}
 	},
 	
@@ -52,7 +52,7 @@
 			font: naipol,
 			fontColorSelected: white,
 			fontColorUnselected: white,
-			selection: box
+			selection: ui/box
 		}
 	}
 

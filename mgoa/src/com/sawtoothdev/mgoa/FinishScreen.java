@@ -18,9 +18,9 @@ public class FinishScreen implements Screen {
 	Stats stats;
 	Mgoa game;
 	
-	public FinishScreen(Mgoa gam, Stats stat){
-		game = gam;
-		stats = stat;
+	public FinishScreen(){
+		game = Mgoa.getInstance();
+		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
@@ -33,7 +33,7 @@ public class FinishScreen implements Screen {
 		okay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});

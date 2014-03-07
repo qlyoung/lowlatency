@@ -30,7 +30,7 @@ public class IntroLoadScreen implements Screen {
 		System.out.println("Loading..." + percentdone + "%");
 		
 		if (percentdone == 100)
-			game.setScreen(new MenuScreen(game));
+			game.setScreen(new MenuScreen());
 		
 	}
 

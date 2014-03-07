@@ -7,8 +7,6 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -17,15 +15,14 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.IDrawable;
+import com.sawtoothdev.mgoa.ISongTimeListener;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.Mgoa;
+import com.sawtoothdev.mgoa.Utilities;
 import com.sawtoothdev.mgoa.objects.Difficulty;
-import com.sawtoothdev.mgoa.objects.Stats;
 
-public class CoreManager implements IUpdateable, IDrawable {
+public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 
-	private static final Texture ringtex = new Texture("textures/ring.png");
-	private static final Texture coretex = new Texture("textures/core.png");
 	class BeatCore implements IUpdateable, IDrawable, Poolable {
 
 		private Sprite ring, core;
@@ -41,8 +38,9 @@ public class CoreManager implements IUpdateable, IDrawable {
 		
 		public BeatCore() {
 			
-			ring = new Sprite(ringtex);
-			core = new Sprite(coretex);
+			ring = Mgoa.getInstance().textures.createSprite("game/ring");
+			core = Mgoa.getInstance().textures.createSprite("game/ring");
+			
 			color = new Color();
 			ec = new Color();
 			position = new Vector2();
@@ -201,23 +199,18 @@ public class CoreManager implements IUpdateable, IDrawable {
 	final OrthographicCamera cam;
 	final Difficulty diff;
 	final Random random;
-	final Stats stats;
 	final EffectsManager fx;
 	
 	private long songtime = 0;
 	
-	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, Stats stat, EffectsManager effects) {
+	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, EffectsManager effects) {
 		cam = new OrthographicCamera(10, 6);
 		corePool = new CorePool();
 		activeCores = new ArrayList<BeatCore>();
 		events = new LinkedList<Beat>();
 		diff = difficulty;
 		random = new Random();
-		stats = stat;
 		fx = effects;
-		
-		ringtex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		coretex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		for (Beat b : beatmap)
 			this.events.add(b);
@@ -261,17 +254,9 @@ public class CoreManager implements IUpdateable, IDrawable {
 		// register a hit event with the beat and note the accuracy
 		Accuracy accuracy = core.onHit(songtime);
 
-		// record in stats
-		stats.numBeatsHit++;
-
 		// calculate the score value based on accuracy
 		int divisor = accuracy.ordinal() + 1;
 		int points = (int) core.getScoreValue() / divisor;
-
-		// statistics & scoring
-		combo++;
-		stats.numBeatsHit++;
-		stats.points += points;
 
 		// pretty lights
 		fx.makeExplosion(core.getPosition(), core.getColor());
@@ -283,7 +268,7 @@ public class CoreManager implements IUpdateable, IDrawable {
 		// hit detection
 		if (Gdx.input.isTouched()) {
 
-			Vector2 touchPos = Mgoa.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), cam);
+			Vector2 touchPos = Utilities.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), cam);
 
 			for (BeatCore core : activeCores) {
 				if (!core.beenHit())
@@ -351,7 +336,9 @@ public class CoreManager implements IUpdateable, IDrawable {
 		
 		return color;
 	}
-	public void setSongTime(long millis){
-		this.songtime = millis;
+
+	@Override
+	public void songtime(long time) {
+		songtime = time;
 	}
 }

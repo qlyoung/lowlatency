@@ -17,8 +17,8 @@ public class ConfigScreen implements Screen {
 	SelectBox selector;
 	Mgoa game;
 	
-	public ConfigScreen(Mgoa gam){
-		game = gam;
+	public ConfigScreen(){
+		game = Mgoa.getInstance();
 		
 		String[] selections = new String[game.difficulties.length];
 		for (int i = 0; i < game.difficulties.length; i++)
@@ -36,7 +36,7 @@ public class ConfigScreen implements Screen {
 				game.difficulty = game.difficulties[index];
 				Gdx.input.setInputProcessor(null);
 				dispose();
-				game.setScreen(new LoadScreen(game));
+				game.setScreen(new LoadScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -44,7 +44,7 @@ public class ConfigScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -60,7 +60,7 @@ public class ConfigScreen implements Screen {
 		
 		Table content = new Table();
 		content.add(lbl);
-		content.add(selector).padBottom(100);
+		content.add(selector);
 		content.row();
 		content.add(playButton).colspan(2).fillX();
 		

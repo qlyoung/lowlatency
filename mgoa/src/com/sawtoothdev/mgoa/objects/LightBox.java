@@ -41,11 +41,11 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 	float idleTimer;
 	
 	private final float
-		LIGHT_DISTANCE_CAP = 3,
-		LIGHT_MIN_DISTANCE = 1,
+		LIGHT_DISTANCE_CAP = 4,
+		LIGHT_MIN_DISTANCE = 2,
 		LIGHT_SHRINK_RATE = 6,
-		LIGHT_LINEAR_DAMPING = .5f,
-		LIGHT_BODY_RADIUS = .1f,
+		LIGHT_BODY_LINEAR_DAMPING = .5f,
+		LIGHT_BODY_RADIUS = .5f,
 		IDLE_TIMER_MIN = 8,
 		IDLE_TIMER_MAX = 10;
 	
@@ -130,7 +130,7 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 		orbBody.createFixture(circfix);
 		orbBody.setLinearVelocity(random.nextFloat() - .5f,
 				random.nextFloat() - .5f);
-		orbBody.setLinearDamping(LIGHT_LINEAR_DAMPING);
+		orbBody.setLinearDamping(LIGHT_BODY_LINEAR_DAMPING);
 
 		PointLight plight = new PointLight(rayHandler, 128, color, size, 0,	0);
 		plight.attachToBody(orbBody, 0, 0);

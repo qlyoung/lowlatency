@@ -59,11 +59,11 @@ public class LoadScreen implements Screen {
 	LoadingThread loadThread;
 	Mgoa game;
 	
-	public LoadScreen(Mgoa gam){
-		game = gam;
+	public LoadScreen(){
+		game = Mgoa.getInstance();
+		
 		loadThread = new LoadingThread();
 		stage = new Stage();
-		
 		Gdx.input.setInputProcessor(stage);
 		
 		status = new Label("Loading . . .", game.skin);
@@ -101,7 +101,7 @@ public class LoadScreen implements Screen {
 
 		// hack for changing the screen after fadeout
 		if (stage.getRoot().getColor().a == 0) {
-			game.setScreen(new GameScreen(game));
+			game.setScreen(new GameScreen());
 			dispose();
 		}
 	}

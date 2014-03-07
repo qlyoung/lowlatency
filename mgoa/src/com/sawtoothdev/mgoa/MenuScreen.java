@@ -21,8 +21,9 @@ public class MenuScreen implements Screen {
 
 	Mgoa game;
 	
-	public MenuScreen(Mgoa gam) {
-		game = gam;
+	public MenuScreen() {
+		game = Mgoa.getInstance();
+		
 		Gdx.input.setInputProcessor(stage);
 		game.lights.setMode(Mode.IDLE);
 		
@@ -43,7 +44,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new ChooseSongScreen(game));
+				game.setScreen(new ChooseSongScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -51,7 +52,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new OptionsScreen(game));
+				game.setScreen(new OptionsScreen());
 				super.clicked(event, x, y);
 			}
 		});

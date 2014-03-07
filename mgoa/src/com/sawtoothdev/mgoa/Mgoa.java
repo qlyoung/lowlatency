@@ -14,8 +14,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.objects.Difficulty;
@@ -33,6 +31,11 @@ import com.sawtoothdev.mgoa.objects.Song;
 
 public class Mgoa extends Game {
 
+	private static Mgoa instance;
+	public static Mgoa getInstance(){
+		return instance;
+	}
+	
 	public static final String VERSION = "pre-alpha";
 	public static final boolean TESTING = true;
 	
@@ -51,10 +54,13 @@ public class Mgoa extends Game {
 	public ScoreRecords records;
 	public Song song;
 	public Skin skin;
-
+	public TextureAtlas textures;
+	
 	@Override
 	public void create() {
-
+		instance = this;
+		
+		textures = new TextureAtlas("textures/mgoa.atlas");
 		font = new BitmapFont();
 		cam = new OrthographicCamera();
 		batch = new SpriteBatch();
@@ -86,20 +92,16 @@ public class Mgoa extends Game {
 		menuMusic.setLooping(true);
 		menuMusic.setVolume(.5f);
 
-		// scoring
 		records = new ScoreRecords();
 
-		// ui
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas"));
-		skin = new Skin(Gdx.files.internal("ui/uiskin.json"), atlas);
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("textures/mgoa.atlas"));
+		skin = new Skin(Gdx.files.internal("ui/skin.json"), atlas);
 
-		// settings
 		settings = Gdx.app.getPreferences("settings");
 		settings.putBoolean("firstrun", !settings.contains("firstrun"));
 		settings.flush();
 
-		// begin
-		setScreen(new MenuScreen(this));
+		setScreen(new MenuScreen());
 	}
 
 	@Override
@@ -132,20 +134,6 @@ public class Mgoa extends Game {
 		lights.dispose();
 		skin.dispose();
 		super.dispose();
-	}
-
-	public static Vector2 screenToWorld(Vector2 screenCoords, Camera worldCam) {
-		Vector3 v3 = new Vector3(screenCoords.x, screenCoords.y, 0);
-		worldCam.unproject(v3);
-		Vector2 v2 = new Vector2(v3.x, v3.y);
-		return v2;
-	}
-
-	public static Vector2 worldToScreen(Vector2 worldCoords, Camera worldCam) {
-		Vector3 v3 = new Vector3(worldCoords.x, worldCoords.y, 0);
-		worldCam.project(v3);
-		Vector2 v2 = new Vector2(v3.x, v3.y);
-		return v2;
 	}
 
 }

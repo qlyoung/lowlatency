@@ -16,8 +16,9 @@ public class OptionsScreen implements Screen {
 	private final Table root = new Table();
 	Mgoa game;
 
-	public OptionsScreen(Mgoa gam) {
-		game = gam;
+	public OptionsScreen() {
+		game = Mgoa.getInstance();
+		
 		Gdx.input.setInputProcessor(stage);
 		stage.addActor(root);
 		root.setFillParent(true);
@@ -32,14 +33,14 @@ public class OptionsScreen implements Screen {
 				else
 					Gdx.graphics.setDisplayMode(1280, 720, false);
 				
-				game.setScreen(new OptionsScreen(game));
+				game.setScreen(new OptionsScreen());
 			}
 		});
 		TextButton backToMenu = new TextButton("Main Menu", game.skin);
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});
@@ -74,7 +75,7 @@ public class OptionsScreen implements Screen {
 
 		{// update
 			if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-				game.setScreen(new MenuScreen(game));
+				game.setScreen(new MenuScreen());
 			stage.act();
 		}
 

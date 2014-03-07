@@ -1,35 +1,47 @@
 
-uiskin.png
+mgoa.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-box
+ui/box
   rotate: false
   xy: 2, 36
   size: 64, 64
-  split: 7, 8, 7, 7
+  split: 8, 9, 8, 8
+  pad: 8, 8, 8, 8
   orig: 64, 64
   offset: 0, 0
   index: -1
-pause
+ui/pause
   rotate: false
   xy: 2, 2
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-play
+ui/play
   rotate: false
-  xy: 132, 68
+  xy: 68, 68
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
-selector
+
+mgoa2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+game/core
   rotate: false
-  xy: 68, 38
-  size: 62, 62
-  split: 6, 16, 6, 35
-  orig: 62, 62
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+game/ring
+  rotate: false
+  xy: 260, 2
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1

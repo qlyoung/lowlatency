@@ -20,30 +20,22 @@ import com.badlogic.gdx.utils.Disposable;
 import com.sawtoothdev.mgoa.GameScreen;
 import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.IUpdateable;
-import com.sawtoothdev.mgoa.objects.ProgressBar;
+import com.sawtoothdev.mgoa.Mgoa;
 import com.sawtoothdev.mgoa.objects.Song;
-import com.sawtoothdev.mgoa.objects.Stats;
 
 public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	
 	Stage stage;
 	private HashMap<String, Actor> tickers;
-	private Stats stats;
 	private Skin skin;
 	private OrthographicCamera screencam;
 	
-	private ProgressBar progressbar;
-	
-	public HeadsUpDisplay(Song song, Skin skn, Stats stat, final GameScreen gs){
+	public HeadsUpDisplay(Song song, final GameScreen gs){
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-		
 		screencam = new OrthographicCamera();
 		screencam.setToOrtho(false);
-		progressbar = new ProgressBar();
-		progressbar.setPosition(new Vector2(5, Gdx.graphics.getHeight() - 25));
 		
-		skin = skn;
-		stats = stat;
+		skin = Mgoa.getInstance().skin;
 		tickers = new HashMap<String, Actor>();
 
 		String songinfo = song.getArtist() + " - " + song.getTitle();
@@ -73,7 +65,6 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	@Override
 	public void update(float delta) {
 		Label scoreLabel = (Label) tickers.get("score");
-		scoreLabel.setText(String.valueOf(stats.points));
 		stage.act(delta);
 	}
 	@Override
@@ -82,7 +73,6 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		
 		batch.setProjectionMatrix(screencam.combined);
 		batch.begin();
-		progressbar.draw(batch);
 		batch.end();
 	}
 		
@@ -98,7 +88,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		stage.addActor(msg);
 	}
 	public void setProgressBarPercent(float percentOutOfOne){
-		this.progressbar.setPercent(percentOutOfOne);
+		//TODO: Implement
 	}
 	public void fadein(float time){
 		stage.getRoot().addAction(Actions.fadeIn(time));
@@ -109,9 +99,6 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	public void setAsInputProcessor(){
 		Gdx.input.setInputProcessor(stage);
 	}
-
-
-
 
 	public float getAlpha(){
 		return stage.getRoot().getColor().a;
