@@ -1,12 +1,14 @@
 package com.sawtoothdev.mgoa.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -33,13 +35,15 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 		private float timeBeenAlive;
 		private Vector2 position;
 		private boolean hit = false;
-
 		private CoreState state;
 		
 		public BeatCore() {
 			
 			ring = Mgoa.getInstance().textures.createSprite("game/ring");
 			core = Mgoa.getInstance().textures.createSprite("game/ring");
+			
+			ring.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			core.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			
 			color = new Color();
 			ec = new Color();
@@ -187,21 +191,19 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 
 	}
 	
-	
 	public static enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST	};
 	public enum CoreState { alive, dying, dead };
 	
 	// pools and cores
-	final CorePool corePool;
-	final ArrayList<BeatCore> activeCores;
-	final LinkedList<Beat> events;
-	public int combo = 0;
-	final OrthographicCamera cam;
-	final Difficulty diff;
-	final Random random;
-	final EffectsManager fx;
-	
-	private long songtime = 0;
+	CorePool corePool;
+	ArrayList<BeatCore> activeCores;
+	LinkedList<Beat> events;
+	OrthographicCamera cam;
+	Difficulty diff;
+	Random random;
+	EffectsManager fx;
+	HashMap<String, Integer> stats;
+	long songtime = 0;
 	
 	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, EffectsManager effects) {
 		cam = new OrthographicCamera(10, 6);
@@ -211,6 +213,9 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 		diff = difficulty;
 		random = new Random();
 		fx = effects;
+		stats = new HashMap<String, Integer>();
+		stats.put("points", 0);
+		stats.put("combo", 0);
 		
 		for (Beat b : beatmap)
 			this.events.add(b);
@@ -251,24 +256,20 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 
 	}
 	private void onCoreHit(BeatCore core) {
-		// register a hit event with the beat and note the accuracy
 		Accuracy accuracy = core.onHit(songtime);
-
-		// calculate the score value based on accuracy
-		int divisor = accuracy.ordinal() + 1;
-		int points = (int) core.getScoreValue() / divisor;
-
-		// pretty lights
-		fx.makeExplosion(core.getPosition(), core.getColor());
+		int points = (int) (core.getScoreValue() / (accuracy.ordinal() + 1));
+		stats.put("points", stats.get("points") + points);
 		
+		fx.makeExplosion(core.getPosition(), core.getColor());
 	}
+	
 	@Override
 	public void update(float delta) {
 
 		// hit detection
 		if (Gdx.input.isTouched()) {
 
-			Vector2 touchPos = Utilities.screenToWorld(new Vector2(Gdx.input.getX(), Gdx.input.getY()), cam);
+			Vector2 touchPos = Utilities.getTouchInWorld(cam);
 
 			for (BeatCore core : activeCores) {
 				if (!core.beenHit())
@@ -295,8 +296,7 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 			if (c.getState() == CoreState.dead) {
 				// check if the current combo has been broken
 				if (!c.beenHit())
-					combo = 0;
-
+					stats.put("combo", stats.get("combo") + 1);
 				activeCores.remove(c);
 				corePool.free(c);
 			}
@@ -317,7 +317,10 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 		batch.end();
 
 	}
-
+	@Override
+	public void songtime(long time) {
+		songtime = time;
+	}
 	public static Color getEnergyColor(float energy){
 		Color color = new Color();
 		
@@ -332,13 +335,12 @@ public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {
 		else if (energy > .15f)
 			color = Color.BLUE;
 		else
-			color = Color.MAGENTA;
+			color = new Color(141, 0, 255, 1);
 		
 		return color;
 	}
-
-	@Override
-	public void songtime(long time) {
-		songtime = time;
+	public int getPoints(){
+		return stats.get("points");
 	}
+
 }

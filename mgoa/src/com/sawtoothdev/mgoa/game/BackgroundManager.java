@@ -13,7 +13,6 @@ import com.sawtoothdev.mgoa.IDrawable;
 import com.sawtoothdev.mgoa.ISongTimeListener;
 import com.sawtoothdev.mgoa.IUpdateable;
 import com.sawtoothdev.mgoa.objects.LightBox;
-import com.sawtoothdev.mgoa.objects.LightBox.Mode;
 
 public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListener {
 
@@ -37,7 +36,7 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 			events = beatevents.iterator();
 			lightbox = lights;
 
-			lightbox.setMode(LightBox.Mode.REACT);
+			lightbox.standby();
 			nextBeat = events.next();
 		}
 
@@ -88,16 +87,13 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 			songtime = time;
 		}
 	}
-
 	
-	private LightboxManager lbm;
-	private ParticleEffect fountain;
-	private OrthographicCamera screencam;
+	LightboxManager lbm;
+	ParticleEffect fountain;
+	OrthographicCamera screencam;
 	
 	public BackgroundManager(LinkedList<Beat> beats){
-		LightBox lb = new LightBox(Mode.REACT);
-		for (int i = 0; i < 4; i++)
-			lb.addLight(Color.WHITE, 3);
+		LightBox lb = new LightBox(4, Color.WHITE);
 		lbm = new LightboxManager(beats, lb);
 
 		fountain = new ParticleEffect();
@@ -127,6 +123,5 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 	public void songtime(long time) {
 		lbm.songtime(time);
 	}
-
 
 }

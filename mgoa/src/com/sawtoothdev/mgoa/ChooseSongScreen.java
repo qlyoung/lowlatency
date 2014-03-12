@@ -54,7 +54,6 @@ public class ChooseSongScreen implements Screen {
 					else {
 						
 						final Dialog dialog = new Dialog("", game.skin);
-						
 						TextButton ok = new TextButton("Ok", game.skin);
 						ok.addListener(new ClickListener(){
 							public void clicked(InputEvent event, float x, float y) {
@@ -80,8 +79,7 @@ public class ChooseSongScreen implements Screen {
 		public FileBrowser(FileHandle root, Skin skin) {
 			this.skin = skin;
 			
-			
-			viewer = new List(new String[] {"dog"}, game.skin);
+			viewer = new List(new String[] {"why do we travel to the mines / with our own chests to dig in?"}, game.skin);
 			viewer.addListener(viewerListener);
 			ScrollPane sp = new ScrollPane(viewer);
 			
@@ -158,6 +156,12 @@ public class ChooseSongScreen implements Screen {
 		stage.addActor(root);
 	}
 
+	private void finish(){
+		Gdx.input.setInputProcessor(null);
+		game.song = new Song(browser.getSelection());
+		game.setScreen(new ConfigScreen());
+	}
+	
 	@Override
 	public void render(float delta) {
 
@@ -171,13 +175,6 @@ public class ChooseSongScreen implements Screen {
 		game.lights.draw(null);
 		stage.draw();
 	}
-
-	private void finish(){
-		Gdx.input.setInputProcessor(null);
-		game.song = new Song(browser.getSelection());
-		game.setScreen(new ConfigScreen());
-	}
-	
 	@Override
 	public void resize(int width, int height) {}
 	@Override

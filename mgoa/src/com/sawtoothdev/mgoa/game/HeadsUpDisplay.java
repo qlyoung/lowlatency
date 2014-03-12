@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,9 +27,9 @@ import com.sawtoothdev.mgoa.objects.Song;
 public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	
 	Stage stage;
-	private HashMap<String, Actor> tickers;
-	private Skin skin;
-	private OrthographicCamera screencam;
+	HashMap<String, Actor> tickers;
+	Skin skin;
+	OrthographicCamera screencam;
 	
 	public HeadsUpDisplay(Song song, final GameScreen gs){
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -41,7 +42,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		String songinfo = song.getArtist() + " - " + song.getTitle();
 		
 		Label scoreLabel = new Label("000000000", skin);
-		tickers.put("score", scoreLabel);
+		tickers.put("points", scoreLabel);
 
 		ImageButton pause = new ImageButton(skin);
 		pause.addListener(new ClickListener(){
@@ -64,16 +65,11 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 
 	@Override
 	public void update(float delta) {
-		Label scoreLabel = (Label) tickers.get("score");
 		stage.act(delta);
 	}
 	@Override
 	public void draw(SpriteBatch batch) {
 		stage.draw();
-		
-		batch.setProjectionMatrix(screencam.combined);
-		batch.begin();
-		batch.end();
 	}
 		
 	public void showMessage(String message, Vector2 screenPosition, float fadein, float fadeout, float live){
@@ -87,8 +83,17 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		msg.addAction(set);
 		stage.addActor(msg);
 	}
+	public void showDialog(Dialog d){
+		d.show(stage);
+	}
 	public void setProgressBarPercent(float percentOutOfOne){
 		//TODO: Implement
+	}
+	public void setPoints(int points) {
+		Label scoreLabel = (Label) tickers.get("points");
+		String text = String.format("%08d", points);
+		
+		scoreLabel.setText(text);
 	}
 	public void fadein(float time){
 		stage.getRoot().addAction(Actions.fadeIn(time));
@@ -99,7 +104,6 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	public void setAsInputProcessor(){
 		Gdx.input.setInputProcessor(stage);
 	}
-
 	public float getAlpha(){
 		return stage.getRoot().getColor().a;
 	}

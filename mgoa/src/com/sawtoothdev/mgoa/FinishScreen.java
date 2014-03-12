@@ -9,22 +9,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.objects.Stats;
 
 public class FinishScreen implements Screen {
 
-	private Stage stage = new Stage();
-	private Table root = new Table();
-	Stats stats;
+	Stage stage;
+	Table root;
 	Mgoa game;
 	
-	public FinishScreen(){
+	public FinishScreen(int points){
 		game = Mgoa.getInstance();
+		stage = new Stage();
+		root = new Table();
 		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		int totalPoints = stats.points * game.difficulty.scoreMultiplier;
+		int totalPoints = points * game.difficulty.scoreMultiplier;
 		game.records.writeScore(game.song.getHandle(), totalPoints);
 		
 		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
@@ -40,7 +40,7 @@ public class FinishScreen implements Screen {
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", game.skin)).left();
-		summary.add(new Label(String.valueOf(stats.points), game.skin)).right();
+		summary.add(new Label(String.valueOf(points), game.skin)).right();
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
 		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), game.skin)).right();
@@ -58,40 +58,32 @@ public class FinishScreen implements Screen {
 		stage.getRoot().getColor().a = 0;
 	}
 
-
-	
 	@Override
 	public void render(float delta) {
 		
 		stage.act();
 		stage.draw();
 	}
-
 	@Override
 	public void resize(int width, int height) {
 
 	}
-
 	@Override
 	public void show() {
 		stage.addAction(Actions.fadeIn(1));
 	}
-
 	@Override
 	public void hide() {
 
 	}
-
 	@Override
 	public void pause() {
 
 	}
-
 	@Override
 	public void resume() {
 
 	}
-
 	@Override
 	public void dispose() {
 

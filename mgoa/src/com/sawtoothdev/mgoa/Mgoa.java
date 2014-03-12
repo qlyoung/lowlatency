@@ -8,7 +8,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.sawtoothdev.audioanalysis.Beat;
 import com.sawtoothdev.mgoa.objects.Difficulty;
 import com.sawtoothdev.mgoa.objects.LightBox;
-import com.sawtoothdev.mgoa.objects.LightBox.Mode;
 import com.sawtoothdev.mgoa.objects.ScoreRecords;
 import com.sawtoothdev.mgoa.objects.Song;
 
@@ -38,7 +36,6 @@ public class Mgoa extends Game {
 	
 	public static final String VERSION = "pre-alpha";
 	public static final boolean TESTING = true;
-	
 	
 	private BitmapFont font;
 	private Camera cam;
@@ -65,10 +62,7 @@ public class Mgoa extends Game {
 		cam = new OrthographicCamera();
 		batch = new SpriteBatch();
 		
-		lights = new LightBox(Mode.IDLE);
-		for (int i = 0; i < 5; i++)
-			lights.addLight(Color.WHITE, 1f);
-		lights.setAllLightsRandomColor();
+		lights = new LightBox(5, Utilities.getRandomColor());
 		
 		difficulties = new Difficulty[3];
 		difficulties[0] = new Difficulty(800, .01f, "Relaxed", 1);
@@ -103,7 +97,6 @@ public class Mgoa extends Game {
 
 		setScreen(new MenuScreen());
 	}
-
 	@Override
 	public void render() {
 
@@ -126,7 +119,6 @@ public class Mgoa extends Game {
 			batch.end();
 		}
 	}
-
 	@Override
 	public void dispose() {
 		menuMusic.dispose();

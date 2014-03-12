@@ -31,69 +31,41 @@ import com.sawtoothdev.mgoa.IUpdateable;
 
 public class LightBox implements IUpdateable, IDrawable, Disposable {
 
-	public enum Mode {IDLE, REACT};
-	
-	World world = new World(new Vector2(0, 0), false);
-	OrthographicCamera cam = new OrthographicCamera(10, 6);
+	World world;
+	OrthographicCamera cam;
 	RayHandler rayHandler;
 	Random random;
-	Mode mode;
+	boolean idle;
 	float idleTimer;
-	
-	private final float
-		LIGHT_DISTANCE_CAP = 4,
-		LIGHT_MIN_DISTANCE = 2,
+	float
+		LIGHT_MAX_DISTANCE = 4,
+		LIGHT_MIN_DISTANCE = 1,
 		LIGHT_SHRINK_RATE = 6,
 		LIGHT_BODY_LINEAR_DAMPING = .5f,
 		LIGHT_BODY_RADIUS = .5f,
-		IDLE_TIMER_MIN = 8,
-		IDLE_TIMER_MAX = 10;
+		IDLE_TIMER_MIN = 4,
+		IDLE_TIMER_MAX = 8;
 	
-
-	public LightBox(Mode mode) {
-		this.mode = mode;
+	public LightBox(int numLights, Color lightColor){
+		this.cam = new OrthographicCamera(10, 6);
+		this.world = new World(new Vector2(0, 0), false);
+		this.idle = false;
 		this.random = new Random();
-
-		spawnWall(5, 0, .25f, 6);
-		spawnWall(-5, 0, .25f, 6);
-		spawnWall(0, 3, 10, .25f);
-		spawnWall(0, -3, 10, .25f);
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(cam.combined);
 		
+		spawnWall(5, 0, .25f, 6);
+		spawnWall(-5, 0, .25f, 6);
+		spawnWall(0, 3, 10, .25f);
+		spawnWall(0, -3, 10, .25f);
+		
+		for (int i = 0; i < numLights; i++)
+			addLight(lightColor, LIGHT_MIN_DISTANCE);
+
 		idleTimer = IDLE_TIMER_MIN;
 	}
-
-	@Override
-	public void update(float delta) {
-
-		world.step(1 / 45f, 6, 2);
-
-		switch (mode){
-		case IDLE:
-			idleTimer -= delta;
-			if (idleTimer <= 0 || Gdx.input.justTouched()){
-				jerkLights(2);
-				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * random.nextFloat() + IDLE_TIMER_MIN);
-			}
-			break;
-		case REACT:
-			for (Light l : rayHandler.lightList) {
-				if (l.getDistance() > LIGHT_MIN_DISTANCE){
-					float newDistance = l.getDistance() - (delta * LIGHT_SHRINK_RATE);
-					l.setDistance(newDistance);
-				}
-			}
-			break;
-		}
-
-	}
-	@Override
-	public void draw(SpriteBatch batch) {
-		rayHandler.updateAndRender();
-	}
-
+	
 	private void spawnWall(float x, float y, float width, float height) {
 		BodyDef wallDef = new BodyDef();
 		wallDef.type = BodyType.StaticBody;
@@ -110,6 +82,31 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 		wallFixture.restitution = 0f;
 
 		wall.createFixture(wallFixture);
+	}
+	
+	@Override
+	public void update(float delta) {
+
+		world.step(1 / 45f, 6, 2);
+
+		if (idle){
+			idleTimer -= delta;
+			if (idleTimer <= 0 || Gdx.input.justTouched()){
+				jerkLights(2);
+				idleTimer = ((IDLE_TIMER_MAX - IDLE_TIMER_MIN) * random.nextFloat() + IDLE_TIMER_MIN);
+			}
+		}
+
+		for (Light l : rayHandler.lightList)
+			if (l.getDistance() > LIGHT_MIN_DISTANCE){
+				float newDistance = l.getDistance() - (delta * LIGHT_SHRINK_RATE);
+				l.setDistance(newDistance);
+			}
+
+	}
+	@Override
+	public void draw(SpriteBatch batch) {
+		rayHandler.updateAndRender();
 	}
 	public void addLight(Color color, float size){
 		BodyDef orbDef = new BodyDef();
@@ -145,48 +142,43 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 		for (Light l : rayHandler.lightList) {
 			float newDistance = l.getDistance() + force;
 
-			if (newDistance > LIGHT_DISTANCE_CAP)
-				l.setDistance(LIGHT_DISTANCE_CAP);
+			if (newDistance > LIGHT_MAX_DISTANCE)
+				l.setDistance(LIGHT_MAX_DISTANCE);
 			else
 				l.setDistance(newDistance);
 		}
 	}
-	public void jerkLights(float force){
+	public void jerkLights(float metersPerSecond){
 		
 		Iterator<Body> bodies = world.getBodies();
 		while (bodies.hasNext()) {
 			float min = .03f, max = 1f;
 
-			float randomx = ((max - min) * random.nextFloat() + min);
-			float randomy = ((max - min) * random.nextFloat() + min);
+			float xDirection = ((max - min) * random.nextFloat() + min);
+			float yDirection = ((max - min) * random.nextFloat() + min);
 
-			randomx *= force;
-			randomy *= force;
+			xDirection *= metersPerSecond;
+			yDirection *= metersPerSecond;
 			
-			randomx = random.nextBoolean() ? randomx : -randomx;
-			randomy = random.nextBoolean() ? randomy : -randomy;
+			xDirection = random.nextBoolean() ? xDirection : -xDirection;
+			yDirection = random.nextBoolean() ? yDirection : -yDirection;
 			
-			bodies.next().setLinearVelocity(randomx, randomy);
+			bodies.next().setLinearVelocity(xDirection, yDirection);
 		}
 	}
 	public void setAllLightsColor(Color color){
 		for (Light l : rayHandler.lightList)
 			l.setColor(color);
 	}
-	public void setAllLightsRandomColor(){
-		float r = random.nextFloat();
-		float g = random.nextFloat();
-		float b = random.nextFloat();
-		Color c = new Color(r, g, b, 1);
-		setAllLightsColor(c);
+	public void idle(){
+		this.idle = true;
 	}
-	public void setMode(Mode mode){
-		this.mode = mode;
+	public void standby(){
+		this.idle = false;
 	}
 	public void setGravity(Vector2 gravity){
 		world.setGravity(gravity);
 	}
-	
 	@Override
 	public void dispose() {
 		world.dispose();

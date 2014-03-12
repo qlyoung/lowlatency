@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sawtoothdev.mgoa.objects.LightBox.Mode;
 
 public class MenuScreen implements Screen {
 
@@ -25,12 +24,12 @@ public class MenuScreen implements Screen {
 		game = Mgoa.getInstance();
 		
 		Gdx.input.setInputProcessor(stage);
-		game.lights.setMode(Mode.IDLE);
+		game.lights.idle();
 		
 		bgcam = new OrthographicCamera();
 		bgcam.setToOrtho(false);
 		background = new ParticleEffect();
-		background.load(Gdx.files.internal("effects/slowspace.p"), Gdx.files.internal("effects/"));
+		background.load(Gdx.files.internal("effects/space.p"), Gdx.files.internal("effects/"));
 		background.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 		
 		
