@@ -71,6 +71,7 @@ public class LoadScreen implements Screen {
 	
 	private void onLoadComplete(){
 		status.setText("Done.");
+		stage.addAction(Actions.delay(1));
 		stage.addAction(Actions.fadeOut(.2f));
 	}
 	

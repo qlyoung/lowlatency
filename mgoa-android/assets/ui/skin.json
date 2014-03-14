@@ -54,6 +54,15 @@
 			fontColorUnselected: white,
 			selection: ui/box
 		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+		default: {
+			font: naipol,
+			checkboxOff: ui/box,
+			checkboxOn: ui/box,
+			fontColor: white
+		}
 	}
 
 }

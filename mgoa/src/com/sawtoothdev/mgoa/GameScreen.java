@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sawtoothdev.mgoa.game.BackgroundManager;
@@ -26,6 +25,7 @@ public class GameScreen implements Screen {
 	enum WorldState { INTRO, MAIN, OUTRO, PAUSED };
 	WorldState state;
 	int cachedState;
+	boolean justSwitchedToMain = false;
 	
 	Mgoa game;
 	SpriteBatch batch;
@@ -66,26 +66,16 @@ public class GameScreen implements Screen {
 				hud.fadein(1f);
 				
 				Dialog.fadeDuration = .5f;
-				Dialog playdialog = new Dialog("Play", Mgoa.getInstance().skin);
+				Dialog playdialog = new Dialog("", Mgoa.getInstance().skin);
+				playdialog.button("Play");
 				playdialog.addListener(new ClickListener(){
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
 						Dialog d = (Dialog) event.getListenerActor();
-						d.addAction(Actions.fadeOut(.2f));
 						d.cancel();
 						
 						state = WorldState.MAIN;
-						musicmanager.play();
-						int score = game.records.readScore(game.song.getHandle());
-						if (score != -1){
-							String message = "Personal best: " + String.valueOf(score);
-							TextBounds bounds = game.skin.getFont("naipol").getBounds(message);
-							Vector2 top = new Vector2(
-									Gdx.graphics.getWidth()/2f - bounds.width / 2f,
-									Gdx.graphics.getHeight() - (bounds.height + 10f));
-							
-							hud.showMessage(message, top, .3f, .3f, 5f);
-						}
+						justSwitchedToMain = true;
 					}
 				});
 				hud.showDialog(playdialog);
@@ -96,6 +86,21 @@ public class GameScreen implements Screen {
 			break;
 			
 		case MAIN:
+			if (justSwitchedToMain){
+				musicmanager.play();
+				int score = game.records.readScore(game.song.getHandle());
+				if (score != -1){
+					String message = "Personal best: " + String.valueOf(score);
+					TextBounds bounds = game.skin.getFont("naipol").getBounds(message);
+					Vector2 top = new Vector2(
+							Gdx.graphics.getWidth()/2f - bounds.width / 2f,
+							Gdx.graphics.getHeight() - (bounds.height + 10f));
+					
+					hud.showMessage(message, top, .3f, .3f, 5f);
+				}
+				
+				justSwitchedToMain = false;
+			}
 			
 			// update
 			musicmanager.update(delta);
@@ -133,22 +138,18 @@ public class GameScreen implements Screen {
 			break;
 		}
 	}
-
 	@Override
 	public void resize(int width, int height) {
 
 	}
-
 	@Override
 	public void show() {
 		
 	}
-
 	@Override
 	public void hide() {
 
 	}
-
 	@Override
 	public void pause() {
 		musicmanager.pause();
@@ -156,14 +157,12 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(pausedMenu);
 		state = WorldState.PAUSED;
 	}
-
 	@Override
 	public void resume() {
 		musicmanager.play();
 		hud.setAsInputProcessor();
 		state = WorldState.values()[cachedState];
 	}
-
 	@Override
 	public void dispose() {
 		musicmanager.dispose();

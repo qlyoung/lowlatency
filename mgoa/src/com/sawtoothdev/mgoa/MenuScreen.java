@@ -12,18 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen implements Screen {
 
+	Stage stage;
+	Table root;
 	ParticleEffect background;
 	OrthographicCamera bgcam;
-	
-	private Stage stage = new Stage();
-	Table root = new Table();
-
 	Mgoa game;
 	
 	public MenuScreen() {
 		game = Mgoa.getInstance();
-		
-		Gdx.input.setInputProcessor(stage);
+		stage = new Stage();
+		root = new Table();
 		game.lights.idle();
 		
 		bgcam = new OrthographicCamera();
@@ -31,7 +29,6 @@ public class MenuScreen implements Screen {
 		background = new ParticleEffect();
 		background.load(Gdx.files.internal("effects/space.p"), Gdx.files.internal("effects/"));
 		background.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-		
 		
 		TextButton
 			playButton = new TextButton("Play", game.skin),
@@ -66,16 +63,17 @@ public class MenuScreen implements Screen {
 		// scene layout
 		root.setFillParent(true);
 		root.setSkin(game.skin);
-		root.defaults().uniform().pad(0, 15, 0, 15);
+		root.defaults().uniform().pad(0, 15, 0, 15).minWidth(200);
 
 		root.add("Low Latency").colspan(3).row();
 		root.add(" ").row().fillX();
-		root.add(playButton).minWidth(200);
-		root.add(optionsButton).minWidth(200);
-		root.add(creditsButton).minWidth(200);
-
+		root.add(optionsButton);
+		root.add(playButton);
+		root.add(creditsButton);
+		
 		stage.addActor(root);
-
+		Gdx.input.setInputProcessor(stage);
+		
 		background.start();
 	}
 
@@ -97,36 +95,29 @@ public class MenuScreen implements Screen {
 		}
 
 	}
-
 	@Override
 	public void resize(int width, int height) {
 
 	}
-
 	@Override
 	public void show() {
 		if (game.settings.getBoolean("musicon"))
 			game.menuMusic.play();
 	}
-
 	@Override
 	public void hide() {
 
 	}
-
 	@Override
 	public void pause() {
 
 	}
-
 	@Override
 	public void resume() {
 
 	}
-
 	@Override
 	public void dispose() {
 		stage.dispose();
 	}
-
 }
