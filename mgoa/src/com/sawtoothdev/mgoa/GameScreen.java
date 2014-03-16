@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 	enum WorldState { INTRO, MAIN, OUTRO, PAUSED };
 	WorldState state;
 	int cachedState;
-	boolean justSwitchedToMain = false;
+	boolean justSwitchedState = false;
 	
 	Mgoa game;
 	SpriteBatch batch;
@@ -54,6 +54,7 @@ public class GameScreen implements Screen {
 		hud.setAsInputProcessor();
 		
 		state = WorldState.INTRO;
+		justSwitchedState = true;
 	}
 
 	@Override
@@ -62,23 +63,17 @@ public class GameScreen implements Screen {
 		switch (state) {
 
 		case INTRO:
-			if (hud.getAlpha() == 0){
+			if (justSwitchedState){
 				hud.fadein(1f);
-				
-				Dialog.fadeDuration = .5f;
-				Dialog playdialog = new Dialog("", Mgoa.getInstance().skin);
-				playdialog.button("Play");
-				playdialog.addListener(new ClickListener(){
+				hud.showPlayDialog(new ClickListener(){
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						Dialog d = (Dialog) event.getListenerActor();
-						d.cancel();
-						
+						event.getListenerActor().remove();
 						state = WorldState.MAIN;
-						justSwitchedToMain = true;
+						justSwitchedState = true;
 					}
 				});
-				hud.showDialog(playdialog);
+				justSwitchedState = false;
 			}
 			
 			hud.update(delta);
@@ -86,7 +81,7 @@ public class GameScreen implements Screen {
 			break;
 			
 		case MAIN:
-			if (justSwitchedToMain){
+			if (justSwitchedState){
 				musicmanager.play();
 				int score = game.records.readScore(game.song.getHandle());
 				if (score != -1){
@@ -96,10 +91,10 @@ public class GameScreen implements Screen {
 							Gdx.graphics.getWidth()/2f - bounds.width / 2f,
 							Gdx.graphics.getHeight() - (bounds.height + 10f));
 					
-					hud.showMessage(message, top, .3f, .3f, 5f);
+					hud.showMessage(message, top, .3f, 5f);
 				}
 				
-				justSwitchedToMain = false;
+				justSwitchedState = false;
 			}
 			
 			// update

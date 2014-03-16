@@ -60,7 +60,7 @@
 		default: {
 			font: naipol,
 			checkboxOff: ui/box,
-			checkboxOn: ui/box,
+			checkboxOn: ui/filledbox,
 			fontColor: white
 		}
 	}

@@ -55,6 +55,7 @@ public class ChooseSongScreen implements Screen {
 						
 						final Dialog dialog = new Dialog("", game.skin);
 						TextButton ok = new TextButton("Ok", game.skin);
+						ok.center().pad(0f, 30, 0, 30);
 						ok.addListener(new ClickListener(){
 							public void clicked(InputEvent event, float x, float y) {
 								dialog.cancel();

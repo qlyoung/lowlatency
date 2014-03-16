@@ -72,19 +72,24 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		stage.draw();
 	}
 		
-	public void showMessage(String message, Vector2 screenPosition, float fadein, float fadeout, float live){
+	public void showMessage(String message, Vector2 screenPosition, float fadetime, float live){
 		Label msg = new Label(message, skin);
 		msg.setPosition(screenPosition.x, screenPosition.y);
 		Action set = Actions.sequence(
-				Actions.fadeIn(fadein),
+				Actions.fadeIn(fadetime),
 				Actions.delay(live),
-				Actions.fadeOut(fadeout),
+				Actions.fadeOut(fadetime),
 				Actions.removeActor());
 		msg.addAction(set);
 		stage.addActor(msg);
 	}
-	public void showDialog(Dialog d){
-		d.show(stage);
+	public void showPlayDialog(ClickListener l){
+		Dialog.fadeDuration = .5f;
+		Dialog playdialog = new Dialog("", Mgoa.getInstance().skin);
+		playdialog.text("Play");
+		playdialog.addListener(l);
+		playdialog.show(stage);
+		
 	}
 	public void setProgressBarPercent(float percentOutOfOne){
 		//TODO: Implement
