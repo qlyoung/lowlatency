@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -71,6 +72,7 @@ public class ConfigScreen implements Screen {
 		root.add(content).expandY();
 		
 		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
 	}
 
 	@Override
@@ -89,8 +91,7 @@ public class ConfigScreen implements Screen {
 	}
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		stage.addAction(Actions.fadeIn(.5f));
 	}
 	@Override
 	public void hide() {

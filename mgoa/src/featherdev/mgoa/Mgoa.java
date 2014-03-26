@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import featherdev.mgoa.audio.Beat;
+import featherdev.lwbd.Beat;
 import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.objects.LightBox;
 import featherdev.mgoa.objects.ScoreRecords;

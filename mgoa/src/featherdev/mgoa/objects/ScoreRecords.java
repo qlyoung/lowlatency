@@ -10,7 +10,7 @@ public class ScoreRecords {
 	FileHandle scoreFile;
 	
 	public ScoreRecords(){
-		scoreFile = Gdx.files.local("scores");
+		scoreFile = Gdx.files.internal("text/scores");
 	}
 
 	/***

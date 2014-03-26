@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -74,6 +75,8 @@ public class MenuScreen implements Screen {
 		root.add(creditsButton);
 		
 		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
+		
 		Gdx.input.setInputProcessor(stage);
 		
 		background.start();
@@ -103,8 +106,14 @@ public class MenuScreen implements Screen {
 	}
 	@Override
 	public void show() {
-		if (game.settings.getBoolean("musicon"))
+		if (game.settings.contains("music")){
+			if (game.settings.getBoolean("music"))
+				game.menuMusic.play();
+		}
+		else
 			game.menuMusic.play();
+		
+		stage.getRoot().addAction(Actions.fadeIn(1));
 	}
 	@Override
 	public void hide() {

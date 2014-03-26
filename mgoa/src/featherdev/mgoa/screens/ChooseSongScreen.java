@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -157,6 +158,7 @@ public class ChooseSongScreen implements Screen {
 		root.add(browser).expand().colspan(2).fill();
 
 		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
 	}
 
 	private void finish(){
@@ -181,7 +183,9 @@ public class ChooseSongScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {}
 	@Override
-	public void show() {}
+	public void show() {
+		stage.addAction(Actions.fadeIn(.5f));
+	}
 	@Override
 	public void hide() {}
 	@Override

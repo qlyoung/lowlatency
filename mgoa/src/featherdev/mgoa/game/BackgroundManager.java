@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import featherdev.mgoa.audio.Beat;
+import featherdev.lwbd.Beat;
 import featherdev.mgoa.objects.LightBox;
 import featherdev.mgoa.screens.IDrawable;
 import featherdev.mgoa.screens.ISongTimeListener;

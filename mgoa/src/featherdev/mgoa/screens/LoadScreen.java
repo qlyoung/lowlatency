@@ -1,24 +1,25 @@
 package featherdev.mgoa.screens;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import featherdev.lwbd.Beat;
+import featherdev.lwbd.BeatDetector;
+import featherdev.lwbd.BeatsProcessor;
+import featherdev.lwbd.LwbdDecoder;
+import featherdev.lwbd.decoders.gdx.GdxMp3Decoder;
+import featherdev.lwbd.decoders.gdx.GdxOggDecoder;
 import featherdev.mgoa.Mgoa;
-import featherdev.mgoa.audio.Beat;
-import featherdev.mgoa.audio.BeatsProcessor;
-import featherdev.mgoa.audio.FastBeatDetector;
 
 /**
- * Analyzes selected song and generates the various beatmaps.
- * 
- * @author albatross
+ * music processing & map gen
  * 
  */
 
@@ -26,29 +27,37 @@ public class LoadScreen implements Screen {
 	
 	class LoadingThread extends Thread {
 
-		private final long MIN_BEAT_SPACE_MS = 120l;
-		
 		@Override
 		public void run() {
 
-			float sensitivity = FastBeatDetector.SENSITIVITY_AGGRESSIVE;
-
 			LinkedList<Beat> rawbeats = null;
-
-			try {
-				rawbeats = FastBeatDetector.detectBeats(game.song.getHandle(), sensitivity);
-			} catch (IOException e) {
-				Gdx.app.log("Load Screen", e.getMessage());
-				return;
-			}
-
-			LinkedList<Beat> beatmap = BeatsProcessor.removeCloseBeats(rawbeats, MIN_BEAT_SPACE_MS);
-			beatmap = BeatsProcessor.dropLowBeats(beatmap, game.difficulty.minBeatEnergy);
+			LinkedList<Beat> beatmap  = null;
+			
+			FileHandle audiofile = game.song.getHandle();
+			LwbdDecoder decoder = null;
+			
+			String extension = audiofile.extension().toLowerCase();
+			
+			if (extension.contains("mp3"))
+				decoder = new GdxMp3Decoder(audiofile);
+			else if (extension.contains("ogg"))
+				decoder = new GdxOggDecoder(audiofile);
+			else
+				onLoadComplete(false);
+			
+			System.out.print("loading...");
+			rawbeats = BeatDetector.detectBeats(decoder, BeatDetector.SENSITIVITY_AGGRESSIVE);
+			System.out.print("done.");
+			beatmap  = BeatsProcessor.thinBeats(rawbeats, 120);
+			beatmap  = BeatsProcessor.dropWeakBeats(beatmap, game.difficulty.minBeatEnergy);
+			
+			for (Beat b : beatmap)
+				System.out.println(b.timeMs);
 			
 			game.rawmap = rawbeats;
 			game.beatmap = beatmap;
 			
-			onLoadComplete();
+			onLoadComplete(true);
 		}
 	}
 
@@ -67,14 +76,21 @@ public class LoadScreen implements Screen {
 		root.add(status);
 		root.setFillParent(true);
 		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
 		
 		Gdx.input.setInputProcessor(stage);
 	}
 	
-	private void onLoadComplete(){
-		status.setText("Done.");
-		stage.addAction(Actions.delay(1));
-		stage.addAction(Actions.fadeOut(.2f));
+	private void onLoadComplete(boolean success){
+		if (success){
+			status.setText("Done.");
+			stage.addAction(Actions.delay(1));
+			stage.addAction(Actions.fadeOut(.2f));
+		}
+		else {
+			System.out.println("Load failed.");
+			return;
+		}
 	}
 	
 	@Override
@@ -98,6 +114,7 @@ public class LoadScreen implements Screen {
 	@Override
 	public void show() {
 		loadThread.start();
+		stage.getRoot().addAction(Actions.fadeIn(.5f));
 	}
 	@Override
 	public void resize(int width, int height) {

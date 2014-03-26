@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,11 +24,10 @@ public class OptionsScreen implements Screen {
 		game = Mgoa.getInstance();
 		stage = new Stage();
 		root = new Table();
-		stage.addActor(root);
 		root.setFillParent(true);
 
-		CheckBox fullscreen = new CheckBox("Fullscreen", game.skin);
-		CheckBox music		= new CheckBox("Music on", game.skin);
+		CheckBox fullscreen = new CheckBox("  Fullscreen", game.skin);
+		CheckBox music		= new CheckBox("  Music", game.skin);
 		TextButton backToMenu = new TextButton("Return", game.skin);
 		fullscreen.addListener(new ClickListener(){
 			@Override
@@ -47,6 +47,9 @@ public class OptionsScreen implements Screen {
 					game.menuMusic.pause();
 				else
 					game.menuMusic.play();
+				
+				game.settings.putBoolean("music", game.menuMusic.isPlaying());
+				game.settings.flush();
 			}
 		});
 		backToMenu.addListener(new ClickListener() {
@@ -57,6 +60,8 @@ public class OptionsScreen implements Screen {
 			}
 		});
 		
+		music.setChecked(game.menuMusic.isPlaying());
+		
 		root.defaults().uniform().padBottom(30);
 		root.add(new Label("Graphics Options", game.skin));
 		root.row();
@@ -65,6 +70,9 @@ public class OptionsScreen implements Screen {
 		root.add(music);
 		root.row();
 		root.add(backToMenu);
+
+		stage.addActor(root);
+		stage.getRoot().getColor().a = 0;
 		
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -89,7 +97,7 @@ public class OptionsScreen implements Screen {
 	}
 	@Override
 	public void show() {
-
+		stage.addAction(Actions.fadeIn(.5f));
 	}
 	@Override
 	public void hide() {

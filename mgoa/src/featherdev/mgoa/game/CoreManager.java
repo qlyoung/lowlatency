@@ -16,8 +16,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
+import featherdev.lwbd.Beat;
 import featherdev.mgoa.Mgoa;
-import featherdev.mgoa.audio.Beat;
 import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.screens.IDrawable;
 import featherdev.mgoa.screens.ISongTimeListener;
