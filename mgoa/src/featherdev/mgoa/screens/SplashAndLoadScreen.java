@@ -83,11 +83,16 @@ public class SplashAndLoadScreen implements Screen {
 		
 		if (b && !e)
 			load();
-		if (e)
-			if (System.currentTimeMillis() - l > 1000) {
+		if (e){
+			if (System.currentTimeMillis() - l > 2000 && System.currentTimeMillis() - l < 3000)
+				return;
+			if (System.currentTimeMillis() - l >= 3000){
 				Mgoa.getInstance().setScreen(new MenuScreen());
-				System.out.println("[#] Initialization sequence complete.");				
+				System.out.println("[#] Initialization sequence complete.");
+				return;
 			}
+			
+		}
 		
 		float x = (Gdx.graphics.getWidth() - t.getWidth()) / 2f;
 		float y = (Gdx.graphics.getHeight() - t.getHeight()) / 2f;

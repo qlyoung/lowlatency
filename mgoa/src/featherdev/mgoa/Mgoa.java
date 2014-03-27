@@ -29,8 +29,8 @@ public class Mgoa extends Game {
 	
 	private OrthographicCamera cam;
 	
-	public static final String VERSION = "pre-alpha";
-	public static final boolean TESTING = true;
+	public static final String VERSION = "1.0";
+	public static final boolean TESTING = false;
 	public SpriteBatch batch;
 	public LightBox lights;
 	public Music menuMusic;

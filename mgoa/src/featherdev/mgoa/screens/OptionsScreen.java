@@ -1,6 +1,7 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -62,12 +63,13 @@ public class OptionsScreen implements Screen {
 		
 		music.setChecked(game.menuMusic.isPlaying());
 		
-		root.defaults().uniform().padBottom(30);
-		root.add(new Label("Graphics Options", game.skin));
+		root.defaults().uniform().pad(10);
+		root.add(new Label("Options", game.skin));
 		root.row();
-		root.add(fullscreen);
+		if (Gdx.app.getType() != ApplicationType.Android)
+			root.add(fullscreen).left();
 		root.row();
-		root.add(music);
+		root.add(music).left();
 		root.row();
 		root.add(backToMenu);
 
