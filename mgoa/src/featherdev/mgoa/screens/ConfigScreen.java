@@ -31,7 +31,7 @@ public class ConfigScreen implements Screen {
 		
 		Label lbl = new Label("Difficulty: ", game.skin);
 		TextButton playButton = new TextButton("Play", game.skin);
-		TextButton backToMenu = new TextButton("Main Menu", game.skin);
+		TextButton backToMenu = new TextButton("Return", game.skin);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -59,9 +59,10 @@ public class ConfigScreen implements Screen {
 		root.setFillParent(true);
 		
 		Table controlBar = new Table();
-		controlBar.add(backToMenu).left();;
+		controlBar.add(backToMenu).expandX().left().pad(10);
 		
 		Table content = new Table();
+		content.defaults().pad(10);
 		content.add(lbl);
 		content.add(selector);
 		content.row();

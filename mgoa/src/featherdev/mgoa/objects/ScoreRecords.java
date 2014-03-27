@@ -10,17 +10,11 @@ public class ScoreRecords {
 	FileHandle scoreFile;
 	
 	public ScoreRecords(){
-		scoreFile = Gdx.files.internal("text/scores");
+		scoreFile = Gdx.files.local("scores");
+		if (!scoreFile.exists())
+			scoreFile = FileHandle.tempFile("scores");
 	}
 
-	/***
-	 * Updates a song score record with the new value.
-	 * If there is not already a record for the given song a
-	 * new record is created.
-	 * 
-	 * @param audiofile The song file
-	 * @param score
-	 */
 	public void writeScore(FileHandle audiofile, int score){
 		String hash = MD5(audiofile.readBytes());
 		String scoreval = String.valueOf(score);

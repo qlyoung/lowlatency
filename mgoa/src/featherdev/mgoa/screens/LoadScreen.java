@@ -38,6 +38,7 @@ public class LoadScreen implements Screen {
 			
 			String extension = audiofile.extension().toLowerCase();
 			
+			System.out.println("[+] Initializing audio analysis system");
 			if (extension.contains("mp3"))
 				decoder = new GdxMp3Decoder(audiofile);
 			else if (extension.contains("ogg"))
@@ -45,17 +46,14 @@ public class LoadScreen implements Screen {
 			else
 				onLoadComplete(false);
 			
-			System.out.print("loading...");
+			
 			rawbeats = BeatDetector.detectBeats(decoder, BeatDetector.SENSITIVITY_AGGRESSIVE);
-			System.out.print("done.");
 			beatmap  = BeatsProcessor.thinBeats(rawbeats, 120);
 			beatmap  = BeatsProcessor.dropWeakBeats(beatmap, game.difficulty.minBeatEnergy);
 			
-			for (Beat b : beatmap)
-				System.out.println(b.timeMs);
-			
 			game.rawmap = rawbeats;
 			game.beatmap = beatmap;
+			System.out.println("[+] Audio analysis complete.");
 			
 			onLoadComplete(true);
 		}
@@ -65,6 +63,8 @@ public class LoadScreen implements Screen {
 	Label status;
 	LoadingThread loadThread;
 	Mgoa game;
+	enum LoadScreenState { LOADING, DYING }
+	LoadScreenState state;
 	
 	public LoadScreen(){
 		game = Mgoa.getInstance();
@@ -72,43 +72,55 @@ public class LoadScreen implements Screen {
 		
 		stage = new Stage();
 		Table root = new Table();
-		status = new Label("Loading . . .", game.skin);		
-		root.add(status);
+		status = new Label("Loading . . .", game.skin);	
+		root.add(status).left();
 		root.setFillParent(true);
 		stage.addActor(root);
 		stage.getRoot().getColor().a = 0;
+		state = LoadScreenState.LOADING;
 		
 		Gdx.input.setInputProcessor(stage);
 	}
 	
+	
 	private void onLoadComplete(boolean success){
 		if (success){
 			status.setText("Done.");
-			stage.addAction(Actions.delay(1));
-			stage.addAction(Actions.fadeOut(.2f));
+			stage.addAction(Actions.sequence(Actions.delay(1), Actions.fadeOut(1f)));
+			state = LoadScreenState.DYING;
 		}
-		else {
+		else
 			System.out.println("Load failed.");
-			return;
-		}
 	}
 	
 	@Override
 	public void render(float delta) {
 		
-		// update
-		game.lights.update(delta);
-		stage.act();
+		switch (state){
+		case LOADING:
+			// update
+			game.lights.update(delta);
+			stage.act(delta);
 
-		// draw
-		game.lights.draw(null);
-		stage.draw();
+			// draw
+			game.lights.draw(null);
+			stage.draw();
+			break;
+		case DYING:
+			// update
+			game.lights.update(delta);
+			stage.act(delta);
 
-		// hack for changing the screen after fadeout
-		if (stage.getRoot().getColor().a == 0) {
-			game.menuMusic.pause();
-			game.setScreen(new GameScreen());
-			dispose();
+			// draw
+			game.lights.draw(null);
+			stage.draw();
+			
+			if (stage.getRoot().getColor().a == 0){
+				game.menuMusic.pause();
+				game.setScreen(new GameScreen());
+				dispose();
+			}
+			break;
 		}
 	}
 	@Override

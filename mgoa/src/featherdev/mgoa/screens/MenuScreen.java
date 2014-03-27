@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
 		root.setSkin(game.skin);
 		root.defaults().uniform().pad(0, 15, 0, 15).minWidth(200);
 
-		root.add("Low Latency").colspan(3).row();
+		root.add("__low_latency__").colspan(3).row();
 		root.add(" ").row().fillX();
 		root.add(optionsButton);
 		root.add(playButton);
@@ -107,7 +107,7 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		if (game.settings.contains("music")){
-			if (game.settings.getBoolean("music"))
+			if (game.settings.getBoolean("music") && !game.menuMusic.isPlaying())
 				game.menuMusic.play();
 		}
 		else

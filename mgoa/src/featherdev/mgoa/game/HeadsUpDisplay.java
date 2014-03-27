@@ -87,8 +87,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	public void showPlayDialog(ClickListener l){
 		Dialog.fadeDuration = .5f;
 		Dialog playdialog = new Dialog("", Mgoa.getInstance().skin);
-		playdialog.pad(10);
-		playdialog.text("Play");
+		playdialog.text("  Play  ");
 		playdialog.addListener(l);
 		playdialog.show(stage);
 		

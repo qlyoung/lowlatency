@@ -31,7 +31,7 @@ public class FinishScreen implements Screen {
 		
 		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
 		Label songLabel = new Label(songinfo, game.skin);
-		TextButton okay = new TextButton("OK", game.skin);
+		TextButton okay = new TextButton("  Ok  ", game.skin);
 		okay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -39,6 +39,7 @@ public class FinishScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
+		okay.pad(0, 10, 0, 10);
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", game.skin)).left();
