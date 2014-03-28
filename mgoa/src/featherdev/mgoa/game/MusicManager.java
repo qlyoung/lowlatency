@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Disposable;
 
+import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.objects.OneShotMusicPlayer;
 import featherdev.mgoa.screens.ISongTimeListener;
-import featherdev.mgoa.screens.IUpdateable;
 
 public class MusicManager implements IUpdateable, Disposable {
 	

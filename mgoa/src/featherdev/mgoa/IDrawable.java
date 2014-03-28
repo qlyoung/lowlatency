@@ -1,4 +1,4 @@
-package featherdev.mgoa.screens;
+package featherdev.mgoa;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

@@ -21,8 +21,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
-import featherdev.mgoa.screens.IDrawable;
-import featherdev.mgoa.screens.IUpdateable;
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
 
 /**
  * Eye candy for a more...synchronized age.
@@ -39,15 +39,15 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 	boolean idle;
 	float idleTimer;
 	float
-		LIGHT_MAX_DISTANCE = 4,
-		LIGHT_MIN_DISTANCE = 1,
+		LIGHT_MAX_DISTANCE = 5,
+		LIGHT_MIN_DISTANCE = 2,
 		LIGHT_SHRINK_RATE = 6,
 		LIGHT_BODY_LINEAR_DAMPING = .5f,
 		LIGHT_BODY_RADIUS = .5f,
 		IDLE_TIMER_MIN = 4,
 		IDLE_TIMER_MAX = 8;
 	
-	public LightBox(int numLights, Color lightColor){
+	public LightBox(){
 		this.cam = new OrthographicCamera(10, 6);
 		this.world = new World(new Vector2(0, 0), false);
 		this.idle = false;
@@ -55,15 +55,14 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(cam.combined);
+		rayHandler.setBlur(true);
+		rayHandler.setCulling(true);
 		
 		spawnWall(5, 0, .25f, 6);
 		spawnWall(-5, 0, .25f, 6);
 		spawnWall(0, 3, 10, .25f);
 		spawnWall(0, -3, 10, .25f);
 		
-		for (int i = 0; i < numLights; i++)
-			addLight(lightColor, LIGHT_MIN_DISTANCE);
-
 		idleTimer = IDLE_TIMER_MIN;
 	}
 	
@@ -83,6 +82,33 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 		wallFixture.restitution = 0f;
 
 		wall.createFixture(wallFixture);
+	}
+	private void addLight(Color color){
+		BodyDef orbDef = new BodyDef();
+
+		orbDef.position.set(new Vector2());
+		orbDef.type = BodyType.DynamicBody;
+
+		Body orbBody = world.createBody(orbDef);
+
+		CircleShape circle = new CircleShape();
+		circle.setRadius(LIGHT_BODY_RADIUS);
+		FixtureDef circfix = new FixtureDef();
+		circfix.shape = circle;
+		circfix.friction = 0f;
+		// circfix.restitution = 1f;
+		circfix.density = 0f;
+
+		orbBody.createFixture(circfix);
+		orbBody.setLinearVelocity(random.nextFloat() - .5f,
+				random.nextFloat() - .5f);
+		orbBody.setLinearDamping(LIGHT_BODY_LINEAR_DAMPING);
+
+		PointLight plight = new PointLight(rayHandler, 128, color, LIGHT_MIN_DISTANCE, 0, 0);
+		plight.attachToBody(orbBody, 0, 0);
+		plight.setSoft(true);
+		plight.setSoftnessLenght(0);
+		plight.setXray(true);
 	}
 	
 	@Override
@@ -109,36 +135,14 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 	public void draw(SpriteBatch batch) {
 		rayHandler.updateAndRender();
 	}
-	public void addLight(Color color, float size){
-		BodyDef orbDef = new BodyDef();
-
-		orbDef.position.set(new Vector2());
-		orbDef.type = BodyType.DynamicBody;
-
-		Body orbBody = world.createBody(orbDef);
-
-		CircleShape circle = new CircleShape();
-		circle.setRadius(LIGHT_BODY_RADIUS);
-		FixtureDef circfix = new FixtureDef();
-		circfix.shape = circle;
-		circfix.friction = 0f;
-		// circfix.restitution = 1f;
-		circfix.density = 0f;
-
-		orbBody.createFixture(circfix);
-		orbBody.setLinearVelocity(random.nextFloat() - .5f,
-				random.nextFloat() - .5f);
-		orbBody.setLinearDamping(LIGHT_BODY_LINEAR_DAMPING);
-
-		PointLight plight = new PointLight(rayHandler, 128, color, size, 0,	0);
-		plight.attachToBody(orbBody, 0, 0);
-		plight.setSoft(true);
-		plight.setSoftnessLenght(0);
-		plight.setXray(true);
-	}
-	public void removeLight(){
+	public void setNumLights(Color color, int n){
+		for (Light l : rayHandler.lightList)
+			world.destroyBody(l.getBody());
+		rayHandler.removeAll();
 		
-	}	
+		for (int i = 0; i < n; i++)
+			addLight(color);
+	}
 	public void pulseLights(float force){
 		for (Light l : rayHandler.lightList) {
 			float newDistance = l.getDistance() + force;
@@ -179,6 +183,13 @@ public class LightBox implements IUpdateable, IDrawable, Disposable {
 	}
 	public void setGravity(Vector2 gravity){
 		world.setGravity(gravity);
+	}
+	public Color getColor(){
+		Light l = rayHandler.lightList.random();
+		if (l != null)
+			return l.getColor();
+		else
+			return null;
 	}
 	@Override
 	public void dispose() {

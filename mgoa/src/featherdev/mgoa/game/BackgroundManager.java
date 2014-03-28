@@ -10,10 +10,11 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import featherdev.lwbd.Beat;
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
+import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.LightBox;
-import featherdev.mgoa.screens.IDrawable;
 import featherdev.mgoa.screens.ISongTimeListener;
-import featherdev.mgoa.screens.IUpdateable;
 
 public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListener {
 
@@ -94,7 +95,8 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 	OrthographicCamera screencam;
 	
 	public BackgroundManager(LinkedList<Beat> beats){
-		LightBox lb = new LightBox(3, Color.WHITE);
+		LightBox lb = Mgoa.getInstance().lights;
+		lb.setNumLights(lb.getColor(), 3);
 		lbm = new LightboxManager(beats, lb);
 
 		fountain = new ParticleEffect();

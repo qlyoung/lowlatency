@@ -29,7 +29,7 @@ public class CreditScreen implements Screen {
 		root.row();
 		root.add("Music and sound effects by John Hughes");
 		root.row();
-		root.add("johnhughes514@gmail.com");
+		root.add("syrinxtunes.bandcamp.com");
 		root.row();
 		
 		TextButton backtomenu = new TextButton("Return", game.skin);

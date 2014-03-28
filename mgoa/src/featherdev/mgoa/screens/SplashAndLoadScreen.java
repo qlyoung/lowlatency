@@ -14,21 +14,27 @@ import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.objects.LightBox;
 import featherdev.mgoa.objects.ScoreRecords;
 
+/**
+ * easily the most disgusting class I've ever written
+ * @author snowdrift
+ */
 public class SplashAndLoadScreen implements Screen {
 	
 	Texture t;
 	OrthographicCamera cam;
 	SpriteBatch s;
+	MenuScreen m;
 	long l;
-	boolean b, e;
+	boolean b, loaded;
 	
 	public SplashAndLoadScreen(){
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false);
 		t = new Texture(Gdx.files.internal("textures/splash.png"));
 		s = new SpriteBatch();
-		b = e = false;
+		loaded = b = false;
 		l = 0;
+		
 	}
 	
 	private void load(){
@@ -39,7 +45,8 @@ public class SplashAndLoadScreen implements Screen {
 		
 		g.batch = new SpriteBatch();
 		
-		g.lights = new LightBox(5, Utilities.getRandomColor());
+		g.lights = new LightBox();
+		g.lights.setNumLights(Utilities.getRandomColor(), 5);
 		
 		g.difficulties = new Difficulty[3];
 		g.difficulties[0] = new Difficulty(800, .01f, "Relaxed", 1);
@@ -75,23 +82,24 @@ public class SplashAndLoadScreen implements Screen {
 		g.settings.flush();
 		
 		l = System.currentTimeMillis();
-		e = true;
+		m = new MenuScreen();
 	}
 
 	@Override
 	public void render(float delta) {
 		
-		if (b && !e)
-			load();
-		if (e){
+		if (loaded){
 			if (System.currentTimeMillis() - l > 2000 && System.currentTimeMillis() - l < 3000)
 				return;
-			if (System.currentTimeMillis() - l >= 3000){
-				Mgoa.getInstance().setScreen(new MenuScreen());
+			else if (System.currentTimeMillis() - l >= 3000){
+				Mgoa.getInstance().setScreen(m);
 				System.out.println("[#] Initialization sequence complete.");
 				return;
 			}
-			
+		}
+		else if (b) {
+			load();
+			loaded = true;
 		}
 		
 		float x = (Gdx.graphics.getWidth() - t.getWidth()) / 2f;
@@ -101,6 +109,7 @@ public class SplashAndLoadScreen implements Screen {
 		s.begin();
 		s.draw(t, x, y);
 		s.end();
+		
 		b = true;
 		
 	}

@@ -77,7 +77,10 @@ public class GameScreen implements Screen {
 				justSwitchedState = false;
 			}
 			
+			backgroundmanager.update(delta);
 			hud.update(delta);
+			
+			backgroundmanager.draw(batch);
 			hud.draw(batch);
 			break;
 			

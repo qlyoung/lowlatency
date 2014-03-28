@@ -19,11 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.Song;
 import featherdev.mgoa.screens.GameScreen;
-import featherdev.mgoa.screens.IDrawable;
-import featherdev.mgoa.screens.IUpdateable;
 
 public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	
@@ -87,7 +87,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	public void showPlayDialog(ClickListener l){
 		Dialog.fadeDuration = .5f;
 		Dialog playdialog = new Dialog("", Mgoa.getInstance().skin);
-		playdialog.text("  Play  ");
+		playdialog.text("  Touch anywhere  ");
 		playdialog.addListener(l);
 		playdialog.show(stage);
 		

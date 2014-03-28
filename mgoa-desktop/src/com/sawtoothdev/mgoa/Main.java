@@ -8,7 +8,7 @@ import featherdev.mgoa.Mgoa;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = "mgoa";
+		cfg.title = "__low_latency__";
 		cfg.useGL20 = false;
 		cfg.width = 1280;
 		cfg.height = 720;

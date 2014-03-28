@@ -22,16 +22,15 @@ public class ConfigScreen implements Screen {
 	
 	public ConfigScreen(){
 		game = Mgoa.getInstance();
+		stage = new Stage();
 		
 		String[] selections = new String[game.difficulties.length];
 		for (int i = 0; i < game.difficulties.length; i++)
 			selections[i] = game.difficulties[i].name;
 		selector = new SelectBox(selections, game.skin);
 		selector.setSelection(1);
-		
 		Label lbl = new Label("Difficulty: ", game.skin);
 		TextButton playButton = new TextButton("Play", game.skin);
-		TextButton backToMenu = new TextButton("Return", game.skin);
 		playButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -43,24 +42,17 @@ public class ConfigScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
+		TextButton backToMenu = new TextButton("Return", game.skin);
 		backToMenu.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new MenuScreen());
+				game.setScreen(new ChooseSongScreen());
 				super.clicked(event, x, y);
 			}
 		});
-		
-		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
-		
-		root = new Table();
-		root.setFillParent(true);
-		
 		Table controlBar = new Table();
 		controlBar.add(backToMenu).expandX().left().pad(10);
-		
 		Table content = new Table();
 		content.defaults().pad(10);
 		content.add(lbl);
@@ -68,12 +60,15 @@ public class ConfigScreen implements Screen {
 		content.row();
 		content.add(playButton).colspan(2).fillX();
 		
-		root.add(controlBar).expandX().fillX();
+		root = new Table();
+		root.add(content).expandY().center();
 		root.row();
-		root.add(content).expandY();
+		root.add(backToMenu).pad(5);
+		root.setFillParent(true);
 		
 		stage.addActor(root);
 		stage.getRoot().getColor().a = 0;
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override

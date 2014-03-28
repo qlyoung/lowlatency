@@ -17,11 +17,11 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pool.Poolable;
 
 import featherdev.lwbd.Beat;
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.Difficulty;
-import featherdev.mgoa.screens.IDrawable;
 import featherdev.mgoa.screens.ISongTimeListener;
-import featherdev.mgoa.screens.IUpdateable;
 import featherdev.mgoa.screens.Utilities;
 
 public class CoreManager implements IUpdateable, IDrawable, ISongTimeListener {

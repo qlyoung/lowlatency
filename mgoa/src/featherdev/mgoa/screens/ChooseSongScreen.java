@@ -64,7 +64,7 @@ public class ChooseSongScreen implements Screen {
 								dialog.cancel();
 							};
 						});
-						dialog.text("Please choose a music file");
+						dialog.text("File type not supported");
 						dialog.button(ok);
 						Dialog.fadeDuration = .2f;
 						
@@ -131,7 +131,6 @@ public class ChooseSongScreen implements Screen {
 	public ChooseSongScreen() {
 		game = Mgoa.getInstance();
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 
 		TextButton homeButton = new TextButton("Return", game.skin);
 		homeButton.addListener(new ClickListener() {
@@ -140,25 +139,21 @@ public class ChooseSongScreen implements Screen {
 				game.setScreen(new MenuScreen());
 			}
 		});
-		
-		FileHandle externalRoot = Gdx.files.external("");
-		browser = new FileBrowser(externalRoot, game.skin);
-		
+		browser = new FileBrowser(Gdx.files.external(""), game.skin);
 		Table ctlbar = new Table(game.skin);
-		ctlbar.defaults().left();
 		ctlbar.add(homeButton);
 
 		Table root = new Table(game.skin);
-		root.defaults().pad(10);
+		root.add("Select Song").colspan(2).center().pad(5, 0, 15, 0);
+		root.row();
+		root.add(browser).expand().fill();
+		root.row();
+		root.add(homeButton).bottom().pad(10, 0, 5, 0);
 		root.setFillParent(true);
-		root.add(ctlbar).expandX().left();
-		root.row();
-		root.add("Select Song").center();
-		root.row();
-		root.add(browser).expand().colspan(2).fill();
 
 		stage.addActor(root);
 		stage.getRoot().getColor().a = 0;
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	private void finish(){

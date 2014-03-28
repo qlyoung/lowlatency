@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import featherdev.mgoa.screens.IDrawable;
-import featherdev.mgoa.screens.IUpdateable;
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
 
 public class ProgressBar implements IDrawable, IUpdateable {
 	

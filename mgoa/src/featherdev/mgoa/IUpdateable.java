@@ -1,4 +1,4 @@
-package featherdev.mgoa.screens;
+package featherdev.mgoa;
 
 public interface IUpdateable {
 	

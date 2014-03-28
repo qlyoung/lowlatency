@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool;
 
-import featherdev.mgoa.screens.IDrawable;
-import featherdev.mgoa.screens.IUpdateable;
+import featherdev.mgoa.IDrawable;
+import featherdev.mgoa.IUpdateable;
 
 public class EffectsManager implements IUpdateable, IDrawable, Disposable {
 

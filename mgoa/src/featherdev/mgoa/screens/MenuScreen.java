@@ -32,11 +32,10 @@ public class MenuScreen implements Screen {
 		background = new ParticleEffect();
 		background.load(Gdx.files.internal("effects/space.p"), Gdx.files.internal("effects/"));
 		background.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-		
+		background.start();		
 		TextButton
 			playButton = new TextButton("Play", game.skin),
 			optionsButton = new TextButton("Options", game.skin),
-			//statsButton = new TextButton("Leaderboards", game.skin),
 			creditsButton = new TextButton("Credits", game.skin);
 
 		playButton.addListener(new ClickListener() {
@@ -63,7 +62,6 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		// scene layout
 		root.setFillParent(true);
 		root.setSkin(game.skin);
 		root.defaults().uniform().pad(0, 15, 0, 15).minWidth(200);
@@ -76,10 +74,9 @@ public class MenuScreen implements Screen {
 		
 		stage.addActor(root);
 		stage.getRoot().getColor().a = 0;
-		
 		Gdx.input.setInputProcessor(stage);
 		
-		background.start();
+		game.lights.update(5);
 	}
 
 	@Override
