@@ -1,10 +1,8 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -12,11 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.mgoa.Mgoa;
 
-public class FinishScreen implements Screen {
+public class FinishScreen extends UiScreen {
 
-	Stage stage;
 	Table root;
-	Mgoa game;
 	
 	public FinishScreen(int points){
 		game = Mgoa.getInstance();
@@ -61,35 +57,10 @@ public class FinishScreen implements Screen {
 		stage.getRoot().getColor().a = 0;
 	}
 
-	@Override
 	public void render(float delta) {
 		
 		stage.act();
 		stage.draw();
-	}
-	@Override
-	public void resize(int width, int height) {
-
-	}
-	@Override
-	public void show() {
-		stage.addAction(Actions.fadeIn(1));
-	}
-	@Override
-	public void hide() {
-
-	}
-	@Override
-	public void pause() {
-
-	}
-	@Override
-	public void resume() {
-
-	}
-	@Override
-	public void dispose() {
-
 	}
 
 }

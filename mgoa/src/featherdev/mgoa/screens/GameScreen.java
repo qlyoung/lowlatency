@@ -13,7 +13,8 @@ import featherdev.mgoa.game.BackgroundManager;
 import featherdev.mgoa.game.CoreManager;
 import featherdev.mgoa.game.EffectsManager;
 import featherdev.mgoa.game.HeadsUpDisplay;
-import featherdev.mgoa.game.MusicManager;
+import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.objects.PausedMenu;
 
 /**
  * What are we here for, anyway?
@@ -31,7 +32,6 @@ public class GameScreen implements Screen {
 	Mgoa game;
 	SpriteBatch batch;
 
-	MusicManager musicmanager;
 	BackgroundManager backgroundmanager;
 	CoreManager coremanager;
 	EffectsManager fxmanager;
@@ -48,9 +48,7 @@ public class GameScreen implements Screen {
 		hud = new HeadsUpDisplay(game.song, this);
 		pausedMenu = new PausedMenu(this);
 
-		musicmanager = new MusicManager(game.song.getHandle());
-		musicmanager.addListener(backgroundmanager);
-		musicmanager.addListener(coremanager);
+		MusicPlayer.instance().load(game.song.getHandle());
 
 		hud.setAsInputProcessor();
 		
@@ -86,7 +84,8 @@ public class GameScreen implements Screen {
 			
 		case MAIN:
 			if (justSwitchedState){
-				musicmanager.play();
+				System.out.println("attempting to play");
+				MusicPlayer.instance().play();
 				int score = game.records.readScore(game.song.getHandle());
 				if (score != -1){
 					String message = "Personal best: " + String.valueOf(score);
@@ -102,10 +101,10 @@ public class GameScreen implements Screen {
 			}
 			
 			// update
-			musicmanager.update(delta);
 			backgroundmanager.update(delta);
 			coremanager.update(delta);
 			hud.setPoints(coremanager.getPoints());
+			hud.setAccuracy(coremanager.getAverageAccuracy());
 			hud.update(delta);
 
 			// draw
@@ -115,7 +114,7 @@ public class GameScreen implements Screen {
 			hud.draw(game.batch);
 			
 			// state
-			if (state == WorldState.MAIN && !musicmanager.isPlaying()){
+			if (state == WorldState.MAIN && !MusicPlayer.instance().isPlaying()){
 				hud.fadeout(1);
 				state = WorldState.OUTRO;
 			}
@@ -151,20 +150,20 @@ public class GameScreen implements Screen {
 	}
 	@Override
 	public void pause() {
-		musicmanager.pause();
+		MusicPlayer.instance().pause();
 		cachedState = state.ordinal();
 		Gdx.input.setInputProcessor(pausedMenu);
 		state = WorldState.PAUSED;
 	}
 	@Override
 	public void resume() {
-		musicmanager.play();
+		MusicPlayer.instance().play();
 		hud.setAsInputProcessor();
 		state = WorldState.values()[cachedState];
 	}
 	@Override
 	public void dispose() {
-		musicmanager.dispose();
+		MusicPlayer.instance().dispose();
 		fxmanager.dispose();
 		hud.dispose();
 	}

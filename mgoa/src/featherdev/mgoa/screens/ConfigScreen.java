@@ -1,44 +1,31 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import featherdev.mgoa.Mgoa;
-
-public class ConfigScreen implements Screen {
+public class ConfigScreen extends UiScreen {
 	
-	Stage stage;
 	Table root;
 	SelectBox selector;
-	Mgoa game;
 	
 	public ConfigScreen(){
-		game = Mgoa.getInstance();
-		stage = new Stage();
-		
 		String[] selections = new String[game.difficulties.length];
 		for (int i = 0; i < game.difficulties.length; i++)
 			selections[i] = game.difficulties[i].name;
 		selector = new SelectBox(selections, game.skin);
 		selector.setSelection(1);
 		Label lbl = new Label("Difficulty: ", game.skin);
-		TextButton playButton = new TextButton("Play", game.skin);
-		playButton.addListener(new ClickListener(){
+		final CheckBox visualizerMode = new CheckBox(" Visualizer mode", game.skin);
+		visualizerMode.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				int index = selector.getSelectionIndex();
-				game.difficulty = game.difficulties[index];
-				Gdx.input.setInputProcessor(null);
-				dispose();
-				game.setScreen(new LoadScreen());
+				
 				super.clicked(event, x, y);
 			}
 		});
@@ -51,6 +38,20 @@ public class ConfigScreen implements Screen {
 				super.clicked(event, x, y);
 			}
 		});
+		TextButton playButton = new TextButton("Play", game.skin);
+		playButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				int index = selector.getSelectionIndex();
+				game.difficulty = game.difficulties[index];
+				game.visualizer = visualizerMode.isChecked();
+				game.setScreen(new LoadScreen());
+				
+				super.clicked(event, x, y);
+				Gdx.input.setInputProcessor(null);
+				dispose();
+			}
+		});
 		Table controlBar = new Table();
 		controlBar.add(backToMenu).expandX().left().pad(10);
 		Table content = new Table();
@@ -59,11 +60,13 @@ public class ConfigScreen implements Screen {
 		content.add(selector);
 		content.row();
 		content.add(playButton).colspan(2).fillX();
+		content.row();
+		content.add(visualizerMode).colspan(2).fillX().padTop(25);
 		
 		root = new Table();
 		root.add(content).expandY().center();
 		root.row();
-		root.add(backToMenu).pad(5);
+		root.add(backToMenu).padBottom(15);
 		root.setFillParent(true);
 		
 		stage.addActor(root);
@@ -71,7 +74,6 @@ public class ConfigScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-	@Override
 	public void render(float delta) {
 		game.lights.update(delta);
 		stage.act();
@@ -79,34 +81,6 @@ public class ConfigScreen implements Screen {
 		game.lights.draw(null);
 		stage.draw();
 		
-	}
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void show() {
-		stage.addAction(Actions.fadeIn(.5f));
-	}
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void dispose() {
-		stage.dispose();
 	}
 
 }

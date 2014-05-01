@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import featherdev.mgoa.Mgoa;
+import featherdev.mgoa.Utilities;
 import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.objects.LightBox;
+import featherdev.mgoa.objects.MusicPlayer;
 import featherdev.mgoa.objects.ScoreRecords;
 
 /**
@@ -66,9 +68,9 @@ public class SplashAndLoadScreen implements Screen {
 		default:
 			musicpath = null;
 		}
-		g.menuMusic = Gdx.audio.newMusic(musicpath);
-		g.menuMusic.setLooping(true);
-		g.menuMusic.setVolume(.5f);
+		
+		MusicPlayer.instance().load(musicpath);
+		
 		System.out.println("[+] Loaded audio");
 		
 		g.records = new ScoreRecords();
@@ -81,6 +83,8 @@ public class SplashAndLoadScreen implements Screen {
 		g.settings.putBoolean("firstrun", !g.settings.contains("firstrun"));
 		g.settings.flush();
 		
+		g.visualizer = false;
+		
 		l = System.currentTimeMillis();
 		m = new MenuScreen();
 	}
@@ -88,6 +92,10 @@ public class SplashAndLoadScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
+		if (b && !loaded){
+			load();
+			loaded = true;
+		}
 		if (loaded){
 			if (System.currentTimeMillis() - l > 2000 && System.currentTimeMillis() - l < 3000)
 				return;
@@ -96,10 +104,6 @@ public class SplashAndLoadScreen implements Screen {
 				System.out.println("[#] Initialization sequence complete.");
 				return;
 			}
-		}
-		else if (b) {
-			load();
-			loaded = true;
 		}
 		
 		float x = (Gdx.graphics.getWidth() - t.getWidth()) / 2f;
@@ -115,32 +119,26 @@ public class SplashAndLoadScreen implements Screen {
 	}
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void show() {
-		load();
 		l = System.currentTimeMillis();
 	}
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -14,22 +14,21 @@ import featherdev.mgoa.IDrawable;
 import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.LightBox;
-import featherdev.mgoa.screens.ISongTimeListener;
+import featherdev.mgoa.objects.MusicPlayer;
 
-public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListener {
+public class BackgroundManager implements IUpdateable, IDrawable {
 
 	/**
 	 * Wet layer that interfaces PrettyLights to mgoa
 	 * 
 	 * @author snowdrift
 	 */
-	private class LightboxManager implements IDrawable, IUpdateable, ISongTimeListener {
+	private class LightboxManager implements IDrawable, IUpdateable {
 
 		private final Iterator<Beat> events;
 		private Beat nextBeat;
 		private LinkedList<Color> window = new LinkedList<Color>();
 		private LightBox lightbox;
-		private long songtime;
 		
 		// decrease for more alive color changes
 		private int WINDOW_SIZE = 3;
@@ -42,11 +41,10 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 			nextBeat = events.next();
 		}
 
-		@Override
 		public void update(float delta) {
 
-			while (nextBeat != null && songtime >= nextBeat.timeMs) {
-				Color ec = CoreManager.getEnergyColor(nextBeat.energy);
+			while (nextBeat != null && MusicPlayer.instance().time() >= nextBeat.timeMs) {
+				Color ec = BeatCore.getEnergyColor(nextBeat.energy);
 				
 				// calculate the color average of the last 5 beats
 				if (window.size() == WINDOW_SIZE)
@@ -78,31 +76,26 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 
 			lightbox.update(delta);
 		}
-
-		@Override
 		public void draw(SpriteBatch batch) {
 			lightbox.draw(null);
-		}
-
-		@Override
-		public void songtime(long time) {
-			songtime = time;
 		}
 	}
 	
 	LightboxManager lbm;
-	ParticleEffect fountain;
+	private ParticleEffect fountain;
 	OrthographicCamera screencam;
+	
+	boolean FOUNTAIN_ON;
 	
 	public BackgroundManager(LinkedList<Beat> beats){
 		LightBox lb = Mgoa.getInstance().lights;
-		lb.setNumLights(lb.getColor(), 3);
-		lbm = new LightboxManager(beats, lb);
-
 		fountain = new ParticleEffect();
 		fountain.load(Gdx.files.internal("effects/space.p"), Gdx.files.internal("effects/"));
 		fountain.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-		fountain.start();
+		
+		lbm = new LightboxManager(beats, lb);
+		FOUNTAIN_ON = true;
+		
 		screencam = new OrthographicCamera();
 		screencam.setToOrtho(false);
 	}
@@ -111,20 +104,22 @@ public class BackgroundManager implements IUpdateable, IDrawable, ISongTimeListe
 	public void update(float delta) {
 		lbm.update(delta);
 	}
-	@Override
 	public void draw(SpriteBatch batch) {
-		batch.setProjectionMatrix(screencam.combined);
-		batch.begin();
-		{
-			fountain.draw(batch, Gdx.graphics.getDeltaTime());
+		if (FOUNTAIN_ON){
+			batch.setProjectionMatrix(screencam.combined);
+			batch.begin();
+			{
+				fountain.draw(batch, Gdx.graphics.getDeltaTime());
+			}
+			batch.end();
 		}
-		batch.end();
-		
+
 		lbm.draw(null);
 	}
-	@Override
-	public void songtime(long time) {
-		lbm.songtime(time);
+	public void numlights(int n){
+		lbm.lightbox.setNumLights(lbm.lightbox.getColor(), n);
 	}
-
+	public void setFountainOn(boolean on){
+		this.FOUNTAIN_ON = on;
+	}
 }

@@ -1,7 +1,6 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -9,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.mgoa.Mgoa;
 
-public class CreditScreen implements Screen {
-	
-	Stage stage;
+public class CreditScreen extends UiScreen {
 	
 	public CreditScreen (final Mgoa game){
 		stage = new Stage();
@@ -47,41 +44,9 @@ public class CreditScreen implements Screen {
 		stage.addActor(root);
 	}
 
-	@Override
 	public void render(float delta) {
 		stage.act();
 		stage.draw();
 
 	}
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

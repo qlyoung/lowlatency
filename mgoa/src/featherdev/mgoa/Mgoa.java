@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,23 +25,23 @@ public class Mgoa extends Game {
 	public static Mgoa getInstance(){
 		return instance;
 	}
-	
 	private OrthographicCamera cam;
 	
 	public static final String VERSION = "1.0";
 	public static final boolean TESTING = false;
 	public SpriteBatch batch;
 	public LightBox lights;
-	public Music menuMusic;
 	public Difficulty difficulties[];
+	public Preferences settings;
+	public ScoreRecords records;
+	public Skin skin;
+	public TextureAtlas textures;
+	
 	public Difficulty difficulty;
 	public LinkedList<Beat> beatmap;
 	public LinkedList<Beat> rawmap;
-	public Preferences settings;
-	public ScoreRecords records;
 	public Song song;
-	public Skin skin;
-	public TextureAtlas textures;
+	public boolean visualizer;
 	
 	@Override
 	public void create() {
@@ -50,10 +49,9 @@ public class Mgoa extends Game {
 		
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false);
-		
-		System.out.println("[+] Initialized GDX subsystems");
-		System.out.println("[+] Initialized OpenGL context");
-		
+		Gdx.app.log("[+]", "Initialized GDX subsystems");
+		Gdx.app.log("[+]", "Initialized OpenGL context");
+		Gdx.app.log("[+]", "Loading assets...");
 		setScreen(new SplashAndLoadScreen());
 
 	}
@@ -65,7 +63,6 @@ public class Mgoa extends Game {
 	}
 	@Override
 	public void dispose() {
-		menuMusic.dispose();
 		batch.dispose();
 		lights.dispose();
 		skin.dispose();

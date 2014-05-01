@@ -33,18 +33,12 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	OrthographicCamera screencam;
 	
 	public HeadsUpDisplay(Song song, final GameScreen gs){
-		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		screencam = new OrthographicCamera();
 		screencam.setToOrtho(false);
 		
+		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		skin = Mgoa.getInstance().skin;
-		tickers = new HashMap<String, Actor>();
-
 		String songinfo = song.getArtist() + " - " + song.getTitle();
-		
-		Label scoreLabel = new Label("000000000", skin);
-		tickers.put("points", scoreLabel);
-
 		ImageButton pause = new ImageButton(skin);
 		pause.addListener(new ClickListener(){
 			@Override
@@ -52,16 +46,22 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 				gs.pause();
 			}
 		});
-		
+		Label scoreLabel = new Label("000000000", skin);
+		Label accuracy   = new Label("0", skin);
 		Table table = new Table(skin);
 		table.setFillParent(true);
 		table.add(pause).top().left();
+		table.add(scoreLabel).top().right().padRight(10);
+		//table.add(accuracy).top().right().expandX();
 		table.row().expandY();
 		table.add(songinfo).expandX().bottom().left().pad(5);
-		table.add(scoreLabel).bottom().right().pad(5);
 		
 		stage.addActor(table);
 		stage.getRoot().getColor().a = 0;
+		
+		tickers = new HashMap<String, Actor>();
+		tickers.put("points", scoreLabel);
+		tickers.put("accuracy", accuracy);
 	}
 
 	@Override
@@ -92,14 +92,15 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		playdialog.show(stage);
 		
 	}
-	public void setProgressBarPercent(float percentOutOfOne){
-		//TODO: Implement
-	}
 	public void setPoints(int points) {
 		Label scoreLabel = (Label) tickers.get("points");
 		String text = String.format("%08d", points);
 		
 		scoreLabel.setText(text);
+	}
+	public void setAccuracy(float avgaccuracy){
+		Label accuracy = (Label) tickers.get("accuracy");
+		accuracy.setText(String.valueOf(avgaccuracy));
 	}
 	public void fadein(float time){
 		stage.getRoot().addAction(Actions.fadeIn(time));

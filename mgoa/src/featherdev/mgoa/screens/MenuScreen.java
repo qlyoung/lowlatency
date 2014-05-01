@@ -1,29 +1,22 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import featherdev.mgoa.Mgoa;
+import featherdev.mgoa.objects.MusicPlayer;
 
-public class MenuScreen implements Screen {
+public class MenuScreen extends UiScreen {
 
-	Stage stage;
-	Table root;
 	ParticleEffect background;
 	OrthographicCamera bgcam;
-	Mgoa game;
+	Table root;
 	
 	public MenuScreen() {
-		game = Mgoa.getInstance();
-		stage = new Stage();
 		root = new Table();
 		game.lights.idle();
 		
@@ -79,7 +72,6 @@ public class MenuScreen implements Screen {
 		game.lights.update(5);
 	}
 
-	@Override
 	public void render(float delta) {
 
 		{// update
@@ -97,35 +89,17 @@ public class MenuScreen implements Screen {
 		}
 
 	}
-	@Override
-	public void resize(int width, int height) {
-
-	}
-	@Override
 	public void show() {
 		if (game.settings.contains("music")){
-			if (game.settings.getBoolean("music") && !game.menuMusic.isPlaying())
-				game.menuMusic.play();
+			if (game.settings.getBoolean("music") && !MusicPlayer.instance().isPlaying())
+				MusicPlayer.instance().play();
 		}
 		else
-			game.menuMusic.play();
+			MusicPlayer.instance().stop();
 		
-		stage.getRoot().addAction(Actions.fadeIn(1));
+		super.show();
 	}
-	@Override
-	public void hide() {
 
-	}
-	@Override
-	public void pause() {
 
-	}
-	@Override
-	public void resume() {
 
-	}
-	@Override
-	public void dispose() {
-		stage.dispose();
-	}
 }

@@ -3,7 +3,6 @@ package featherdev.mgoa.screens;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -14,16 +13,16 @@ import featherdev.lwbd.Beat;
 import featherdev.lwbd.BeatDetector;
 import featherdev.lwbd.BeatsProcessor;
 import featherdev.lwbd.LwbdDecoder;
-import featherdev.lwbd.decoders.gdx.GdxMp3Decoder;
-import featherdev.lwbd.decoders.gdx.GdxOggDecoder;
+import featherdev.lwbd.decoders.GdxMp3Decoder;
+import featherdev.lwbd.decoders.GdxOggDecoder;
 import featherdev.mgoa.Mgoa;
+import featherdev.mgoa.objects.MusicPlayer;
 
 /**
  * music processing & map gen
- * 
  */
 
-public class LoadScreen implements Screen {
+public class LoadScreen extends UiScreen {
 	
 	class LoadingThread extends Thread {
 
@@ -59,10 +58,8 @@ public class LoadScreen implements Screen {
 		}
 	}
 
-	Stage stage;
 	Label status;
 	LoadingThread loadThread;
-	Mgoa game;
 	enum LoadScreenState { LOADING, DYING }
 	LoadScreenState state;
 	
@@ -82,7 +79,6 @@ public class LoadScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 	}
 	
-	
 	private void onLoadComplete(boolean success){
 		if (success){
 			status.setText("Done.");
@@ -93,7 +89,6 @@ public class LoadScreen implements Screen {
 			System.out.println("Load failed.");
 	}
 	
-	@Override
 	public void render(float delta) {
 		
 		switch (state){
@@ -116,36 +111,18 @@ public class LoadScreen implements Screen {
 			stage.draw();
 			
 			if (stage.getRoot().getColor().a == 0){
-				game.menuMusic.pause();
-				game.setScreen(new GameScreen());
+				MusicPlayer.instance().pause();
+				if (game.visualizer)
+					game.setScreen(new VisualizerScreen());
+				else
+					game.setScreen(new GameScreen());
 				dispose();
 			}
 			break;
 		}
 	}
-	@Override
 	public void show() {
 		loadThread.start();
-		stage.getRoot().addAction(Actions.fadeIn(.5f));
-	}
-	@Override
-	public void resize(int width, int height) {
-
-	}
-	@Override
-	public void hide() {
-
-	}
-	@Override
-	public void pause() {
-
-	}
-	@Override
-	public void resume() {
-
-	}
-	@Override
-	public void dispose() {
-		stage.dispose();
+		super.show();
 	}
 }

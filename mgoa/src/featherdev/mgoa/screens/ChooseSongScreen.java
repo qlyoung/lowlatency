@@ -3,11 +3,8 @@ package featherdev.mgoa.screens;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -16,10 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.Song;
 
-public class ChooseSongScreen implements Screen {
+public class ChooseSongScreen extends UiScreen {
 	
 	class FileBrowser extends Table {
 		
@@ -123,15 +119,9 @@ public class ChooseSongScreen implements Screen {
 			return selection;
 		}
 	}
-
-	Stage stage;
 	FileBrowser browser;
-	Mgoa game;
 
 	public ChooseSongScreen() {
-		game = Mgoa.getInstance();
-		stage = new Stage();
-
 		TextButton homeButton = new TextButton("Return", game.skin);
 		homeButton.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
@@ -161,7 +151,6 @@ public class ChooseSongScreen implements Screen {
 		game.song = new Song(browser.getSelection());
 		game.setScreen(new ConfigScreen());
 	}
-	
 	@Override
 	public void render(float delta) {
 
@@ -174,22 +163,6 @@ public class ChooseSongScreen implements Screen {
 		// draw
 		game.lights.draw(null);
 		stage.draw();
-	}
-	@Override
-	public void resize(int width, int height) {}
-	@Override
-	public void show() {
-		stage.addAction(Actions.fadeIn(.5f));
-	}
-	@Override
-	public void hide() {}
-	@Override
-	public void pause() {}
-	@Override
-	public void resume() {}
-	@Override
-	public void dispose() {
-		stage.dispose();
 	}
 
 }
