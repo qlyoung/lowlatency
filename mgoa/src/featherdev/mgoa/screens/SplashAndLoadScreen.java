@@ -2,7 +2,6 @@ package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,8 +12,8 @@ import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.Utilities;
 import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.objects.LightBox;
-import featherdev.mgoa.objects.MusicPlayer;
-import featherdev.mgoa.objects.ScoreRecords;
+import featherdev.mgoa.subsystems.MusicPlayer;
+import featherdev.mgoa.subsystems.ScoreRecords;
 
 /**
  * easily the most disgusting class I've ever written
@@ -40,10 +39,10 @@ public class SplashAndLoadScreen implements Screen {
 	}
 	
 	private void load(){
-		Mgoa g = Mgoa.getInstance();
+		Mgoa g = Mgoa.instance();
 		
 		g.textures = new TextureAtlas("textures/mgoa.atlas");
-		System.out.println("[+] Loaded textures");
+		Gdx.app.log("[+]", "Loaded textures");
 		
 		g.batch = new SpriteBatch();
 		
@@ -55,41 +54,24 @@ public class SplashAndLoadScreen implements Screen {
 		g.difficulties[1] = new Difficulty(650, .005f, "Normal", 2);
 		g.difficulties[2] = new Difficulty(600, .003f, "Altered", 3);
 
-		FileHandle musicpath;
-		switch (Gdx.app.getType()) {
-		case Android:
-			// work around Music's inability to load Internal files on Android
-			Gdx.files.internal("audio/title.mp3").copyTo( Gdx.files.local("title.mp3"));
-			musicpath = Gdx.files.local("title.mp3");
-			break;
-		case Desktop:
-			musicpath = Gdx.files.internal("audio/title.mp3");
-			break;
-		default:
-			musicpath = null;
-		}
-		
-		MusicPlayer.instance().load(musicpath);
-		
-		System.out.println("[+] Loaded audio");
-		
-		g.records = new ScoreRecords();
-		System.out.println("[+] Loaded saved data");
-
+		MusicPlayer.instance();
+		Gdx.app.log("[+]", "Initialized music player");
+		ScoreRecords.instance();
+		Gdx.app.log("[+]", "Initialized records");
 		g.skin = new Skin(Gdx.files.internal("ui/skin.json"), g.textures);
-		System.out.println("[+] Initialized ui");
+		Gdx.app.log("[+]", "Initialized ui");
 
 		g.settings = Gdx.app.getPreferences("settings");
 		g.settings.putBoolean("firstrun", !g.settings.contains("firstrun"));
 		g.settings.flush();
+		Gdx.app.log("[+]", "Loaded settings");
 		
 		g.visualizer = false;
 		
 		l = System.currentTimeMillis();
 		m = new MenuScreen();
 	}
-
-	@Override
+	
 	public void render(float delta) {
 		
 		if (b && !loaded){
@@ -100,7 +82,7 @@ public class SplashAndLoadScreen implements Screen {
 			if (System.currentTimeMillis() - l > 2000 && System.currentTimeMillis() - l < 3000)
 				return;
 			else if (System.currentTimeMillis() - l >= 3000){
-				Mgoa.getInstance().setScreen(m);
+				Mgoa.instance().setScreen(m);
 				System.out.println("[#] Initialization sequence complete.");
 				return;
 			}
@@ -117,27 +99,21 @@ public class SplashAndLoadScreen implements Screen {
 		b = true;
 		
 	}
-	@Override
 	public void resize(int width, int height) {
 
 	}
-	@Override
 	public void show() {
 		l = System.currentTimeMillis();
 	}
-	@Override
 	public void hide() {
 
 	}
-	@Override
 	public void pause() {
 
 	}
-	@Override
 	public void resume() {
 
 	}
-	@Override
 	public void dispose() {
 
 	}

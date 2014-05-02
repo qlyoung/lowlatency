@@ -12,14 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.mgoa.Mgoa;
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 public class OptionsScreen extends UiScreen {
 
 	Table root;
 
 	public OptionsScreen() {
-		game = Mgoa.getInstance();
+		game = Mgoa.instance();
 		stage = new Stage();
 		root = new Table();
 		root.setFillParent(true);

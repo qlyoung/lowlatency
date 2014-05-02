@@ -17,7 +17,7 @@ public class PausedMenu extends Stage {
 	public PausedMenu(final GameScreen gs) {
 		super();
 		
-		Skin skin = Mgoa.getInstance().skin;
+		Skin skin = Mgoa.instance().skin;
 		
 		TextButton resume = new TextButton("Resume", skin);
 		TextButton quitToMenu = new TextButton("Quit to Main Menu", skin);
@@ -33,7 +33,7 @@ public class PausedMenu extends Stage {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.input.setInputProcessor(null);
-				Mgoa.getInstance().setScreen(new MenuScreen());
+				Mgoa.instance().setScreen(new MenuScreen());
 				super.clicked(event, x, y);
 			}
 		});

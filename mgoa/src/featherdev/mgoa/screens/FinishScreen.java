@@ -9,21 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.mgoa.Mgoa;
+import featherdev.mgoa.subsystems.ScoreRecords;
+import featherdev.mgoa.subsystems.Stats;
 
 public class FinishScreen extends UiScreen {
 
 	Table root;
 	
-	public FinishScreen(int points){
-		game = Mgoa.getInstance();
+	public FinishScreen(){
+		game = Mgoa.instance();
 		stage = new Stage();
 		root = new Table();
 		
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		int totalPoints = points * game.difficulty.scoreMultiplier;
-		game.records.writeScore(game.song.getHandle(), totalPoints);
+		int totalPoints = Stats.instance().points * game.difficulty.scoreMultiplier;
+		ScoreRecords.instance().writeScore(game.song.getHandle(), totalPoints);
 		
 		String songinfo = game.song.getArtist() + " - " + game.song.getTitle();
 		Label songLabel = new Label(songinfo, game.skin);
@@ -39,7 +41,7 @@ public class FinishScreen extends UiScreen {
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", game.skin)).left();
-		summary.add(new Label(String.valueOf(points), game.skin)).right();
+		summary.add(new Label(String.valueOf(Stats.instance().points), game.skin)).right();
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
 		summary.add(new Label(String.valueOf(game.difficulty.scoreMultiplier), game.skin)).right();

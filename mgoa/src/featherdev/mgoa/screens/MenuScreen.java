@@ -1,6 +1,7 @@
 package featherdev.mgoa.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -8,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 public class MenuScreen extends UiScreen {
 
@@ -19,6 +20,22 @@ public class MenuScreen extends UiScreen {
 	public MenuScreen() {
 		root = new Table();
 		game.lights.idle();
+		
+		FileHandle musicpath;
+		switch (Gdx.app.getType()) {
+		case Android:
+			// work around Music's inability to load Internal files on Android
+			Gdx.files.internal("audio/title.mp3").copyTo( Gdx.files.local("title.mp3"));
+			musicpath = Gdx.files.local("title.mp3");
+			break;
+		case Desktop:
+			musicpath = Gdx.files.internal("audio/title.mp3");
+			break;
+		default:
+			musicpath = null;
+		}
+		
+		MusicPlayer.instance().load(musicpath);
 		
 		bgcam = new OrthographicCamera();
 		bgcam.setToOrtho(false);

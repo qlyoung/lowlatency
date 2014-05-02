@@ -21,9 +21,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
-import featherdev.mgoa.IDrawable;
-import featherdev.mgoa.IUpdateable;
-
 /**
  * Eye candy for a more...synchronized age.
  * @author snowdrift

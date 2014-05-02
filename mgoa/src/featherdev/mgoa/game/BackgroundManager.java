@@ -10,16 +10,16 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import featherdev.lwbd.Beat;
-import featherdev.mgoa.IDrawable;
-import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.Mgoa;
+import featherdev.mgoa.objects.IDrawable;
+import featherdev.mgoa.objects.IUpdateable;
 import featherdev.mgoa.objects.LightBox;
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 public class BackgroundManager implements IUpdateable, IDrawable {
 
 	/**
-	 * Wet layer that interfaces PrettyLights to mgoa
+	 * Wet layer that interfaces LightBox to mgoa
 	 * 
 	 * @author snowdrift
 	 */
@@ -82,13 +82,13 @@ public class BackgroundManager implements IUpdateable, IDrawable {
 	}
 	
 	LightboxManager lbm;
-	private ParticleEffect fountain;
+	ParticleEffect fountain;
 	OrthographicCamera screencam;
 	
 	boolean FOUNTAIN_ON;
 	
 	public BackgroundManager(LinkedList<Beat> beats){
-		LightBox lb = Mgoa.getInstance().lights;
+		LightBox lb = Mgoa.instance().lights;
 		fountain = new ParticleEffect();
 		fountain.load(Gdx.files.internal("effects/space.p"), Gdx.files.internal("effects/"));
 		fountain.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
@@ -100,7 +100,6 @@ public class BackgroundManager implements IUpdateable, IDrawable {
 		screencam.setToOrtho(false);
 	}
 	
-	@Override
 	public void update(float delta) {
 		lbm.update(delta);
 	}

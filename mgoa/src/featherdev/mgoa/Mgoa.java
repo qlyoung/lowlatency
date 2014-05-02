@@ -6,7 +6,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import featherdev.lwbd.Beat;
 import featherdev.mgoa.objects.Difficulty;
 import featherdev.mgoa.objects.LightBox;
-import featherdev.mgoa.objects.ScoreRecords;
 import featherdev.mgoa.objects.Song;
 import featherdev.mgoa.screens.SplashAndLoadScreen;
 
@@ -22,10 +20,10 @@ import featherdev.mgoa.screens.SplashAndLoadScreen;
 public class Mgoa extends Game {
 
 	private static Mgoa instance;
-	public static Mgoa getInstance(){
+	public static Mgoa instance(){
 		return instance;
 	}
-	private OrthographicCamera cam;
+	
 	
 	public static final String VERSION = "1.0";
 	public static final boolean TESTING = false;
@@ -33,7 +31,6 @@ public class Mgoa extends Game {
 	public LightBox lights;
 	public Difficulty difficulties[];
 	public Preferences settings;
-	public ScoreRecords records;
 	public Skin skin;
 	public TextureAtlas textures;
 	
@@ -47,8 +44,6 @@ public class Mgoa extends Game {
 	public void create() {
 		instance = this;
 		
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false);
 		Gdx.app.log("[+]", "Initialized GDX subsystems");
 		Gdx.app.log("[+]", "Initialized OpenGL context");
 		Gdx.app.log("[+]", "Loading assets...");

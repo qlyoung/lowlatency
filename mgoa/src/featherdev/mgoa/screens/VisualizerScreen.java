@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.game.BackgroundManager;
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 public class VisualizerScreen implements Screen {
 	
@@ -13,11 +13,11 @@ public class VisualizerScreen implements Screen {
 	SpriteBatch batch;
 	
 	public VisualizerScreen(){
-		MusicPlayer.instance().load(Mgoa.getInstance().song.getHandle());
-		bm = new BackgroundManager(Mgoa.getInstance().rawmap);
+		MusicPlayer.instance().load(Mgoa.instance().song.getHandle());
+		bm = new BackgroundManager(Mgoa.instance().rawmap);
 		bm.numlights(6);
 		bm.setFountainOn(false);
-		batch = Mgoa.getInstance().batch;
+		batch = Mgoa.instance().batch;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class VisualizerScreen implements Screen {
 		bm.draw(batch);
 		
 		if (!MusicPlayer.instance().isPlaying())
-			Mgoa.getInstance().setScreen(new MenuScreen());
+			Mgoa.instance().setScreen(new MenuScreen());
 	}
 	public void resize(int width, int height) {
 		

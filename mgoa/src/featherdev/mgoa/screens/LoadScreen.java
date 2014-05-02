@@ -16,7 +16,7 @@ import featherdev.lwbd.LwbdDecoder;
 import featherdev.lwbd.decoders.GdxMp3Decoder;
 import featherdev.lwbd.decoders.GdxOggDecoder;
 import featherdev.mgoa.Mgoa;
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 /**
  * music processing & map gen
@@ -64,7 +64,7 @@ public class LoadScreen extends UiScreen {
 	LoadScreenState state;
 	
 	public LoadScreen(){
-		game = Mgoa.getInstance();
+		game = Mgoa.instance();
 		loadThread = new LoadingThread();
 		
 		stage = new Stage();
@@ -115,7 +115,7 @@ public class LoadScreen extends UiScreen {
 				if (game.visualizer)
 					game.setScreen(new VisualizerScreen());
 				else
-					game.setScreen(new GameScreen());
+					game.setScreen(new ReadyScreen());
 				dispose();
 			}
 			break;

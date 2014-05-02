@@ -1,0 +1,56 @@
+
+mgoa.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+game/core
+  rotate: false
+  xy: 2, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+game/ring
+  rotate: false
+  xy: 260, 2
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+mgoa2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ui/box
+  rotate: false
+  xy: 2, 36
+  size: 64, 64
+  split: 8, 9, 8, 8
+  pad: 8, 8, 8, 8
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+ui/filledbox
+  rotate: false
+  xy: 68, 36
+  size: 64, 64
+  split: 8, 9, 8, 8
+  pad: 8, 8, 8, 8
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+ui/pause
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+ui/play
+  rotate: false
+  xy: 134, 68
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

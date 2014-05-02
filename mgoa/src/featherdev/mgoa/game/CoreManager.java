@@ -1,127 +1,89 @@
 package featherdev.mgoa.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
 import featherdev.lwbd.Beat;
-import featherdev.mgoa.IDrawable;
-import featherdev.mgoa.IUpdateable;
 import featherdev.mgoa.objects.Difficulty;
-import featherdev.mgoa.objects.MusicPlayer;
+import featherdev.mgoa.objects.IDrawable;
+import featherdev.mgoa.objects.IUpdateable;
+import featherdev.mgoa.subsystems.MusicPlayer;
 
 public class CoreManager implements IUpdateable, IDrawable {
-
-	
 	class CorePool extends Pool<BeatCore> {
-		
 		protected BeatCore newObject() {
 			return new BeatCore();
 		}
-
 	}
 	
 	CorePool corePool;
 	ArrayList<BeatCore> activeCores;
-	LinkedList<Beat> events;
-	OrthographicCamera cam;
-	Difficulty diff;
+	LinkedList<Beat> beatmap;
+	long preloadTime;
 	Random random;
-	EffectsManager fx;
-	HashMap<String, Float> stats;
 	
-	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty, EffectsManager effects) {
-		cam = new OrthographicCamera(10, 6);
+	public CoreManager(LinkedList<Beat> beatmap, Difficulty difficulty) {
 		corePool = new CorePool();
 		activeCores = new ArrayList<BeatCore>();
-		events = new LinkedList<Beat>();
-		diff = difficulty;
+		this.beatmap = beatmap;
+		preloadTime = difficulty.ringTimeMs;
 		random = new Random();
-		fx = effects;
-		stats = new HashMap<String, Float>();
-		stats.put("points", 0f);
-		stats.put("combo", 0f);
-		stats.put("avgacc", 0f);
-		
-		for (Beat b : beatmap)
-			this.events.add(b);
-
 	}
 
 	private void spawnCore(Beat beat) {
 
+		BeatCore core = corePool.obtain();
+		
+		// select random free position
 		float[] xset = { -4, -2, 0, 2, 4 };
 		float[] yset = {-1.5f, 0, 1.5f };		
-		float x = xset[random.nextInt(xset.length)];
-		float y = yset[random.nextInt(yset.length)];
-		
-		Vector2 position = new Vector2(x, y);
-		
-		if (activeCores.size() > 0) {
-			
-			boolean emptySpace = false;
-			while (!emptySpace) {
-				
-				x = xset[random.nextInt(xset.length)];
-				y = yset[random.nextInt(yset.length)];
-				position.set(x, y);
-				
-				for (BeatCore c : activeCores) {
-					
-					emptySpace = !(c.getPosition().x == position.x && c.getPosition().y == position.y);
-					if (!emptySpace)
-						break;
-				}
+		ArrayList<Vector2> freespots = new ArrayList<Vector2>();
+		for (float x : xset){
+			for (float y : yset)
+				freespots.add(new Vector2(x, y));
+		}
+		for (BeatCore c : activeCores){
+			Vector2 cp = c.getPosition();
+			for (int i = 0; i < freespots.size(); i++){
+				Vector2 spot = freespots.get(i);
+				if (spot.x == cp.x && spot.y == cp.y)
+					freespots.remove(spot);
 			}
 		}
+		int selection = random.nextInt(freespots.size());
+		Vector2 position = freespots.get(selection);
 		
-		BeatCore core = corePool.obtain();
-		core.set(beat, position, diff.ringTimeMs / 1000f);
-
+		core.init(beat, position, preloadTime / 1000f);
 		activeCores.add(core);
-
 	}
 	
 	public void update(float delta) {
-
-		// hit detection
-		if (Gdx.input.isTouched()) {
-			for (BeatCore core : activeCores)
-				core.update(delta);
-		}
-
-		System.out.println(MusicPlayer.instance().time());
+		
+		// update all cores
+		for (BeatCore c : activeCores)
+			c.update(delta);
+		
 		// check if we need to spawn cores
-		while (events.peek() != null && MusicPlayer.instance().time() >= events.peek().timeMs - diff.ringTimeMs) {
-			spawnCore(events.poll());
+		while (true){
+			if (beatmap.size() > 0){
+				long nextTriggerTime = beatmap.peek().timeMs - preloadTime;
+				
+				if (MusicPlayer.instance().time() >= nextTriggerTime)
+					spawnCore(beatmap.poll());
+				else
+					break;
+			}
 		}
-
-		// clean up dead cores
+		
+		// return dead cores to pool		
 		for (int i = 0; i < activeCores.size(); i++) {
-
 			BeatCore c = activeCores.get(i);
-
-			// free the dead ones
 			if (c.isDead()) {
-				// check if the current combo has been broken
-				if (!c.beenHit()){
-					//break the combo
-					stats.put("combo", stats.get("combo") + 1);
-					
-					//hurt accuracy
-					float newacc = stats.get("avgacc") - .1f;
-					if (newacc < 0f)
-						stats.put("avgacc", 0f);
-					else
-						stats.put("avgacc", newacc);
-				}
 				activeCores.remove(c);
 				corePool.free(c);
 			}
@@ -129,21 +91,13 @@ public class CoreManager implements IUpdateable, IDrawable {
 
 	}
 	public void draw(SpriteBatch batch) {
-		batch.setProjectionMatrix(cam.combined);
+		batch.setProjectionMatrix(BeatCore.cam.combined);
 		batch.begin();
 		{
 			for (BeatCore core : activeCores)
 				core.draw(batch);
 		}
 		batch.end();
-
-	}
-
-	public int getPoints(){
-		return (int) stats.get("points").floatValue();
-	}
-	public float getAverageAccuracy(){
-		return stats.get("avgacc");
 	}
 
 }

@@ -1,0 +1,68 @@
+{
+	com.badlogic.gdx.graphics.Color: {
+		white: { r: 1, g: 1, b: 1, a: 1 },
+		blue: { r: 0, g: 0, b: 1, a: 1 }
+	},
+	
+	com.badlogic.gdx.graphics.g2d.BitmapFont: {
+		naipol: { file: fonts/naipol.fnt }
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+		default: {
+			down: ui/box,
+			up: ui/box,
+			font: naipol,
+			fontColor: white
+		}
+	},
+
+	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+		default: {
+			up: ui/pause,
+			down: ui/pause
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+		default: {
+			font: naipol
+		},
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+		default: {
+			font: naipol,
+			fontColor: white,
+			background: ui/box,
+			listBackground: ui/box,
+			listSelection: ui/box
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+		default: {
+			titleFont: naipol,
+			background: ui/box
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+		default: {
+			font: naipol,
+			fontColorSelected: white,
+			fontColorUnselected: white,
+			selection: ui/box
+		}
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+		default: {
+			font: naipol,
+			checkboxOff: ui/box,
+			checkboxOn: ui/filledbox,
+			fontColor: white
+		}
+	}
+
+}

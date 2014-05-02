@@ -12,7 +12,7 @@ public abstract class UiScreen implements Screen {
 	protected Stage stage;
 	
 	public UiScreen(){
-		game = Mgoa.getInstance();
+		game = Mgoa.instance();
 		stage = new Stage();
 	}
 	

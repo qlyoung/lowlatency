@@ -22,16 +22,8 @@ public class ConfigScreen extends UiScreen {
 		selector.setSelection(1);
 		Label lbl = new Label("Difficulty: ", game.skin);
 		final CheckBox visualizerMode = new CheckBox(" Visualizer mode", game.skin);
-		visualizerMode.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				
-				super.clicked(event, x, y);
-			}
-		});
 		TextButton backToMenu = new TextButton("Return", game.skin);
 		backToMenu.addListener(new ClickListener() {
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
 				game.setScreen(new ChooseSongScreen());
@@ -40,7 +32,6 @@ public class ConfigScreen extends UiScreen {
 		});
 		TextButton playButton = new TextButton("Play", game.skin);
 		playButton.addListener(new ClickListener(){
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				int index = selector.getSelectionIndex();
 				game.difficulty = game.difficulties[index];
