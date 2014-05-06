@@ -16,6 +16,11 @@ import featherdev.mgoa.objects.LightBox;
 import featherdev.mgoa.objects.Song;
 import featherdev.mgoa.screens.SplashAndLoadScreen;
 
+/***
+ * platform-independent entry point
+ * @author snowdrift
+ *
+ */
 
 public class Mgoa extends Game {
 
@@ -23,10 +28,9 @@ public class Mgoa extends Game {
 	public static Mgoa instance(){
 		return instance;
 	}
-	
-	
 	public static final String VERSION = "1.0";
 	public static final boolean TESTING = false;
+	
 	public SpriteBatch batch;
 	public LightBox lights;
 	public Difficulty difficulties[];
@@ -52,7 +56,6 @@ public class Mgoa extends Game {
 	}
 	@Override
 	public void render() {
-
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		super.render();
 	}

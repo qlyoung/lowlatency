@@ -36,7 +36,6 @@ public class CoreManager implements IUpdateable, IDrawable {
 	}
 
 	private void spawnCore(Beat beat) {
-
 		BeatCore core = corePool.obtain();
 		
 		// select random free position
@@ -68,15 +67,12 @@ public class CoreManager implements IUpdateable, IDrawable {
 		for (BeatCore c : activeCores)
 			c.update(delta);
 		
-		// check if we need to spawn cores
-		while (true){
-			if (beatmap.size() > 0){
-				long nextTriggerTime = beatmap.peek().timeMs - preloadTime;
-				
-				if (MusicPlayer.instance().time() >= nextTriggerTime)
-					spawnCore(beatmap.poll());
-				else
-					break;
+		// check if we need to spawn cores & do so if necessary
+		if (beatmap.size() > 0){
+			long nextTriggerTime = beatmap.peek().timeMs - preloadTime;
+			while (MusicPlayer.instance().time() >= nextTriggerTime && beatmap.size() > 0){
+				spawnCore(beatmap.poll());
+				nextTriggerTime = beatmap.peek().timeMs - preloadTime;	
 			}
 		}
 		

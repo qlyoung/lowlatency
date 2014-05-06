@@ -1,4 +1,4 @@
-package featherdev.mgoa.game;
+package featherdev.mgoa.subsystems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,14 +15,20 @@ import com.badlogic.gdx.utils.Disposable;
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.objects.IDrawable;
 import featherdev.mgoa.objects.IUpdateable;
-import featherdev.mgoa.subsystems.Stats;
 
 public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
+	
+	private static HeadsUpDisplay instance;
+	public static HeadsUpDisplay instance(){
+		if (instance == null)
+			instance = new HeadsUpDisplay();
+		return instance;
+	}
 	
 	Stage stage;
 	Skin skin;
 	
-	public HeadsUpDisplay(){
+	private HeadsUpDisplay(){
 		
 		// ui
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -59,15 +65,14 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		Label songinfo = (Label) stage.getRoot().findActor("songinfo");
 		songinfo.setText(artist + " - " + title);
 	}
-	public void showMessage(String message, Vector2 screenPosition, float fadetime, float live){
+	public void showMessage(String message, Vector2 screenPosition, float live){
 		Label msg = new Label(message, skin);
 		msg.setPosition(screenPosition.x, screenPosition.y);
-		Action set = Actions.sequence(
-				Actions.fadeIn(fadetime),
-				Actions.delay(live),
-				Actions.fadeOut(fadetime),
-				Actions.removeActor());
-		msg.addAction(set);
+		Action s = Actions.parallel(
+				Actions.moveTo(screenPosition.x, screenPosition.y + 100, live),
+				Actions.fadeOut(live));
+		Action r = Actions.sequence(s, Actions.removeActor());
+		msg.addAction(r);
 		stage.addActor(msg);
 	}
 	public void fadein(float time){

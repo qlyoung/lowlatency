@@ -16,12 +16,13 @@ import featherdev.mgoa.Utilities;
 import featherdev.mgoa.objects.IDrawable;
 import featherdev.mgoa.objects.IUpdateable;
 import featherdev.mgoa.subsystems.Effects;
+import featherdev.mgoa.subsystems.HeadsUpDisplay;
 import featherdev.mgoa.subsystems.MusicPlayer;
 import featherdev.mgoa.subsystems.Stats;
 
 class BeatCore implements IUpdateable, IDrawable, Poolable {
 	enum CoreState { ALIVE, DYING, DEAD }
-	enum Accuracy { STELLAR, PERFECT, EXCELLENT, GOOD, ALMOST };
+	enum Accuracy { Stellar, Perfect, Excellent, Good, Almost };
 	static OrthographicCamera cam = new OrthographicCamera(10, 6);
 	
 	// beat
@@ -56,27 +57,36 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		if (beenHit || state == CoreState.DEAD)
 			return;
 
-		// calculate how accurate the hit was
+		// calculate how accurate the hit was & tell the user
 		long diff = songTimeMs - beat.timeMs;
 		Accuracy acc;
 		if (diff < -210)
-			acc = Accuracy.ALMOST;
+			acc = Accuracy.Almost;
 		else if (diff < -150)
-			acc = Accuracy.GOOD;
+			acc = Accuracy.Good;
 		else if (diff <= -90)
-			acc = Accuracy.EXCELLENT;
+			acc = Accuracy.Excellent;
 		else if (diff <= -30)
-			acc = Accuracy.PERFECT;
+			acc = Accuracy.Perfect;
 		else if (diff <= 40)
-			acc = Accuracy.STELLAR;
+			acc = Accuracy.Stellar;
 		else if (diff <= 120)
-			acc = Accuracy.PERFECT;
+			acc = Accuracy.Perfect;
 		else if (diff <= 200)
-			acc = Accuracy.EXCELLENT;
+			acc = Accuracy.Excellent;
 		else if (diff <= 280)
-			acc = Accuracy.GOOD;
+			acc = Accuracy.Good;
 		else
-			acc = Accuracy.ALMOST;
+			acc = Accuracy.Almost;
+		
+		Vector2 pos = Utilities.worldToScreen(position, cam);
+		pos.y += 20;
+		
+		String message = acc.toString() + "!";
+		float mwidth = Mgoa.instance().skin.getFont("naipol").getBounds(message).width;
+		float xcenter = (core.getWidth() / 2f) + pos.x;
+		pos.set(xcenter - (mwidth / 2f), pos.y);
+		HeadsUpDisplay.instance().showMessage(message, pos, .7f);
 		
 		// calculate the point value & record in stats
 		int points = (int) (getScoreValue() / (acc.ordinal() + 1));
@@ -194,9 +204,6 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 	public boolean isDead(){
 		return state == CoreState.DEAD;
 	}
-	public Color getColor() {
-		return ec;
-	}
 	public static Color getEnergyColor(float energy){
 		Color color = new Color();
 		
@@ -215,5 +222,6 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		
 		return color;
 	}
-	
+
+
 }

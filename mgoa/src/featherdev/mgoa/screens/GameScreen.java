@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import featherdev.mgoa.Mgoa;
 import featherdev.mgoa.game.BackgroundManager;
 import featherdev.mgoa.game.CoreManager;
-import featherdev.mgoa.game.HeadsUpDisplay;
 import featherdev.mgoa.objects.PausedMenu;
 import featherdev.mgoa.subsystems.Effects;
+import featherdev.mgoa.subsystems.HeadsUpDisplay;
 import featherdev.mgoa.subsystems.MusicPlayer;
 import featherdev.mgoa.subsystems.ScoreRecords;
 import featherdev.mgoa.subsystems.Stats;
@@ -37,8 +37,8 @@ public class GameScreen implements Screen {
 
 	BackgroundManager backgroundmanager;
 	CoreManager coremanager;
-	HeadsUpDisplay hud;
 	PausedMenu pausedMenu;
+	HeadsUpDisplay hud;
 
 	public GameScreen() {
 		game = Mgoa.instance();
@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
 
 		backgroundmanager = new BackgroundManager(game.rawmap);
 		coremanager = new CoreManager(game.beatmap, game.difficulty);
-		hud = new HeadsUpDisplay();
+		hud = HeadsUpDisplay.instance();
 		hud.setSongInfo(game.song.getArtist(), game.song.getTitle());
 		pausedMenu = new PausedMenu(this);
 		Stats.instance().clear();
@@ -58,7 +58,6 @@ public class GameScreen implements Screen {
 	}
 
 	public void render(float delta) {
-
 		switch (state) {
 
 		case MAIN:
@@ -111,7 +110,7 @@ public class GameScreen implements Screen {
 					- bounds.width / 2f, Gdx.graphics.getHeight()
 					- (bounds.height + 10f));
 
-			hud.showMessage(message, top, .3f, 5f);
+			hud.showMessage(message, top, 5f);
 		}
 	}
 
