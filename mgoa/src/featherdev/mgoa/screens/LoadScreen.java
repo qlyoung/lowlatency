@@ -112,10 +112,7 @@ public class LoadScreen extends UiScreen {
 			
 			if (stage.getRoot().getColor().a == 0){
 				MusicPlayer.instance().pause();
-				if (game.visualizer)
-					game.setScreen(new VisualizerScreen());
-				else
-					game.setScreen(new ReadyScreen());
+				game.setScreen(new ReadyScreen());
 				dispose();
 			}
 			break;

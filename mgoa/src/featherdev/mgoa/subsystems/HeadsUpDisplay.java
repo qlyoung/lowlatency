@@ -24,7 +24,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 			instance = new HeadsUpDisplay();
 		return instance;
 	}
-	
+
 	Stage stage;
 	Skin skin;
 	
@@ -34,6 +34,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		skin = Mgoa.instance().skin;
 		ImageButton pause = new ImageButton(skin);
+		
 		Label scoreLabel = new Label("000000000", skin);
 		scoreLabel.setName("score");
 		Label songinfo = new Label("", skin);

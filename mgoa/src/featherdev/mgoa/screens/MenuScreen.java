@@ -35,7 +35,10 @@ public class MenuScreen extends UiScreen {
 			musicpath = null;
 		}
 		
-		MusicPlayer.instance().load(musicpath);
+		if (!MusicPlayer.instance().isPlaying()){
+			MusicPlayer.instance().load(musicpath);
+			MusicPlayer.instance().setLooping(true);
+		}
 		
 		bgcam = new OrthographicCamera();
 		bgcam.setToOrtho(false);

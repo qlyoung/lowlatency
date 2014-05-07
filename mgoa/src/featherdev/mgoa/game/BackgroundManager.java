@@ -3,6 +3,7 @@ package featherdev.mgoa.game;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -94,6 +95,10 @@ public class BackgroundManager implements IUpdateable, IDrawable {
 		fountain.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
 		
 		lbm = new LightboxManager(beats, lb);
+		if (Gdx.app.getType() == ApplicationType.Android)
+			lb.setNumLights(lb.getColor(), 3);
+		else
+			lb.setNumLights(lb.getColor(), 6);
 		FOUNTAIN_ON = true;
 		
 		screencam = new OrthographicCamera();

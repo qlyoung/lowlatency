@@ -1,5 +1,6 @@
 package featherdev.mgoa.objects;
 
+
 public class Stopwatch {
 	private long starttime, stoptime;
 	private boolean running, paused;
@@ -21,6 +22,7 @@ public class Stopwatch {
 	}
 	public void pause(){
 		stoptime = System.currentTimeMillis();
+		
 		running = false;
 		paused = true;
 	}

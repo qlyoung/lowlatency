@@ -23,14 +23,12 @@ public class PausedMenu extends Stage {
 		TextButton quitToMenu = new TextButton("Quit to Main Menu", skin);
 		
 		resume.addListener(new ClickListener(){
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				gs.resume();
 				super.clicked(event, x, y);
 			}
 		});
 		quitToMenu.addListener(new ClickListener(){
-			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.input.setInputProcessor(null);
 				Mgoa.instance().setScreen(new MenuScreen());
@@ -39,6 +37,7 @@ public class PausedMenu extends Stage {
 		});
 		
 		Table table = new Table(skin);
+		table.pad(10);
 		table.setFillParent(true);
 		table.add("Options");
 		table.row();

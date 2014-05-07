@@ -53,7 +53,6 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 	}
 
 	private void onHit(long songTimeMs) {
-		Gdx.app.log("BeatCore", "HIT");
 		if (beenHit || state == CoreState.DEAD)
 			return;
 
@@ -86,7 +85,7 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		float mwidth = Mgoa.instance().skin.getFont("naipol").getBounds(message).width;
 		float xcenter = (core.getWidth() / 2f) + pos.x;
 		pos.set(xcenter - (mwidth / 2f), pos.y);
-		HeadsUpDisplay.instance().showMessage(message, pos, .7f);
+		HeadsUpDisplay.instance().showMessage(message, pos, 1f);
 		
 		// calculate the point value & record in stats
 		int points = (int) (getScoreValue() / (acc.ordinal() + 1));

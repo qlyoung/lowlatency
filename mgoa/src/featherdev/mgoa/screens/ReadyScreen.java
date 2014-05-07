@@ -19,7 +19,11 @@ public class ReadyScreen extends UiScreen {
 		playdialog.text("  Touch anywhere  ");
 		playdialog.addListener(new ClickListener(){
 			public void clicked(InputEvent event, float x, float y) {
-				Mgoa.instance().setScreen(new GameScreen());
+				Gdx.input.setInputProcessor(null);
+				if (Mgoa.instance().visualizer)
+					Mgoa.instance().setScreen(new VisualizerScreen());
+				else
+					Mgoa.instance().setScreen(new GameScreen());
 			};
 		});
 	}

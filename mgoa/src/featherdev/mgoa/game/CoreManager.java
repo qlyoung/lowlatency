@@ -68,13 +68,8 @@ public class CoreManager implements IUpdateable, IDrawable {
 			c.update(delta);
 		
 		// check if we need to spawn cores & do so if necessary
-		if (beatmap.size() > 0){
-			long nextTriggerTime = beatmap.peek().timeMs - preloadTime;
-			while (MusicPlayer.instance().time() >= nextTriggerTime && beatmap.size() > 0){
+		while (beatmap.size() > 0 && beatmap.peek().timeMs - preloadTime <= MusicPlayer.instance().time())
 				spawnCore(beatmap.poll());
-				nextTriggerTime = beatmap.peek().timeMs - preloadTime;	
-			}
-		}
 		
 		// return dead cores to pool		
 		for (int i = 0; i < activeCores.size(); i++) {

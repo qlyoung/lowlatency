@@ -78,7 +78,10 @@ public class MusicPlayer implements Disposable {
 	}
 
 	public boolean isPlaying() {
-		return music.isPlaying();
+		if (music == null)
+			return false;
+		else
+			return music.isPlaying();
 	}
 	public void setVolume(float volume){
 		music.setVolume(volume);
