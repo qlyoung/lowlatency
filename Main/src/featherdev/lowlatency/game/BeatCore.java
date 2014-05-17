@@ -22,7 +22,7 @@ import featherdev.lowlatency.subsystems.Stats;
 
 class BeatCore implements IUpdateable, IDrawable, Poolable {
 	enum CoreState { ALIVE, DYING, DEAD }
-	enum Accuracy { Stellar, Perfect, Excellent, Good, Almost };
+	enum Accuracy { Stellar, Perfect, Excellent, Good, Almost }
 	static OrthographicCamera cam = new OrthographicCamera(10, 6);
 	
 	// beat
@@ -88,7 +88,7 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		HeadsUpDisplay.instance().showEvaporatingMessage(message, pos, 1f);
 		
 		// calculate the point value & record in stats
-		int points = (int) (getScoreValue() / (acc.ordinal() + 1));
+		int points = (getScoreValue() / (acc.ordinal() + 1));
 		Stats.instance().points += points;
 		
 		// generate an effect
@@ -204,8 +204,8 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		return state == CoreState.DEAD;
 	}
 	public static Color getEnergyColor(float energy){
-		Color color = new Color();
-		
+        Color color;
+
 		if (energy > .75f)
 			color = Color.RED;
 		else if (energy > .6f)

@@ -4,13 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import featherdev.lowlatency.objects.Difficulty;
-import featherdev.lowlatency.objects.LightBox;
 import featherdev.lowlatency.screens.SplashAndLoadScreen;
 
 /***
@@ -29,12 +27,10 @@ public class LowLatency extends Game {
 	public static final boolean TESTING = false;
 	
 	public SpriteBatch batch;
-	public LightBox lights;
 	public Difficulty difficulties[];
 	public Preferences settings;
 	public Skin skin;
 	public TextureAtlas textures;
-	public OrthographicCamera screencam;
 	
 	@Override
 	public void create() {
@@ -53,7 +49,6 @@ public class LowLatency extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		lights.dispose();
 		skin.dispose();
 		super.dispose();
 	}

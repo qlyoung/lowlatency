@@ -7,17 +7,22 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
-import featherdev.lowlatency.LowLatency;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import featherdev.lowlatency.Utilities;
 import featherdev.lowlatency.subsystems.Holder;
+import featherdev.lowlatency.subsystems.LightTank;
 import featherdev.lowlatency.subsystems.MusicPlayer;
 
 public class MenuScreen extends UiScreen {
 
 	ParticleEffect fountain;
 	Table root;
+    Viewport viewport;
 
 	public MenuScreen() {
+        viewport = new ScreenViewport();
+
 		// ui
 		TextButton playButton = new TextButton("Play", game.skin), optionsButton = new TextButton(
 				"Options", game.skin), creditsButton = new TextButton(
@@ -59,15 +64,14 @@ public class MenuScreen extends UiScreen {
 		Gdx.input.setInputProcessor(stage);
 
 		// background
-		game.lights.idle();
-		game.lights.setNumLights(game.lights.getColor(), 5);
+		LightTank.instance().setup(6, Utilities.getRandomColor(), true);
 		fountain = new ParticleEffect();
 		fountain.load(Gdx.files.internal("effects/space.p"),
 				Gdx.files.internal("effects/"));
 		fountain.setPosition(Gdx.graphics.getWidth() / 2f,
 				Gdx.graphics.getHeight() / 2f);
 		fountain.start();
-		game.lights.update(5);
+		LightTank.instance().update(5);
 
 		// globals
 		Holder.clear();
@@ -97,18 +101,18 @@ public class MenuScreen extends UiScreen {
 	public void render(float delta) {
 
 		// update
-		game.lights.update(delta);
+		LightTank.instance().update(delta);
 		stage.act(delta);
 
 		// draw
-		game.batch.setProjectionMatrix(LowLatency.instance().screencam.combined);
+		game.batch.setProjectionMatrix(viewport.getCamera().combined);
 		game.batch.begin();
 		{
 			fountain.draw(game.batch, delta);
 		}
 		game.batch.end();
 
-		game.lights.draw(null);
+		LightTank.instance().draw(null);
 		stage.draw();
 
 	}

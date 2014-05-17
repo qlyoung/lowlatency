@@ -1,13 +1,11 @@
 package featherdev.lowlatency.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import featherdev.lowlatency.subsystems.Holder;
+import featherdev.lowlatency.subsystems.LightTank;
 
 public class ConfigScreen extends UiScreen {
 	
@@ -68,10 +66,10 @@ public class ConfigScreen extends UiScreen {
 	}
 
 	public void render(float delta) {
-		game.lights.update(delta);
+        LightTank.instance().update(delta);
 		stage.act();
-		
-		game.lights.draw(null);
+
+        LightTank.instance().draw(null);
 		stage.draw();
 		
 	}

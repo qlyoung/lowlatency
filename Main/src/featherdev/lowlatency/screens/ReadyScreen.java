@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.lowlatency.LowLatency;
 import featherdev.lowlatency.subsystems.Holder;
+import featherdev.lowlatency.subsystems.LightTank;
 
 public class ReadyScreen extends UiScreen {
 
@@ -30,8 +31,8 @@ public class ReadyScreen extends UiScreen {
 	}
 
 	public void render(float delta) {
-		LowLatency.instance().lights.update(delta);
-		LowLatency.instance().lights.draw(null);
+        LightTank.instance().update(delta);
+		LightTank.instance().draw(null);
 		stage.act();
 		stage.draw();
 

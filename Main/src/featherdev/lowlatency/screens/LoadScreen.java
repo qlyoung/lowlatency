@@ -9,12 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-import featherdev.lwbd.Beat;
-import featherdev.lwbd.BeatDetector;
-import featherdev.lwbd.BeatsProcessor;
-import featherdev.lwbd.LwbdDecoder;
-import featherdev.lwbd.decoders.GdxMp3Decoder;
-import featherdev.lwbd.decoders.GdxOggDecoder;
+import featherdev.lowlatency.subsystems.LightTank;
+import featherdev.lwbd.*;
+import featherdev.lwbd.decoders.*;
+import featherdev.lwbd.processing.*;
 import featherdev.lowlatency.LowLatency;
 import featherdev.lowlatency.subsystems.Holder;
 import featherdev.lowlatency.subsystems.MusicPlayer;
@@ -95,20 +93,20 @@ public class LoadScreen extends UiScreen {
 		switch (state){
 		case LOADING:
 			// update
-			game.lights.update(delta);
+			LightTank.instance().update(delta);
 			stage.act(delta);
 
 			// draw
-			game.lights.draw(null);
+			LightTank.instance().draw(null);
 			stage.draw();
 			break;
 		case DYING:
 			// update
-			game.lights.update(delta);
+			LightTank.instance().update(delta);
 			stage.act(delta);
 
 			// draw
-			game.lights.draw(null);
+			LightTank.instance().draw(null);
 			stage.draw();
 			
 			if (stage.getRoot().getColor().a == 0){

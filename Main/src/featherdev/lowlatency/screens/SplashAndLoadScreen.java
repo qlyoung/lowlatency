@@ -6,18 +6,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import featherdev.lowlatency.LowLatency;
-import featherdev.lowlatency.Utilities;
 import featherdev.lowlatency.objects.Difficulty;
-import featherdev.lowlatency.objects.LightBox;
 import featherdev.lowlatency.subsystems.MusicPlayer;
 import featherdev.lowlatency.subsystems.ScoreRecords;
 
 /**
- * easily the most disgusting class I've ever written
+ * loads everything
  * @author snowdrift
  */
 public class SplashAndLoadScreen implements Screen {
@@ -25,7 +22,6 @@ public class SplashAndLoadScreen implements Screen {
 	Texture t;
 	OrthographicCamera cam;
 	SpriteBatch s;
-	MenuScreen m;
 	long l;
 	boolean b, loaded;
 	
@@ -47,12 +43,6 @@ public class SplashAndLoadScreen implements Screen {
 		
 		// graphics
 		g.batch = new SpriteBatch();
-		g.screencam = new OrthographicCamera();
-		g.screencam.setToOrtho(false);
-		
-		// lights
-		g.lights = new LightBox();
-		g.lights.setNumLights(Utilities.getRandomColor(), 5);
 		
 		// difficulties
 		g.difficulties = new Difficulty[3];
@@ -74,10 +64,7 @@ public class SplashAndLoadScreen implements Screen {
 		g.settings.flush();
 		Gdx.app.log("[+]", "Loaded settings");
 		
-		// 
-		
 		l = System.currentTimeMillis();
-		m = new MenuScreen();
 	}
 	
 	public void render(float delta) {
@@ -90,8 +77,8 @@ public class SplashAndLoadScreen implements Screen {
 			if (System.currentTimeMillis() - l > 2000 && System.currentTimeMillis() - l < 3000)
 				return;
 			else if (System.currentTimeMillis() - l >= 3000){
-				LowLatency.instance().setScreen(m);
-				System.out.println("[#] Initialization sequence complete.");
+				LowLatency.instance().setScreen(new MenuScreen());
+				Gdx.app.log("[+]", "Load complete.");
 				return;
 			}
 		}

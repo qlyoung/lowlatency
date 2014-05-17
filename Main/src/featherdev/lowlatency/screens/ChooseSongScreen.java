@@ -1,20 +1,15 @@
 package featherdev.lowlatency.screens;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import featherdev.lowlatency.objects.Song;
 import featherdev.lowlatency.subsystems.Holder;
+import featherdev.lowlatency.subsystems.LightTank;
+
+import java.util.ArrayList;
 
 public class ChooseSongScreen extends UiScreen {
 	
@@ -153,18 +148,19 @@ public class ChooseSongScreen extends UiScreen {
 		Gdx.input.setInputProcessor(null);
 		Holder.song = new Song(browser.getSelection());
 		game.setScreen(new ConfigScreen());
+		game.setScreen(new ConfigScreen());
 	}
 	@Override
 	public void render(float delta) {
 
 		// update
-		game.lights.update(delta);
+		LightTank.instance().update(delta);
 		stage.act();
 		if (browser.getSelection() != null)
 			finish();
 
 		// draw
-		game.lights.draw(null);
+		LightTank.instance().draw(null);
 		stage.draw();
 	}
 
