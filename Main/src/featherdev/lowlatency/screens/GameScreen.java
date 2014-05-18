@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
         TextButton quitToMenu = new TextButton("Quit to Main Menu", skin);
         resume.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                state = WorldState.MAIN;
+                switchstate(WorldState.MAIN);
                 super.clicked(event, x, y);
             }
         });
@@ -63,8 +63,9 @@ public class GameScreen implements Screen {
         });
         Table table = new Table(skin);
         table.defaults().pad(10);
+        table.defaults().fill();
         table.setFillParent(true);
-        table.add("Options");
+        table.add("Paused");
         table.row();
         table.add(resume);
         table.row();

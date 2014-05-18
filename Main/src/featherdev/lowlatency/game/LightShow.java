@@ -47,7 +47,8 @@ public class LightShow implements IUpdateable, IDrawable {
             if (window.size() == WINDOW_SIZE)
                 window.removeFirst();
 
-            window.addLast(BeatCore.getEnergyColor(nextBeat.energy));
+            if (BeatCore.getEnergyColor(nextBeat.energy) != Color.MAGENTA)
+                window.addLast(BeatCore.getEnergyColor(nextBeat.energy));
 
             // average all the colors in the window
             float r = 0, g = 0, b = 0;

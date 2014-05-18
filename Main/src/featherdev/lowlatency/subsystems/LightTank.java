@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import featherdev.lowlatency.objects.IDrawable;
 import featherdev.lowlatency.objects.IUpdateable;
@@ -38,16 +38,23 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
     Stopwatch stopwatch;
     Random random;
     final float
-            LIGHT_RADIUS,
+            NORMAL_LIGHT_RADIUS,
+            MAX_LIGHT_RADIUS,
             LIGHT_BODY_RADIUS,
             MAX_VELOCITY_METRES_PER_SECOND,
-            SHRINK_RATE_PPS;
+            SHRINK_RATE_METRES_PER_SECOND;
 
     private LightTank() {
-        viewport = new ScreenViewport();
+        // set camera viewport to 10, 6 but adjust one dimension as needed
+        // to match the aspect ratio of the screen. Camera viewport is centered
+        // on (0, 0)
+        viewport = new ExtendViewport(10, 6);
+        viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         System.out.println(
-                viewport.getViewportWidth() + " : " + viewport.getViewportHeight() +"\n"
-              + viewport.getWorldWidth() + " : " + viewport.getWorldHeight());
+                viewport.getViewportWidth() + " : " + viewport.getViewportHeight() + "\n"
+                        + viewport.getWorldWidth() + " : " + viewport.getWorldHeight());
+
         world = new World(new Vector2(), true);
         rh = new RayHandler(world);
         rh.setCombinedMatrix(viewport.getCamera().combined);
@@ -55,20 +62,22 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
         playful = false;
         random = new Random();
 
-        // diameter of each light should be 1/6 screen width
-        LIGHT_RADIUS = 7;
-        // body radius should be super small (for wall collisions), constant 5 pixels
-        LIGHT_BODY_RADIUS = 5;
+        // diameter of each light should be 1/4 world's smaller dimension
+        NORMAL_LIGHT_RADIUS = viewport.getWorldHeight() / 2f;
+        // maximum should be 4 times normal size
+        MAX_LIGHT_RADIUS = 4 * NORMAL_LIGHT_RADIUS;
+        // body radius should be super small, we'll do 1/10 light radius
+        LIGHT_BODY_RADIUS = NORMAL_LIGHT_RADIUS / 10f;
         // at max velocity lights should take 1/2 second to cross the screen
-        MAX_VELOCITY_METRES_PER_SECOND = .5f * Gdx.graphics.getWidth();
-        // lights should take 1 second to shrink to normal size from double normal size
-        SHRINK_RATE_PPS = LIGHT_RADIUS;
+        MAX_VELOCITY_METRES_PER_SECOND = viewport.getWorldWidth() * 2f;
+        // lights should take 1 second to shrink to normal size from maximum
+        SHRINK_RATE_METRES_PER_SECOND = MAX_LIGHT_RADIUS;
 
         // create box walls
-        spawnWall(0, 0, 1, viewport.getViewportHeight());
-        spawnWall(0, viewport.getViewportWidth() - 1, 1, viewport.getViewportHeight());
-        spawnWall(0, 0, viewport.getViewportWidth(), 1);
-        spawnWall(0, viewport.getViewportHeight() - 1, viewport.getViewportWidth(), 1);
+        spawnWall(-viewport.getWorldWidth() / 2f, 0, .1f, viewport.getWorldHeight());
+        spawnWall(viewport.getWorldWidth() / 2f, 0, .1f, viewport.getWorldHeight());
+        spawnWall(0, viewport.getWorldHeight() / 2f, viewport.getWorldWidth(), .1f);
+        spawnWall(0, -viewport.getWorldHeight() / 2f, viewport.getWorldWidth(), .1f);
     }
 
     private void spawnWall(float x, float y, float width, float height) {
@@ -83,8 +92,7 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
 
         FixtureDef wallFixture = new FixtureDef();
         wallFixture.shape = wallShape;
-        wallFixture.friction = 0f;
-        wallFixture.restitution = 0f;
+        wallFixture.restitution = 1f;
 
         wall.createFixture(wallFixture);
     }
@@ -93,30 +101,32 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
         // create body
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
-        def.position.set(0, 0);
         Body lightbody = world.createBody(def);
+        lightbody.setLinearDamping(viewport.getWorldWidth() / 3f);
 
         // add a circular fixture to the body so they collide with walls
         CircleShape circ = new CircleShape();
-        circ.setRadius(5);
+        circ.setRadius(LIGHT_BODY_RADIUS);
         FixtureDef circfix = new FixtureDef();
         circfix.shape = circ;
         lightbody.createFixture(circfix);
 
         // spawn light at center of screen
-        float x = Gdx.graphics.getWidth() / 2f;
-        float y = Gdx.graphics.getHeight() / 2f;
-        PointLight p = new PointLight(rh, 100, c, LIGHT_RADIUS, x, y);
+        float x = viewport.getWorldWidth() / 2f;
+        float y = viewport.getWorldHeight() /2f;
+        PointLight p = new PointLight(rh, 100, c, NORMAL_LIGHT_RADIUS, x, y);
         p.attachToBody(lightbody, 0, 0);
         p.setXray(true);
         p.setSoft(true);
+
+        p.setPosition(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f);
     }
 
     public void update(float delta) {
         world.step(1 / 45f, 6, 2);
 
         if (playful) { // jerk from time to time
-            if (stopwatch.time() > random.nextInt((6 - 4) + 1) + 4 || Gdx.input.justTouched()) {
+            if (stopwatch.time() / 1000f > random.nextInt((6 - 4) + 1) + 4 || Gdx.input.justTouched()) {
                 jerkAll(random.nextFloat());
                 stopwatch.reset();
                 stopwatch.start();
@@ -124,17 +134,13 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
         }
 
         for (Light l : rh.lightList){
-            if (l.getDistance() > LIGHT_RADIUS)
-                l.setDistance(l.getDistance() - delta * SHRINK_RATE_PPS);
-            Gdx.app.log(l.getPosition().toString(), String.valueOf(l.getDistance()));
+            if (l.getDistance() > NORMAL_LIGHT_RADIUS)
+                l.setDistance(l.getDistance() - delta * SHRINK_RATE_METRES_PER_SECOND);
         }
-        Gdx.app.log("lights out", "--");
-
-        rh.update();
     }
 
     public void draw(SpriteBatch batch) {
-        rh.render();
+        rh.updateAndRender();
     }
 
     public void setup(int numLights, Color lightsColor, boolean playful) {
@@ -161,15 +167,15 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
      */
     public void pulseAll(float energy){
         // add a percentage of the normal light distance
-        float additiveDistance = energy * LIGHT_RADIUS;
+        float additiveDistance = energy * NORMAL_LIGHT_RADIUS * 2;
 
         for (Light l : rh.lightList){
             float newDistance = l.getDistance() + additiveDistance;
             l.setDistance(newDistance);
 
             // limit light distance to double the normal
-            if (l.getDistance() > LIGHT_RADIUS * 2)
-                l.setDistance(LIGHT_RADIUS * 2);
+            if (l.getDistance() > NORMAL_LIGHT_RADIUS * 2)
+                l.setDistance(NORMAL_LIGHT_RADIUS * 2);
         }
     }
 
@@ -177,9 +183,10 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
      * @param energy should be between 0 and 1
      */
     public void jerkAll(float energy){
+        energy *= 2;
         for (Light l : rh.lightList){
             // calculate random direction
-            float min = .01f, max = 1f;
+            float min = .5f, max = MAX_VELOCITY_METRES_PER_SECOND;
             float xdir = ((max - min) * random.nextFloat() + min);
             float ydir = ((max - min) * random.nextFloat() + min);
             xdir = random.nextBoolean() ? xdir : -xdir;
@@ -197,5 +204,9 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
     public void dispose() {
         rh.dispose();
         world.dispose();
+    }
+
+    public void resize(int screenWidth, int screenHeight){
+        viewport.update(screenWidth, screenHeight);
     }
 }

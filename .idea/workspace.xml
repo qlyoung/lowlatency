@@ -77,7 +77,7 @@
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <method_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java" line="45" class="featherdev.lowlatency.subsystems.LightTank" package="featherdev.lowlatency.subsystems">
+      <breakpoint url="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java" line="46" class="featherdev.lowlatency.subsystems.LightTank" package="featherdev.lowlatency.subsystems">
         <option name="WATCH_ENTRY" value="true" />
         <option name="WATCH_EXIT" value="true" />
         <option name="ENABLED" value="true" />
@@ -104,37 +104,79 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LightShow.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="LightShow.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="27" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="1332">
+            <state line="50" column="16" selection-start="1583" selection-end="1583" vertical-scroll-proportion="0.3582343" vertical-offset="491" max-vertical-offset="1350">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LowLatency.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java">
+      <file leaf-file-name="LightTank.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="24" selection-start="1307" selection-end="1307" vertical-scroll-proportion="0.0" vertical-offset="202" max-vertical-offset="954">
-              <folding />
+            <state line="185" column="20" selection-start="6426" selection-end="6426" vertical-scroll-proportion="0.0" vertical-offset="959" max-vertical-offset="1854">
+              <folding>
+                <element signature="docComment;class#LightTank#0" expanded="false" />
+                <element signature="method#instance#0;class#LightTank#0" expanded="false" />
+                <element signature="e#1301#1367#0" expanded="false" />
+                <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
+                <element signature="method#spawnLight#0;class#LightTank#0" expanded="false" />
+                <element signature="method#update#0;class#LightTank#0" expanded="false" />
+                <element signature="method#draw#0;class#LightTank#0" expanded="false" />
+                <element signature="method#setup#0;class#LightTank#0" expanded="false" />
+                <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
+                <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
+                <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
+                <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
+                <element signature="method#dispose#0;class#LightTank#0" expanded="false" />
+                <element signature="method#resize#0;class#LightTank#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SplashAndLoadScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java">
+      <file leaf-file-name="GameScreen.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="19" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1998">
+            <state line="52" column="43" selection-start="1979" selection-end="1979" vertical-scroll-proportion="0.0" vertical-offset="274" max-vertical-offset="2502">
+              <folding>
+                <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VisualizerScreen.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="75" column="35" selection-start="2631" selection-end="2631" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1782">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Effects.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="BeatCore.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/BeatCore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="220" column="14" selection-start="5711" selection-end="5711" vertical-scroll-proportion="0.0" vertical-offset="2235" max-vertical-offset="2952">
+              <folding>
+                <element signature="method#getScoreValue#0;class#BeatCore#0" expanded="false" />
+                <element signature="method#checkIsTouched#0;class#BeatCore#0" expanded="false" />
+                <element signature="method#draw#0;class#BeatCore#0" expanded="false" />
+                <element signature="method#reset#0;class#BeatCore#0" expanded="false" />
+                <element signature="method#init#0;class#BeatCore#0" expanded="false" />
+                <element signature="method#isDead#0;class#BeatCore#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Effects.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/Effects.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="13" selection-start="527" selection-end="527" vertical-scroll-proportion="0.095744684" vertical-offset="0" max-vertical-offset="2214">
+            <state line="16" column="13" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0" vertical-offset="1527" max-vertical-offset="2214">
               <folding />
             </state>
           </provider>
@@ -173,15 +215,15 @@
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ChooseSongScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/LoadScreen.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ReadyScreen.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/HeadsUpDisplay.java" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/BeatCore.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/HeadsUpDisplay.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java" />
       </list>
     </option>
   </component>
@@ -438,7 +480,13 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="Desktop" />
       <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
       <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
@@ -567,24 +615,24 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3992298" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.225" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31835687" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20924261" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298611" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
@@ -609,25 +657,24 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="485" selection-end="485" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="1530">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="106" column="0" selection-start="3648" selection-end="3744" vertical-scroll-proportion="0.0" vertical-offset="1908" max-vertical-offset="2700">
           <folding>
             <element signature="docComment;class#LightTank#0" expanded="false" />
             <element signature="method#instance#0;class#LightTank#0" expanded="false" />
+            <element signature="e#1301#1367#0" expanded="false" />
             <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
+            <element signature="method#spawnLight#0;class#LightTank#0" expanded="false" />
+            <element signature="method#update#0;class#LightTank#0" expanded="false" />
+            <element signature="method#draw#0;class#LightTank#0" expanded="false" />
+            <element signature="method#setup#0;class#LightTank#0" expanded="false" />
             <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
-            <element signature="method#jerkAll#0;class#LightTank#0" expanded="false" />
+            <element signature="method#dispose#0;class#LightTank#0" expanded="false" />
+            <element signature="method#resize#0;class#LightTank#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -652,12 +699,18 @@
           <folding>
             <element signature="docComment;class#LightTank#0" expanded="false" />
             <element signature="method#instance#0;class#LightTank#0" expanded="false" />
+            <element signature="e#1301#1367#0" expanded="false" />
             <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
+            <element signature="method#spawnLight#0;class#LightTank#0" expanded="false" />
+            <element signature="method#update#0;class#LightTank#0" expanded="false" />
+            <element signature="method#draw#0;class#LightTank#0" expanded="false" />
+            <element signature="method#setup#0;class#LightTank#0" expanded="false" />
             <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
-            <element signature="method#jerkAll#0;class#LightTank#0" expanded="false" />
+            <element signature="method#dispose#0;class#LightTank#0" expanded="false" />
+            <element signature="method#resize#0;class#LightTank#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -686,7 +739,9 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="29" selection-start="628" selection-end="628" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3348">
-          <folding />
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -696,12 +751,18 @@
           <folding>
             <element signature="docComment;class#LightTank#0" expanded="false" />
             <element signature="method#instance#0;class#LightTank#0" expanded="false" />
+            <element signature="e#1301#1367#0" expanded="false" />
             <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
+            <element signature="method#spawnLight#0;class#LightTank#0" expanded="false" />
+            <element signature="method#update#0;class#LightTank#0" expanded="false" />
+            <element signature="method#draw#0;class#LightTank#0" expanded="false" />
+            <element signature="method#setup#0;class#LightTank#0" expanded="false" />
             <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
             <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
-            <element signature="method#jerkAll#0;class#LightTank#0" expanded="false" />
+            <element signature="method#dispose#0;class#LightTank#0" expanded="false" />
+            <element signature="method#resize#0;class#LightTank#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -716,7 +777,9 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="92" column="40" selection-start="2749" selection-end="2749" vertical-scroll-proportion="0.0" vertical-offset="1656" max-vertical-offset="2880">
-          <folding />
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -730,7 +793,9 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="37" column="20" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.0" vertical-offset="666" max-vertical-offset="2160">
-          <folding />
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -744,7 +809,9 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="166" column="40" selection-start="4629" selection-end="4629" vertical-scroll-proportion="0.0" vertical-offset="2160" max-vertical-offset="2160">
-          <folding />
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -770,7 +837,9 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="39" column="0" selection-start="1222" selection-end="1222" vertical-scroll-proportion="0.0" vertical-offset="702" max-vertical-offset="2844">
-          <folding />
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -882,30 +951,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="109" column="9" selection-start="3227" selection-end="3227" vertical-scroll-proportion="0.0" vertical-offset="1012" max-vertical-offset="2088">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ReadyScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="30" selection-start="891" selection-end="891" vertical-scroll-proportion="0.42553192" vertical-offset="22" max-vertical-offset="774">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/UiScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="22" selection-start="239" selection-end="239" vertical-scroll-proportion="0.04255319" vertical-offset="40" max-vertical-offset="792">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="0" selection-start="2327" selection-end="2327" vertical-scroll-proportion="0.0" vertical-offset="864" max-vertical-offset="2034">
           <folding />
         </state>
       </provider>
@@ -928,22 +976,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/BeatCore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="91" column="8" selection-start="2831" selection-end="2831" vertical-scroll-proportion="0.3324468" vertical-offset="1388" max-vertical-offset="2952">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getScoreValue#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#checkIsTouched#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#draw#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#reset#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#init#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#isDead#0;class#BeatCore#0" expanded="false" />
-            <element signature="method#getEnergyColor#0;class#BeatCore#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/CoreManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="41" selection-start="462" selection-end="462" vertical-scroll-proportion="-0.74202126" vertical-offset="810" max-vertical-offset="1710">
@@ -953,53 +985,103 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="25" selection-start="3822" selection-end="3822" vertical-scroll-proportion="0.2632979" vertical-offset="1350" max-vertical-offset="2916">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="178" column="0" selection-start="5802" selection-end="5802" vertical-scroll-proportion="0.6888298" vertical-offset="1660" max-vertical-offset="2412">
-          <folding>
-            <element signature="docComment;class#LightTank#0" expanded="false" />
-            <element signature="method#instance#0;class#LightTank#0" expanded="false" />
-            <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
-            <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
-            <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
-            <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
-            <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
-            <element signature="method#jerkAll#0;class#LightTank#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="27" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0" vertical-offset="108" max-vertical-offset="1332">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="24" selection-start="1307" selection-end="1307" vertical-scroll-proportion="0.0" vertical-offset="202" max-vertical-offset="954">
+        <state line="52" column="24" selection-start="1307" selection-end="1307" vertical-scroll-proportion="0.7606383" vertical-offset="202" max-vertical-offset="954">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="19" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1998">
+        <state line="16" column="19" selection-start="567" selection-end="567" vertical-scroll-proportion="0.0" vertical-offset="785" max-vertical-offset="1998">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/Stopwatch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="13" selection-start="54" selection-end="54" vertical-scroll-proportion="-0.07712766" vertical-offset="112" max-vertical-offset="864">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="130" column="49" selection-start="3657" selection-end="3657" vertical-scroll-proportion="1.8862479" vertical-offset="851" max-vertical-offset="2142">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="185" column="20" selection-start="6426" selection-end="6426" vertical-scroll-proportion="0.0" vertical-offset="959" max-vertical-offset="1854">
+          <folding>
+            <element signature="docComment;class#LightTank#0" expanded="false" />
+            <element signature="method#instance#0;class#LightTank#0" expanded="false" />
+            <element signature="e#1301#1367#0" expanded="false" />
+            <element signature="method#spawnWall#0;class#LightTank#0" expanded="false" />
+            <element signature="method#spawnLight#0;class#LightTank#0" expanded="false" />
+            <element signature="method#update#0;class#LightTank#0" expanded="false" />
+            <element signature="method#draw#0;class#LightTank#0" expanded="false" />
+            <element signature="method#setup#0;class#LightTank#0" expanded="false" />
+            <element signature="method#changeColor#0;class#LightTank#0" expanded="false" />
+            <element signature="docComment;method#pulseAll#0;class#LightTank#0" expanded="false" />
+            <element signature="method#pulseAll#0;class#LightTank#0" expanded="false" />
+            <element signature="docComment;method#jerkAll#0;class#LightTank#0" expanded="false" />
+            <element signature="method#dispose#0;class#LightTank#0" expanded="false" />
+            <element signature="method#resize#0;class#LightTank#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/UiScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="22" selection-start="239" selection-end="239" vertical-scroll-proportion="0.054329373" vertical-offset="40" max-vertical-offset="792">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="43" selection-start="1979" selection-end="1979" vertical-scroll-proportion="0.0" vertical-offset="274" max-vertical-offset="2502">
+          <folding>
+            <element signature="method#switchstate#0;class#GameScreen#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="75" column="35" selection-start="2631" selection-end="2631" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1782">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/Effects.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="527" selection-end="527" vertical-scroll-proportion="0.095744684" vertical-offset="0" max-vertical-offset="2214">
+        <state line="16" column="13" selection-start="527" selection-end="527" vertical-scroll-proportion="0.0" vertical-offset="1527" max-vertical-offset="2214">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/BeatCore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="220" column="14" selection-start="5711" selection-end="5711" vertical-scroll-proportion="0.0" vertical-offset="2235" max-vertical-offset="2952">
+          <folding>
+            <element signature="method#getScoreValue#0;class#BeatCore#0" expanded="false" />
+            <element signature="method#checkIsTouched#0;class#BeatCore#0" expanded="false" />
+            <element signature="method#draw#0;class#BeatCore#0" expanded="false" />
+            <element signature="method#reset#0;class#BeatCore#0" expanded="false" />
+            <element signature="method#init#0;class#BeatCore#0" expanded="false" />
+            <element signature="method#isDead#0;class#BeatCore#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="16" selection-start="1583" selection-end="1583" vertical-scroll-proportion="0.3582343" vertical-offset="491" max-vertical-offset="1350">
           <folding />
         </state>
       </provider>

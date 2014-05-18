@@ -217,7 +217,8 @@ class BeatCore implements IUpdateable, IDrawable, Poolable {
 		else if (energy > .15f)
 			color = Color.BLUE;
 		else
-			color = new Color(141, 0, 255, 1);
+            color = Color.MAGENTA;
+			//color = new Color(141, 0, 255, 1);
 		
 		return color;
 	}

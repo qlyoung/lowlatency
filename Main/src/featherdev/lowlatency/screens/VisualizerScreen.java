@@ -73,6 +73,7 @@ public class VisualizerScreen implements Screen {
                 }
                 break;
             case PAUSED:
+                lightshow.draw(null);
                 pausedMenu.act();
                 pausedMenu.draw();
                 break;

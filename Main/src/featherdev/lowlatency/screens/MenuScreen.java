@@ -71,7 +71,6 @@ public class MenuScreen extends UiScreen {
 		fountain.setPosition(Gdx.graphics.getWidth() / 2f,
 				Gdx.graphics.getHeight() / 2f);
 		fountain.start();
-		LightTank.instance().update(5);
 
 		// globals
 		Holder.clear();
@@ -128,4 +127,8 @@ public class MenuScreen extends UiScreen {
 		super.show();
 	}
 
+    public void resize(int width, int height) {
+        LightTank.instance().resize(width, height);
+        super.resize(width, height);
+    }
 }
