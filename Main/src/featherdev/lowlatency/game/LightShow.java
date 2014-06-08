@@ -28,7 +28,9 @@ public class LightShow implements IUpdateable, IDrawable {
         events = beats.iterator();
         nextBeat = events.next();
 
-        // configure lights
+        // performance related hack, decrease the number of lights if we're on android
+        // this is off until testing proves that it's necessary
+        /*
         switch (Gdx.app.getType()){
             case Android:
                 LightTank.instance().setup(3, Utilities.getRandomColor(), false);
@@ -37,16 +39,19 @@ public class LightShow implements IUpdateable, IDrawable {
                 LightTank.instance().setup(6, Utilities.getRandomColor(), false);
                 break;
         }
+        */
 
 	}
 	
 	public void update(float delta) {
-        while (nextBeat != null && MusicPlayer.instance().time() >= nextBeat.timeMs) {
+        // react to beats that just hit
+        while (events.hasNext() && MusicPlayer.instance().time() >= nextBeat.timeMs) {
 
             // out with the old, in with the new
             if (window.size() == WINDOW_SIZE)
                 window.removeFirst();
 
+            // we don't like magenta because there's too much of it
             if (BeatCore.getEnergyColor(nextBeat.energy) != Color.MAGENTA)
                 window.addLast(BeatCore.getEnergyColor(nextBeat.energy));
 

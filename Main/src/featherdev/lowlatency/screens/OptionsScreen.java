@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import featherdev.lowlatency.LowLatency;
+import featherdev.lowlatency.subsystems.LightTank;
 import featherdev.lowlatency.subsystems.MusicPlayer;
 
 public class OptionsScreen extends UiScreen {
@@ -78,16 +79,15 @@ public class OptionsScreen extends UiScreen {
 	}
 
 	public void render(float delta) {
-
-		// update
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-			game.setScreen(new MenuScreen());
 		
 		stage.act();
-
-		// draw
 		stage.draw();
+        LightTank.instance().update(delta);
+        LightTank.instance().draw(null);
 
 	}
 
+    public void dispose() {
+        super.dispose();
+    }
 }

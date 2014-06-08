@@ -11,7 +11,7 @@ public class DesktopStarter {
 		cfg.title = "__low_latency__";
 		cfg.useGL30 = false;
 		cfg.width = 1280;
-		cfg.height = 720;
+		cfg.height = 700;
 		cfg.resizable = false;
 		
 		new LwjglApplication(new LowLatency(), cfg);

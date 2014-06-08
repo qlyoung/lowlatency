@@ -1,9 +1,9 @@
 package featherdev.lowlatency.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,7 +20,6 @@ import featherdev.lowlatency.subsystems.HeadsUpDisplay;
 import featherdev.lowlatency.subsystems.Holder;
 import featherdev.lowlatency.subsystems.MusicPlayer;
 import featherdev.lowlatency.subsystems.ScoreRecords;
-import featherdev.lowlatency.subsystems.Stats;
 
 public class GameScreen implements Screen {
 
@@ -30,19 +29,15 @@ public class GameScreen implements Screen {
     WorldState state;
 
     LowLatency game;
-    SpriteBatch batch;
     LightShow lightShow;
     CoreManager coremanager;
-    HeadsUpDisplay hud;
     Stage pausedMenu;
 
     public GameScreen() {
         game = LowLatency.instance();
-        batch = game.batch;
         lightShow = new LightShow(Holder.rawmap);
         coremanager = new CoreManager(Holder.beatmap, Holder.difficulty);
-        hud = HeadsUpDisplay.instance();
-        hud.setSongInfo(Holder.song.getArtist(), Holder.song.getTitle());
+        HeadsUpDisplay.instance().setSongInfo(Holder.song.getArtist(), Holder.song.getTitle());
 
         pausedMenu = new Stage();
         Skin skin = LowLatency.instance().skin;
@@ -72,9 +67,11 @@ public class GameScreen implements Screen {
         table.add(quitToMenu);
         pausedMenu.addActor(table);
 
-        Stats.instance().clear();
         MusicPlayer.instance().load(Holder.song.getHandle());
 
+        // shitty performance shit
+        System.gc();
+        
         state = WorldState.MAIN;
     }
 
@@ -97,7 +94,7 @@ public class GameScreen implements Screen {
                 break;
             case OUTRO:
                 if (state == WorldState.MAIN){
-                    hud.fadeout(1);
+                    HeadsUpDisplay.instance().fadeout(1);
                     state = WorldState.OUTRO;
                 }
                 break;
@@ -111,34 +108,38 @@ public class GameScreen implements Screen {
                 // update
                 lightShow.update(delta);
                 coremanager.update(delta);
-                hud.update(delta);
+                HeadsUpDisplay.instance().update(delta);
 
                 // draw
-                lightShow.draw(batch);
-                coremanager.draw(batch);
-                Effects.instance().render(delta, batch);
-                hud.draw(game.batch);
+                lightShow.draw(game.batch);
+                coremanager.draw(game.batch);
+                Effects.instance().render(delta, game.batch);
+                HeadsUpDisplay.instance().draw(game.batch);
 
                 // state
                 if (!MusicPlayer.instance().isPlaying())
                     switchstate(WorldState.OUTRO);
                 else if (Gdx.input.justTouched() && Gdx.input.getX() < 30 && Gdx.input.getY() < 40)
-                    switchstate((WorldState.PAUSED));
+                    switchstate(WorldState.PAUSED);
+                else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+                    switchstate(WorldState.PAUSED);
 
                 break;
 
 
             case PAUSED:
-                lightShow.draw(batch);
+                lightShow.draw(game.batch);
+                coremanager.draw(game.batch);
+                HeadsUpDisplay.instance().draw(game.batch);
                 pausedMenu.act();
-                pausedMenu.draw();
+                //pausedMenu.draw();
                 break;
 
             case OUTRO:
-                hud.update(delta);
-                hud.draw(game.batch);
+                HeadsUpDisplay.instance().update(delta);
+                HeadsUpDisplay.instance().draw(game.batch);
 
-                if (hud.getAlpha() == 0f)
+                if (HeadsUpDisplay.instance().getAlpha() == 0f)
                     game.setScreen(new FinishScreen());
                 break;
         }
@@ -147,8 +148,8 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) { }
 
     public void show() {
-        // fade in hud
-        hud.fadein(1f);
+        // fade in HeadsUpDisplay.instance()
+        HeadsUpDisplay.instance().fadein(1f);
         // show player's last score
         int score = ScoreRecords.instance().readScore(Holder.song.getHandle());
         if (score != -1) {
@@ -158,7 +159,7 @@ public class GameScreen implements Screen {
                     - bounds.width / 2f, Gdx.graphics.getHeight()
                     - (bounds.height + 10f));
 
-            hud.showMessage(message, top, 5f, .2f);
+            HeadsUpDisplay.instance().showMessage(message, top, 5f, .2f);
         }
         // play the music
         MusicPlayer.instance().play();
@@ -173,9 +174,7 @@ public class GameScreen implements Screen {
     public void resume() { }
 
     public void dispose() {
-        MusicPlayer.instance().dispose();
-        Effects.instance().dispose();
-        hud.dispose();
+        pausedMenu.dispose();
     }
 
 }

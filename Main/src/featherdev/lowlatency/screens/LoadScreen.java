@@ -43,8 +43,7 @@ public class LoadScreen extends UiScreen {
 				decoder = new GdxOggDecoder(audiofile);
 			else
 				onLoadComplete(false);
-			
-			
+
 			rawbeats = BeatDetector.detectBeats(decoder, BeatDetector.SENSITIVITY_AGGRESSIVE);
 			beatmap  = BeatsProcessor.thinBeats(rawbeats, 120);
 			beatmap  = BeatsProcessor.dropWeakBeats(beatmap, Holder.difficulty.minBeatEnergy);
@@ -121,4 +120,8 @@ public class LoadScreen extends UiScreen {
 		loadThread.start();
 		super.show();
 	}
+
+    public void dispose() {
+        super.dispose();
+    }
 }

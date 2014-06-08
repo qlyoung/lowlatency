@@ -25,7 +25,7 @@ public class FinishScreen extends UiScreen {
 		Gdx.input.setInputProcessor(stage);
 		root.setFillParent(true);
 		
-		int totalPoints = Stats.instance().points * Holder.difficulty.scoreMultiplier;
+		int totalPoints = Stats.points * Holder.difficulty.scoreMultiplier;
 		ScoreRecords.instance().writeScore(Holder.song.getHandle(), totalPoints);
 		
 		String songinfo = Holder.song.getArtist() + " - " + Holder.song.getTitle();
@@ -42,7 +42,7 @@ public class FinishScreen extends UiScreen {
 		
 		Table summary = new Table();
 		summary.add(new Label("Raw Points", game.skin)).left();
-		summary.add(new Label(String.valueOf(Stats.instance().points), game.skin)).right();
+		summary.add(new Label(String.valueOf(Stats.points), game.skin)).right();
 		summary.row();
 		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
 		summary.add(new Label(String.valueOf(Holder.difficulty.scoreMultiplier), game.skin)).right();
@@ -61,9 +61,12 @@ public class FinishScreen extends UiScreen {
 	}
 
 	public void render(float delta) {
-		
 		stage.act();
 		stage.draw();
 	}
 
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
 }

@@ -13,10 +13,10 @@ import featherdev.lowlatency.Utilities;
 import featherdev.lowlatency.subsystems.Holder;
 import featherdev.lowlatency.subsystems.LightTank;
 import featherdev.lowlatency.subsystems.MusicPlayer;
+import featherdev.lowlatency.subsystems.Stats;
 
 public class MenuScreen extends UiScreen {
 
-	ParticleEffect fountain;
 	Table root;
     Viewport viewport;
 
@@ -65,15 +65,10 @@ public class MenuScreen extends UiScreen {
 
 		// background
 		LightTank.instance().setup(6, Utilities.getRandomColor(), true);
-		fountain = new ParticleEffect();
-		fountain.load(Gdx.files.internal("effects/space.p"),
-				Gdx.files.internal("effects/"));
-		fountain.setPosition(Gdx.graphics.getWidth() / 2f,
-				Gdx.graphics.getHeight() / 2f);
-		fountain.start();
 
 		// globals
 		Holder.clear();
+        Stats.clear();
 
 		// music
 		FileHandle musicpath;
@@ -98,22 +93,10 @@ public class MenuScreen extends UiScreen {
 	}
 
 	public void render(float delta) {
-
-		// update
-		LightTank.instance().update(delta);
-		stage.act(delta);
-
-		// draw
-		game.batch.setProjectionMatrix(viewport.getCamera().combined);
-		game.batch.begin();
-		{
-			fountain.draw(game.batch, delta);
-		}
-		game.batch.end();
-
-		LightTank.instance().draw(null);
-		stage.draw();
-
+        LightTank.instance().update(delta);
+        LightTank.instance().draw(null);
+        stage.act(delta);
+        stage.draw();
 	}
 
 	public void show() {
@@ -130,5 +113,9 @@ public class MenuScreen extends UiScreen {
     public void resize(int width, int height) {
         LightTank.instance().resize(width, height);
         super.resize(width, height);
+    }
+
+    public void dispose() {
+        super.dispose();
     }
 }

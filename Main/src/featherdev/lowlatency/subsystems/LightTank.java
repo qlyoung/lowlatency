@@ -45,28 +45,25 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
             SHRINK_RATE_METRES_PER_SECOND;
 
     private LightTank() {
-        // set camera viewport to 10, 6 but adjust one dimension as needed
-        // to match the aspect ratio of the screen. Camera viewport is centered
-        // on (0, 0)
+        // start with world viewport of 10 x 6 & automatically adjust to match
+        // screen aspect ratio. Cam centered at (0, 0)
         viewport = new ExtendViewport(10, 6);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        System.out.println(
-                viewport.getViewportWidth() + " : " + viewport.getViewportHeight() + "\n"
-                        + viewport.getWorldWidth() + " : " + viewport.getWorldHeight());
 
         world = new World(new Vector2(), true);
         rh = new RayHandler(world);
         rh.setCombinedMatrix(viewport.getCamera().combined);
+        rh.setBlur(true);
+        rh.setCulling(true);
         stopwatch = new Stopwatch();
         playful = false;
         random = new Random();
 
-        // diameter of each light should be 1/4 world's smaller dimension
+        // radius of each light should be 1/2 world's smaller dimension
         NORMAL_LIGHT_RADIUS = viewport.getWorldHeight() / 2f;
         // maximum should be 4 times normal size
         MAX_LIGHT_RADIUS = 4 * NORMAL_LIGHT_RADIUS;
-        // body radius should be super small, we'll do 1/10 light radius
+        // physics body radius should be super small, we'll do 1/10 light radius
         LIGHT_BODY_RADIUS = NORMAL_LIGHT_RADIUS / 10f;
         // at max velocity lights should take 1/2 second to cross the screen
         MAX_VELOCITY_METRES_PER_SECOND = viewport.getWorldWidth() * 2f;
@@ -116,8 +113,8 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
         float y = viewport.getWorldHeight() /2f;
         PointLight p = new PointLight(rh, 100, c, NORMAL_LIGHT_RADIUS, x, y);
         p.attachToBody(lightbody, 0, 0);
-        p.setXray(true);
         p.setSoft(true);
+        p.setXray(true);
 
         p.setPosition(viewport.getWorldWidth() / 2f, viewport.getWorldHeight() / 2f);
     }
@@ -137,10 +134,12 @@ public class LightTank implements IUpdateable, IDrawable, Disposable {
             if (l.getDistance() > NORMAL_LIGHT_RADIUS)
                 l.setDistance(l.getDistance() - delta * SHRINK_RATE_METRES_PER_SECOND);
         }
+
+        rh.update();
     }
 
     public void draw(SpriteBatch batch) {
-        rh.updateAndRender();
+        rh.render();
     }
 
     public void setup(int numLights, Color lightsColor, boolean playful) {

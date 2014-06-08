@@ -55,7 +55,7 @@ public class HeadsUpDisplay implements IUpdateable, IDrawable, Disposable {
 	public void update(float delta) {
 		// update points
 		Label score = (Label) stage.getRoot().findActor("score");
-		String text = String.format("%08d", Stats.instance().points);		
+		String text = String.format("%08d", Stats.points);
 		score.setText(text);
 		
 		stage.act(delta);

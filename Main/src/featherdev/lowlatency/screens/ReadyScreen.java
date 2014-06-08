@@ -43,4 +43,7 @@ public class ReadyScreen extends UiScreen {
 		super.show();
 	}
 
+    public void dispose() {
+        super.dispose();
+    }
 }
