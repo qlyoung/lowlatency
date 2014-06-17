@@ -132,7 +132,7 @@ public class GameScreen implements Screen {
                 coremanager.draw(game.batch);
                 HeadsUpDisplay.instance().draw(game.batch);
                 pausedMenu.act();
-                //pausedMenu.draw();
+                pausedMenu.draw();
                 break;
 
             case OUTRO:

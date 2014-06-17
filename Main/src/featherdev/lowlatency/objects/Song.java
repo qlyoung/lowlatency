@@ -1,7 +1,9 @@
 package featherdev.lowlatency.objects;
 
 import java.io.IOException;
+import java.util.Iterator;
 
+import adamb.vorbis.CommentField;
 import org.cmc.music.metadata.MusicMetadata;
 import org.cmc.music.myid3.MyID3;
 
@@ -38,10 +40,12 @@ public class Song {
 			
 			try {comments = VorbisIO.readComments(file.file());}
 			catch (IOException e) { Gdx.app.log("song", "ogg metadata read failed"); }
-			
+
 			if (comments != null){
-				title = comments.fields.get(0).value;
-				artist = comments.fields.get(1).value;
+                if (comments.fields.size() > 0)
+                    title = comments.fields.get(0).value;
+                if (comments.fields.size() > 1)
+                    artist = comments.fields.get(1).value;
 			}
 		}
 		
