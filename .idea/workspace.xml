@@ -107,7 +107,7 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Android/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="612">
+            <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.07180851" vertical-offset="0" max-vertical-offset="752">
               <folding />
             </state>
           </provider>
@@ -139,7 +139,6 @@
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/LightBox.java" />
         <option value="$PROJECT_DIR$/Android/assets/ui/skin.json" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/MusicPlayer.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightBox.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/CoreManager.java" />
@@ -147,7 +146,6 @@
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/Stats.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/HeadsUpDisplay.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/Effects.java" />
-        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ReadyScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/OptionsScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/FinishScreen.java" />
@@ -162,6 +160,8 @@
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java" />
         <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/Song.java" />
         <option value="$PROJECT_DIR$/Android/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java" />
+        <option value="$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java" />
       </list>
     </option>
   </component>
@@ -198,16 +198,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -346,70 +336,14 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Desktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="drawable-hdpi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Android" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -635,7 +569,6 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32991013" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2169448" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -646,10 +579,11 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298611" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32991013" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -674,37 +608,27 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="20" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.0" vertical-offset="666" max-vertical-offset="2160">
-          <folding />
-        </state>
+        <state line="37" column="20" selection-start="1201" selection-end="1201" vertical-scroll-proportion="0.0" vertical-offset="666" max-vertical-offset="2160" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1530">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="360" max-vertical-offset="1530" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="166" column="40" selection-start="4629" selection-end="4629" vertical-scroll-proportion="0.0" vertical-offset="2160" max-vertical-offset="2160">
-          <folding />
-        </state>
+        <state line="166" column="40" selection-start="4629" selection-end="4629" vertical-scroll-proportion="0.0" vertical-offset="2160" max-vertical-offset="2160" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530">
-          <folding />
-        </state>
+        <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android/assets/ui/skin.json">
@@ -719,9 +643,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1222" selection-end="1222" vertical-scroll-proportion="0.0" vertical-offset="702" max-vertical-offset="2844">
-          <folding />
-        </state>
+        <state line="39" column="0" selection-start="1222" selection-end="1222" vertical-scroll-proportion="0.0" vertical-offset="702" max-vertical-offset="2844" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android/assets/textures/splash.png">
@@ -779,11 +701,6 @@
         <state line="14" column="0" selection-start="507" selection-end="507" vertical-scroll-proportion="0.68560606" vertical-offset="53" max-vertical-offset="342" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="24" selection-start="1307" selection-end="1307" vertical-scroll-proportion="0.8885077" vertical-offset="256" max-vertical-offset="954" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/Holder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="13" selection-start="208" selection-end="208" vertical-scroll-proportion="0.12349914" vertical-offset="0" max-vertical-offset="583" />
@@ -814,18 +731,9 @@
         <state line="8" column="22" selection-start="239" selection-end="239" vertical-scroll-proportion="0.12349914" vertical-offset="0" max-vertical-offset="792" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="8" selection-start="2757" selection-end="2757" vertical-scroll-proportion="0.7221269" vertical-offset="1397" max-vertical-offset="1998">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ReadyScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="0" selection-start="1166" selection-end="1166" vertical-scroll-proportion="0.6603774" vertical-offset="245" max-vertical-offset="828">
-          <folding />
-        </state>
+        <state line="44" column="0" selection-start="1166" selection-end="1166" vertical-scroll-proportion="0.6603774" vertical-offset="245" max-vertical-offset="828" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/OptionsScreen.java">
@@ -840,9 +748,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="8" selection-start="2294" selection-end="2294" vertical-scroll-proportion="0.6295026" vertical-offset="749" max-vertical-offset="1332">
-          <folding />
-        </state>
+        <state line="71" column="8" selection-start="2294" selection-end="2294" vertical-scroll-proportion="0.6295026" vertical-offset="749" max-vertical-offset="1332" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/Stopwatch.java">
@@ -857,16 +763,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/LoadScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="0" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.0" vertical-offset="463" max-vertical-offset="2394">
-          <folding />
-        </state>
+        <state line="45" column="0" selection-start="1280" selection-end="1280" vertical-scroll-proportion="0.0" vertical-offset="463" max-vertical-offset="2394" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/VisualizerScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="38" selection-start="3050" selection-end="3050" vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="1872">
-          <folding />
-        </state>
+        <state line="82" column="38" selection-start="3050" selection-end="3050" vertical-scroll-proportion="0.0" vertical-offset="731" max-vertical-offset="1872" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/game/LightShow.java">
@@ -906,25 +808,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/FinishScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="51" selection-start="1498" selection-end="1498" vertical-scroll-proportion="0.7180851" vertical-offset="0" max-vertical-offset="1152">
-          <folding />
-        </state>
+        <state line="44" column="51" selection-start="1498" selection-end="1498" vertical-scroll-proportion="0.7180851" vertical-offset="0" max-vertical-offset="1152" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/GameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="19" selection-start="1097" selection-end="1097" vertical-scroll-proportion="0.08111702" vertical-offset="155" max-vertical-offset="2934">
-          <folding />
-        </state>
+        <state line="31" column="19" selection-start="1097" selection-end="1097" vertical-scroll-proportion="0.08111702" vertical-offset="155" max-vertical-offset="2934" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="121" column="0" selection-start="3997" selection-end="3997" vertical-scroll-proportion="1.3875968" vertical-offset="1300" max-vertical-offset="2124">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="121" column="0" selection-start="3997" selection-end="3997" vertical-scroll-proportion="1.3875968" vertical-offset="1300" max-vertical-offset="2124" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/subsystems/LightTank.java">
@@ -941,30 +835,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/Song.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="58" selection-start="1318" selection-end="1318" vertical-scroll-proportion="1.3090909" vertical-offset="0" max-vertical-offset="1026">
-          <folding />
-        </state>
+        <state line="47" column="58" selection-start="1318" selection-end="1318" vertical-scroll-proportion="1.3090909" vertical-offset="0" max-vertical-offset="1026" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ChooseSongScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="0" selection-start="3725" selection-end="3725" vertical-scroll-proportion="0.7313131" vertical-offset="196" max-vertical-offset="1062">
-          <folding>
-            <element signature="class#FileBrowser#0;class#ChooseSongScreen#0" expanded="false" />
-          </folding>
-        </state>
+        <state line="145" column="0" selection-start="3725" selection-end="3725" vertical-scroll-proportion="0.7313131" vertical-offset="196" max-vertical-offset="1062" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/Main.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="0" selection-start="503" selection-end="503" vertical-scroll-proportion="0.47272727" vertical-offset="0" max-vertical-offset="495">
+        <state line="13" column="0" selection-start="503" selection-end="503" vertical-scroll-proportion="0.47272727" vertical-offset="0" max-vertical-offset="495" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SplashAndLoadScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="59" selection-start="2096" selection-end="2096" vertical-scroll-proportion="-0.2925532" vertical-offset="1318" max-vertical-offset="2070">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/LowLatency.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="0" selection-start="572" selection-end="572" vertical-scroll-proportion="0.21010639" vertical-offset="76" max-vertical-offset="954">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="612">
+        <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.07180851" vertical-offset="0" max-vertical-offset="752">
           <folding />
         </state>
       </provider>

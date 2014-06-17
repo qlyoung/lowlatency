@@ -19,7 +19,7 @@ import featherdev.lowlatency.subsystems.ScoreRecords;
  */
 public class SplashAndLoadScreen implements Screen {
 	
-	Texture t;
+	Texture splash;
 	OrthographicCamera cam;
 	SpriteBatch s;
 	long l;
@@ -28,7 +28,7 @@ public class SplashAndLoadScreen implements Screen {
 	public SplashAndLoadScreen(){
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false);
-		t = new Texture(Gdx.files.internal("textures/splash.png"));
+		splash = new Texture(Gdx.files.internal("textures/splash.png"));
 		s = new SpriteBatch();
 		loaded = b = false;
 		l = 0;
@@ -48,7 +48,7 @@ public class SplashAndLoadScreen implements Screen {
 		g.difficulties = new Difficulty[3];
 		g.difficulties[0] = new Difficulty(800, .01f, "Relaxed", 1);
 		g.difficulties[1] = new Difficulty(650, .005f, "Normal", 2);
-		g.difficulties[2] = new Difficulty(600, .003f, "Altered", 3);
+		g.difficulties[2] = new Difficulty(550, .003f, "Altered", 3);
 
 		// music
 		MusicPlayer.instance();
@@ -68,7 +68,9 @@ public class SplashAndLoadScreen implements Screen {
 	}
 	
 	public void render(float delta) {
-		
+
+        // we need the splash to draw before we call load()
+        // 'b' indicates whether we've drawn the splash yet
 		if (b && !loaded){
 			load();
 			loaded = true;
@@ -82,13 +84,15 @@ public class SplashAndLoadScreen implements Screen {
 				return;
 			}
 		}
-		
-		float x = (Gdx.graphics.getWidth() - t.getWidth()) / 2f;
-		float y = (Gdx.graphics.getHeight() - t.getHeight()) / 2f;
+
+        // 'b' is a marker that indicates whether this next bit has
+        // executed yet
+		float x = (Gdx.graphics.getWidth() - splash.getWidth()) / 2f;
+		float y = (Gdx.graphics.getHeight() - splash.getHeight()) / 2f;
 		
 		s.setProjectionMatrix(cam.combined);
 		s.begin();
-		s.draw(t, x, y);
+		s.draw(splash, x, y);
 		s.end();
 		
 		b = true;
