@@ -26,7 +26,7 @@ public class ConfigScreen extends UiScreen {
 		backToMenu.addListener(new ClickListener() {
 			public void clicked(InputEvent event, float x, float y) {
 				dispose();
-				game.setScreen(new ChooseSongScreen());
+				game.setScreen(new SelectSongScreen());
 				super.clicked(event, x, y);
 			}
 		});

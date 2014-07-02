@@ -32,7 +32,7 @@ public class MenuScreen extends UiScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 dispose();
-                game.setScreen(new ChooseSongScreen());
+                game.setScreen(new SelectSongScreen());
                 super.clicked(event, x, y);
             }
         });
@@ -75,20 +75,28 @@ public class MenuScreen extends UiScreen {
         FileHandle musicpath;
         switch (Gdx.app.getType()) {
             case Android:
-                // work around Music's inability to load Internal files on Android
-                Gdx.files.internal("audio/title.mp3").copyTo(
-                        Gdx.files.local("title.mp3"));
                 musicpath = Gdx.files.local("title.mp3");
                 break;
             case Desktop:
                 musicpath = Gdx.files.internal("audio/title.mp3");
                 break;
             default:
-                musicpath = null;
+                Gdx.app.error("[!]", "Unsupported System: " + Gdx.app.getType().toString());
+                return;
         }
-        if (!MusicPlayer.instance().isPlaying()) {
-            MusicPlayer.instance().load(musicpath);
-            MusicPlayer.instance().setLooping(true);
+        if (!musicpath.exists()){
+            Gdx.app.error("[!]", "Cannot locate assets");
+            return;
+        }
+
+        try {
+            if (!MusicPlayer.instance().isPlaying()) {
+                MusicPlayer.instance().load(musicpath);
+                MusicPlayer.instance().setLooping(true);
+            }
+        }
+        catch (Exception e){
+            Gdx.app.error("[!]", e.getMessage());
         }
 
     }

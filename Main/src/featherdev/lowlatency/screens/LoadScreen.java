@@ -35,8 +35,8 @@ public class LoadScreen extends UiScreen {
 			LwbdDecoder decoder = null;
 			
 			String extension = audiofile.extension().toLowerCase();
-			
-			System.out.println("[+] Initializing audio analysis system");
+
+            Gdx.app.log("[+]", "Initializing audio analysis system");
 			if (extension.contains("mp3"))
 				decoder = new GdxMp3Decoder(audiofile);
 			else if (extension.contains("ogg"))
@@ -50,8 +50,8 @@ public class LoadScreen extends UiScreen {
 			
 			Holder.rawmap = rawbeats;
 			Holder.beatmap = beatmap;
-			System.out.println("[+] Audio analysis complete.");
-			
+			Gdx.app.log("[+]", "Audio analysis complete.");
+
 			onLoadComplete(true);
 		}
 	}
@@ -67,7 +67,7 @@ public class LoadScreen extends UiScreen {
 		
 		stage = new Stage();
 		Table root = new Table();
-		status = new Label("Loading . . .", game.skin);	
+		status = new Label("Loading, Please Wait . . .", game.skin);
 		root.add(status).left();
 		root.setFillParent(true);
 		stage.addActor(root);

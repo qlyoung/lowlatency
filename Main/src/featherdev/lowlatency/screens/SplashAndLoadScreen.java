@@ -1,5 +1,6 @@
 package featherdev.lowlatency.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -50,12 +51,20 @@ public class SplashAndLoadScreen implements Screen {
 		g.difficulties[1] = new Difficulty(650, .005f, "Normal", 2);
 		g.difficulties[2] = new Difficulty(550, .003f, "Altered", 3);
 
+        // audio resources
+        if (Gdx.app.getType() == Application.ApplicationType.Android)
+            Gdx.files.internal("audio/title.mp3").copyTo(Gdx.files.local("title.mp3"));
+
 		// music
 		MusicPlayer.instance();
 		Gdx.app.log("[+]", "Initialized music player");
+
+        // user data
 		ScoreRecords.instance();
 		Gdx.app.log("[+]", "Initialized records");
-		g.skin = new Skin(Gdx.files.internal("ui/skin.json"), g.textures);
+
+        // UI resources
+        g.skin = new Skin(Gdx.files.internal("ui/skin.json"), g.textures);
 		Gdx.app.log("[+]", "Initialized ui");
 
 		// settings

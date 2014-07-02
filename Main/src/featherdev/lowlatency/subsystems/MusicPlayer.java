@@ -46,6 +46,9 @@ public class MusicPlayer implements Disposable {
     }
 
     public void play() {
+        if (music == null)
+            return;
+
         switch (state) {
             case STOPPED:
                 music.play();
@@ -63,18 +66,27 @@ public class MusicPlayer implements Disposable {
     }
 
     public void pause() {
+        if (music == null)
+            return;
+
         music.pause();
         stopwatch.pause();
         state = PlayerState.PAUSED;
     }
 
     public void stop() {
+        if (music == null)
+            return;
+
         music.stop();
         stopwatch.reset();
         state = PlayerState.STOPPED;
     }
 
     public long time() {
+        if (music == null)
+            return 0;
+
         if (state == PlayerState.STOPPED)
             return 0;
         else
@@ -89,14 +101,23 @@ public class MusicPlayer implements Disposable {
     }
 
     public void setVolume(float volume) {
+        if (music == null)
+            return;
+
         music.setVolume(volume);
     }
 
     public void setLooping(boolean val) {
+        if (music == null)
+            return;
+
         music.setLooping(val);
     }
 
     public void dispose() {
+        if (music == null)
+            return;
+
         music.dispose();
     }
 
