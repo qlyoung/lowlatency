@@ -104,54 +104,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MenuScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/MenuScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="69" selection-start="1255" selection-end="1255" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="2034">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ConfigScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="50" selection-start="1101" selection-end="1101" vertical-scroll-proportion="0.0" vertical-offset="231" max-vertical-offset="1332">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SelectSongScreen.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SelectSongScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="71" selection-start="855" selection-end="855" vertical-scroll-proportion="0.0" vertical-offset="213" max-vertical-offset="1260">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#SelectSongScreen#0;class#SelectSongScreen#0" expanded="false" />
-                <element signature="method#dialog#0;class#SelectSongScreen#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileBrowserWidget.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/FileBrowserWidget.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="25" selection-start="1404" selection-end="1404" vertical-scroll-proportion="0.0" vertical-offset="258" max-vertical-offset="1566">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="class#ListItem#0;class#FileBrowserWidget#0" expanded="false" />
-                <element signature="method#setDirectory#0;class#FileBrowserWidget#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Android/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="612">
+            <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="594">
               <folding />
             </state>
           </provider>
@@ -212,10 +168,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
     <option name="y" value="29" />
-    <option name="width" value="1442" />
-    <option name="height" value="876" />
+    <option name="width" value="1440" />
+    <option name="height" value="871" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -244,6 +199,16 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LowLatency" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -404,16 +369,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="LowLatency" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -627,14 +582,13 @@
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="ToolWindowManager">
-    <frame x="-1" y="29" width="1442" height="876" extended-state="6" />
+    <frame x="0" y="29" width="1440" height="871" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3992298" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -652,8 +606,9 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298611" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32991013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="UnknownFeatures">
@@ -676,6 +631,13 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Android/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="612">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="0" selection-start="632" selection-end="632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530" />
@@ -906,9 +868,7 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/Main/libs/gdx-sources.jar!/com/badlogic/gdx/scenes/scene2d/utils/Selection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="0" selection-start="2484" selection-end="2484" vertical-scroll-proportion="0.33200794" vertical-offset="1309" max-vertical-offset="4266">
-          <folding />
-        </state>
+        <state line="92" column="0" selection-start="2484" selection-end="2484" vertical-scroll-proportion="0.33200794" vertical-offset="1309" max-vertical-offset="4266" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/ConfigScreen.java">
@@ -928,28 +888,20 @@
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/screens/SelectSongScreen.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="71" selection-start="855" selection-end="855" vertical-scroll-proportion="0.0" vertical-offset="213" max-vertical-offset="1260">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#SelectSongScreen#0;class#SelectSongScreen#0" expanded="false" />
-            <element signature="method#dialog#0;class#SelectSongScreen#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main/src/featherdev/lowlatency/objects/FileBrowserWidget.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="25" selection-start="1404" selection-end="1404" vertical-scroll-proportion="0.0" vertical-offset="258" max-vertical-offset="1566">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="class#ListItem#0;class#FileBrowserWidget#0" expanded="false" />
-            <element signature="method#setDirectory#0;class#FileBrowserWidget#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Android/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="612">
+        <state line="3" column="26" selection-start="178" selection-end="178" vertical-scroll-proportion="0.10909091" vertical-offset="0" max-vertical-offset="594">
           <folding />
         </state>
       </provider>
