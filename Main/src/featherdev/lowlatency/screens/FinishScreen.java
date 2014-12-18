@@ -41,20 +41,20 @@ public class FinishScreen extends UiScreen {
 		okay.pad(0, 10, 0, 10);
 		
 		Table summary = new Table();
-		summary.add(new Label("Raw Points", game.skin)).left();
-		summary.add(new Label(String.valueOf(Stats.points), game.skin)).right();
+		summary.add(new Label("Raw Points", game.skin)).right().padRight(50);
+		summary.add(new Label(String.valueOf(Stats.points), game.skin)).left().padLeft(50);
 		summary.row();
-		summary.add(new Label("Difficulty Multiplier", game.skin)).left();
-		summary.add(new Label(String.valueOf(Holder.difficulty.scoreMultiplier), game.skin)).right();
+		summary.add(new Label("Difficulty Multiplier", game.skin)).right().padRight(50);
+		summary.add(new Label(String.valueOf(Holder.difficulty.scoreMultiplier), game.skin)).left().padLeft(50);
 		summary.row();
-		summary.add(new Label("Total Points", game.skin)).left();
-		summary.add(new Label(String.valueOf(totalPoints), game.skin)).right();
+		summary.add(new Label("Total Points", game.skin)).right().padRight(50);
+		summary.add(new Label(String.valueOf(totalPoints), game.skin)).left().padLeft(50);
 
-		root.add(songLabel);
+		root.add(songLabel).padBottom(80);
 		root.row();
 		root.add(summary);
 		root.row();
-		root.add(okay);
+		root.add(okay).padTop(70).minWidth(600);
 		
 		stage.addActor(root);
 		stage.getRoot().getColor().a = 0;

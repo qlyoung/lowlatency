@@ -5,7 +5,9 @@
 	},
 	
 	com.badlogic.gdx.graphics.g2d.BitmapFont: {
-		naipol: { file: fonts/naipol.fnt }
+		naipol: { file: fonts/naipol.fnt },
+		naipol_i: {file: fonts/naipol_i.fnt},
+		naipol_i_big: {file: fonts/naipol_i_big.fnt}
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
@@ -26,13 +28,13 @@
 	
 	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		default: {
-			font: naipol
+			font: naipol_i
 		}
 	},
 
 	com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		default: {
-			titleFont: naipol,
+			titleFont: naipol_i,
 			background: ui/box
 		}
 	},
@@ -64,7 +66,7 @@
 	
 	com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 		default: {
-			font: naipol,
+			font: naipol_i,
 			checkboxOff: ui/box,
 			checkboxOn: ui/filledbox,
 			fontColor: white

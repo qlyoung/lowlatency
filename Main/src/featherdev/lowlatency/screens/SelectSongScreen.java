@@ -23,11 +23,6 @@ public class SelectSongScreen extends UiScreen {
     public SelectSongScreen(String dir){
         browser = new FileBrowserWidget(dir, LowLatency.instance().skin);
 
-        Table root = new Table(game.skin);
-        root.add("Select Song").top().pad(5, 0, 5, 0);
-        root.row();
-        root.add(browser).expand().fill();
-        root.row();
         TextButton home = new TextButton("Main Menu", game.skin);
         home.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -35,8 +30,12 @@ public class SelectSongScreen extends UiScreen {
                 game.setScreen(new MenuScreen());
             }
         });
-        root.add(home).bottom().pad(15, 0, 5, 0);
+
+        Table root = new Table(game.skin);
         root.setFillParent(true);
+        root.add("Select Song").top().pad(5, 0, 5, 0).row();
+        root.add(browser).expand().fill().row();
+        root.add(home).fill().bottom().pad(5, 15, 15, 15);
 
         stage.addActor(root);
         Gdx.input.setInputProcessor(stage);

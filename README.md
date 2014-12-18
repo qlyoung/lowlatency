@@ -8,6 +8,6 @@ detection algorithm does the work of analysing the music and generating a map be
 Low Latency targets Android but runs just fine on the desktop as well.
 
 Low Latency uses:
---LibGDX, a FOSS x-platform Java game framework
---MyID3 for Android, a port of the excellent MyID3 library
---lwbd, an extensible & extremely simple beat detection library
++ LibGDX, a FOSS x-platform Java game framework
++ MyID3 for Android, a port of the excellent MyID3 library
++ lwbd, an extensible & extremely simple beat detection library

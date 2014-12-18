@@ -44,9 +44,7 @@ public class FileBrowserWidget extends Table {
 
         // populate table
         row().padBottom(15);
-        add("Directory: ").right();
-        add(pathLabel).expandX().fill().left();
-        row();
+        add(pathLabel).expandX().fill().left().row();
         add(sp).expand().fill().colspan(2);
 
         // set directory
@@ -59,7 +57,7 @@ public class FileBrowserWidget extends Table {
     public void setDirectory(FileHandle directory){
         // fail if the path doesn't exist
         if (!directory.exists()){
-            Gdx.app.log("[!] ERROR", "Directory does not exist");
+            Gdx.app.log("[!]", "ERROR: Directory does not exist");
             return;
         }
 

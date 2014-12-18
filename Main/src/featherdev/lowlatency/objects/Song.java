@@ -21,8 +21,7 @@ public class Song {
 	public Song(FileHandle file){
 		
 		this.file = file;
-		
-		
+
 		if (file.extension().toLowerCase().contains("mp3")){
 			MusicMetadata metadata = null;
 			
@@ -33,7 +32,6 @@ public class Song {
 				title = metadata.getSongTitle();
 				artist = metadata.getArtist();
 			}
-			
 		}
 		else if (file.extension().toLowerCase().contains("ogg")) {
 			VorbisCommentHeader comments = null;

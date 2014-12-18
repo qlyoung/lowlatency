@@ -2,10 +2,9 @@ package featherdev.lowlatency.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -51,15 +50,19 @@ public class MenuScreen extends UiScreen {
                 super.clicked(event, x, y);
             }
         });
-        root = new Table();
+
+        Table menu = new Table();
+        menu.defaults().uniform().pad(45, 15, 45, 0).minWidth(400).left();
+        menu.add(playButton).expandY().fill().row();
+        menu.add(optionsButton).expandY().fill().row();
+        menu.add(creditsButton).expandY().fill().row();
+
+        Label title = new Label("Low\nLatency", game.skin, "naipol_i_big", Color.WHITE);
+
+        root = new Table(game.skin);
         root.setFillParent(true);
-        root.setSkin(game.skin);
-        root.defaults().uniform().pad(0, 15, 0, 15).minWidth(200);
-        root.add("__low_latency__").colspan(3).row();
-        root.add(" ").row().fillX();
-        root.add(optionsButton);
-        root.add(playButton);
-        root.add(creditsButton);
+        root.add(menu).expand().left().fillY();
+        root.add(title).expand().left().padLeft(20);
         stage.addActor(root);
         stage.getRoot().getColor().a = 0;
         Gdx.input.setInputProcessor(stage);
@@ -99,6 +102,8 @@ public class MenuScreen extends UiScreen {
             Gdx.app.error("[!]", e.getMessage());
         }
 
+        // move lights so they don't obscure title
+        LightTank.instance().jerkAll(0.5f);
     }
 
     public void render(float delta) {
@@ -106,6 +111,9 @@ public class MenuScreen extends UiScreen {
         LightTank.instance().draw(null);
         stage.act(delta);
         stage.draw();
+
+
+        Table.drawDebug(stage);
     }
 
     public void show() {
